@@ -207,8 +207,6 @@ final class ProductsTableCell: UITableViewCell {
         basketDelegate?.didTapBasketButton(inCell: self)
         //basketButtonActionx()
         print("basketButtonAction")
-        
-    
     }
     
     @objc

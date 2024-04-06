@@ -102,7 +102,7 @@ class ProductsController: UIViewController, UITableViewDelegate, UITableViewData
         self.tableView.delegate = self
         self.tableView.backgroundColor = R.Colors.background
         self.tableView.estimatedRowHeight = 150
-        self.tableView.allowsSelection = false
+        self.tableView.allowsSelection = true
         self.tableView.rowHeight = UITableView.automaticDimension
         self.tableView.dataSource = self
         self.tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -127,8 +127,10 @@ class ProductsController: UIViewController, UITableViewDelegate, UITableViewData
         cardsData = [.init(image: "salmon", price: "1.990 р", title: "Tasty salmon", prodType: .salmon, prodId: 1),
                      .init(image: "dish", price: "1.990 р", title: "Grilled fish", prodType: .salmon, prodId: 2),
                      .init(image: "fish2", price: "1.990 р", title: "Tasty frozen fish", prodType: .frozen, prodId: 3),
-                     .init(image: "fish3", price: "1.990 р", title: "dd", prodType: .frozen, prodId: 4),
-                     .init(image: "fish", price: "1.990 р", title: "dd", prodType: .salmon, prodId: 8)]
+                     .init(image: "fish3", price: "1.990 р", title: "Freeze fish", prodType: .frozen, prodId: 4),
+                     .init(image: "fish", price: "1.990 р", title: "Gold fish", prodType: .salmon, prodId: 8)]
+        
+        tableView.reloadData()
         
         buttons.onFilterChange = { newFilter in
             self.selectedFilter = newFilter
@@ -160,9 +162,14 @@ class ProductsController: UIViewController, UITableViewDelegate, UITableViewData
 extension ProductsController: CellDelegate, BasketCellDelegate {
     func didTapBasketButton(inCell cell: UITableViewCell) {
         guard let indexPath = tableView.indexPath(for: cell) else { return }
+        print("INDEX OF CELL = \(indexPath.row)")
         cardsData[indexPath.row].isInBasket.toggle()
+        
         self.cardsData[indexPath.row].prodCount += 1
         prodDict[indexPath.row] = [self.cardsData[indexPath.row].title]
+        
+        UserSettings.basket["\(indexPath.row)"] = [self.cardsData[indexPath.row].title]
+        
         tableView.reloadRows(at: [indexPath], with: .none)
     }
     
@@ -182,10 +189,6 @@ extension ProductsController: CellDelegate, BasketCellDelegate {
         cell.buttonClicked = { [self] in
             self.openVc(indexPath.row)
             
-//            vc.modalPresentationStyle = .currentContext
-//            vc.modalTransitionStyle = .
-            //navigationController?.pushViewController(CardInfoController(), animated: true)
-            //present(vc, animated: true)
             print(indexPath.row)
         }
         
@@ -199,6 +202,13 @@ extension ProductsController: CellDelegate, BasketCellDelegate {
                 print("\(self.cardsData[indexPath.row].prodCount) PLUS")
                 
                 self.prodDict[indexPath.row]?.append(self.cardsData[indexPath.row].title)
+                
+                if var productArray = UserSettings.basket["\(indexPath.row)"] as? [String] {
+                    productArray.append(self.cardsData[indexPath.row].title)
+                    UserSettings.basket["\(indexPath.row)"] = productArray
+                } else {
+                    print("Элемент не найден или не является массивом [String]")
+                }
                 print(self.prodDict)
             }
         }
@@ -218,6 +228,16 @@ extension ProductsController: CellDelegate, BasketCellDelegate {
                 }
             }
             self.prodDict[indexPath.row]?.removeLast()
+            
+            if var productArray = UserSettings.basket["\(indexPath.row)"] as? [String] {
+                productArray.removeLast()
+                UserSettings.basket["\(indexPath.row)"] = productArray
+                
+                print("User basket = \(UserSettings.basket ?? [:])")
+            } else {
+                print("Элемент не найден или не является массивом [String]")
+            }
+            
             print(self.prodDict)
             
         }
@@ -235,7 +255,8 @@ extension ProductsController: CellDelegate, BasketCellDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("CELL")
+        let cellData = displayDataSource[indexPath.row]
+        print("cell Data = \(cellData.title)")
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

@@ -7,9 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		B40EF3622BC0513E00F06662 /* BasketController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B40EF3612BC0513E00F06662 /* BasketController.swift */; };
+		B40EF3642BC0529900F06662 /* BasketCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B40EF3632BC0529900F06662 /* BasketCell.swift */; };
 		B425FCEC2BB2AC2D00F2FA27 /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = B425FCEB2BB2AC2D00F2FA27 /* UserSettings.swift */; };
-		B425FCEE2BB6BD0100F2FA27 /* TestCollection.swift in Sources */ = {isa = PBXBuildFile; fileRef = B425FCED2BB6BD0100F2FA27 /* TestCollection.swift */; };
-		B425FCF02BB6BD0C00F2FA27 /* TestCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B425FCEF2BB6BD0C00F2FA27 /* TestCell.swift */; };
 		B4DC5CF82B977A73006D3E42 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4DC5CF72B977A72006D3E42 /* TabBarController.swift */; };
 		B4DC5CFA2B9B3674006D3E42 /* NavBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4DC5CF92B9B3674006D3E42 /* NavBarController.swift */; };
 		B4DC5CFC2B9B3AA8006D3E42 /* Stack.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4DC5CFB2B9B3AA8006D3E42 /* Stack.swift */; };
@@ -22,7 +22,6 @@
 		B4DC5D122B9DCDDD006D3E42 /* FilterButtons.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4DC5D112B9DCDDD006D3E42 /* FilterButtons.swift */; };
 		B4DC5D142B9DCE26006D3E42 /* ProdButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4DC5D132B9DCE26006D3E42 /* ProdButton.swift */; };
 		B4DC5D162B9DCFB7006D3E42 /* ProdFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4DC5D152B9DCFB7006D3E42 /* ProdFilter.swift */; };
-		B4DC5D182B9E24AC006D3E42 /* BasketController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4DC5D172B9E24AC006D3E42 /* BasketController.swift */; };
 		B4DC5D1A2BA1EDDF006D3E42 /* CardInfoController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4DC5D192BA1EDDF006D3E42 /* CardInfoController.swift */; };
 		B4DC5D1E2BA71466006D3E42 /* RoundedView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4DC5D1D2BA71466006D3E42 /* RoundedView.swift */; };
 		B4DC5D222BA80D27006D3E42 /* Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4DC5D212BA80D27006D3E42 /* Ext.swift */; };
@@ -35,9 +34,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		B40EF3612BC0513E00F06662 /* BasketController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasketController.swift; sourceTree = "<group>"; };
+		B40EF3632BC0529900F06662 /* BasketCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasketCell.swift; sourceTree = "<group>"; };
 		B425FCEB2BB2AC2D00F2FA27 /* UserSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettings.swift; sourceTree = "<group>"; };
-		B425FCED2BB6BD0100F2FA27 /* TestCollection.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCollection.swift; sourceTree = "<group>"; };
-		B425FCEF2BB6BD0C00F2FA27 /* TestCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCell.swift; sourceTree = "<group>"; };
 		B4DC5CF72B977A72006D3E42 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		B4DC5CF92B9B3674006D3E42 /* NavBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavBarController.swift; sourceTree = "<group>"; };
 		B4DC5CFB2B9B3AA8006D3E42 /* Stack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stack.swift; sourceTree = "<group>"; };
@@ -50,7 +49,6 @@
 		B4DC5D112B9DCDDD006D3E42 /* FilterButtons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterButtons.swift; sourceTree = "<group>"; };
 		B4DC5D132B9DCE26006D3E42 /* ProdButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProdButton.swift; sourceTree = "<group>"; };
 		B4DC5D152B9DCFB7006D3E42 /* ProdFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProdFilter.swift; sourceTree = "<group>"; };
-		B4DC5D172B9E24AC006D3E42 /* BasketController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasketController.swift; sourceTree = "<group>"; };
 		B4DC5D192BA1EDDF006D3E42 /* CardInfoController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CardInfoController.swift; sourceTree = "<group>"; };
 		B4DC5D1D2BA71466006D3E42 /* RoundedView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoundedView.swift; sourceTree = "<group>"; };
 		B4DC5D212BA80D27006D3E42 /* Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ext.swift; sourceTree = "<group>"; };
@@ -75,6 +73,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B40EF3652BC1B51100F06662 /* BasketController */ = {
+			isa = PBXGroup;
+			children = (
+				B40EF3612BC0513E00F06662 /* BasketController.swift */,
+				B40EF3632BC0529900F06662 /* BasketCell.swift */,
+			);
+			path = BasketController;
+			sourceTree = "<group>";
+		};
 		B4DC5D032B9B3F3F006D3E42 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
@@ -97,9 +104,9 @@
 		B4DC5D092B9B4455006D3E42 /* ProductsController */ = {
 			isa = PBXGroup;
 			children = (
+				B40EF3652BC1B51100F06662 /* BasketController */,
 				B4DC5D1F2BA805F1006D3E42 /* CardInfoController */,
 				B4DC5D202BA8061B006D3E42 /* Filter */,
-				B4DC5D172B9E24AC006D3E42 /* BasketController.swift */,
 				B4F38FA42B91E7A100B96806 /* ProductsController.swift */,
 				B4DC5D0A2B9B4810006D3E42 /* ProductsTableCell.swift */,
 			);
@@ -120,8 +127,6 @@
 			children = (
 				B4DC5D1D2BA71466006D3E42 /* RoundedView.swift */,
 				B4DC5D192BA1EDDF006D3E42 /* CardInfoController.swift */,
-				B425FCED2BB6BD0100F2FA27 /* TestCollection.swift */,
-				B425FCEF2BB6BD0C00F2FA27 /* TestCell.swift */,
 			);
 			path = CardInfoController;
 			sourceTree = "<group>";
@@ -243,14 +248,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				B4DC5D162B9DCFB7006D3E42 /* ProdFilter.swift in Sources */,
-				B425FCEE2BB6BD0100F2FA27 /* TestCollection.swift in Sources */,
 				B4DC5D1A2BA1EDDF006D3E42 /* CardInfoController.swift in Sources */,
-				B425FCF02BB6BD0C00F2FA27 /* TestCell.swift in Sources */,
 				B4DC5D102B9DCD04006D3E42 /* ProdType.swift in Sources */,
 				B4F38FA52B91E7A100B96806 /* ProductsController.swift in Sources */,
 				B425FCEC2BB2AC2D00F2FA27 /* UserSettings.swift in Sources */,
 				B4DC5CF82B977A73006D3E42 /* TabBarController.swift in Sources */,
 				B4DC5CFE2B9B3ACF006D3E42 /* Color.swift in Sources */,
+				B40EF3622BC0513E00F06662 /* BasketController.swift in Sources */,
 				B4DC5D1E2BA71466006D3E42 /* RoundedView.swift in Sources */,
 				B4DC5D022B9B3B31006D3E42 /* R.swift in Sources */,
 				B4DC5D122B9DCDDD006D3E42 /* FilterButtons.swift in Sources */,
@@ -263,8 +267,8 @@
 				B4DC5D062B9B4107006D3E42 /* SearchController.swift in Sources */,
 				B4DC5CFC2B9B3AA8006D3E42 /* Stack.swift in Sources */,
 				B4DC5D242BA80D4C006D3E42 /* InfoBlock.swift in Sources */,
+				B40EF3642BC0529900F06662 /* BasketCell.swift in Sources */,
 				B4DC5D0B2B9B4810006D3E42 /* ProductsTableCell.swift in Sources */,
-				B4DC5D182B9E24AC006D3E42 /* BasketController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -415,6 +419,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -442,6 +447,7 @@
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 16.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
