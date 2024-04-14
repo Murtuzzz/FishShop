@@ -7,22 +7,21 @@
 
 struct CardInfo {
     let image: String
-    let price: String
+    let price: Int
     let title: String
     let prodType: ProdType
     let prodId: Int
     var prodCount: Int = 0
     var isInBasket = false
+    var wasInBasket = false
 }
-
 
 import UIKit
 
 class ProductsController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     private var tableView = UITableView()
-    
-    var prodDict: [Int:[String]] = [:]
+    private var basketInfoArray: [[BasketInfo]] = []
     
     private let basketView: UIView = {
         let view = UIView()
@@ -66,38 +65,49 @@ class ProductsController: UIViewController, UITableViewDelegate, UITableViewData
             }
         }
     }
-    
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(updateProductData), name: NSNotification.Name("basketUpdated"), object: nil)
+        
         view.backgroundColor = R.Colors.background
-        UserSettings.basket = [:]
+        UserSettings.basketInfo = []
         view.addSubview(buttons)
         view.addSubview(basketView)
         view.addSubview(basketButton)
         view.addSubview(profileView)
+        
         title = "Products"
         let textAttributes = [NSAttributedString.Key.foregroundColor:UIColor.white]
         navigationController?.navigationBar.titleTextAttributes = textAttributes
         
-        constraints()
         buttonActions()
         tableApperance()
+        constraints()
     }
     
-    func buttonActions() {
+    private func buttonActions() {
         basketButton.addTarget(self, action: #selector(basketAction), for: .touchUpInside)
         
     }
+    
+    @objc func updateProductData() {
+          // Обновите данные вашей пользовательской настройки здесь
+        tableView.reloadData() // или обновление, специфичное для вашего UI
+        print("NOTIFICATION TEST")
+        
+      }
+
     
     @objc
     func basketAction() {
         let vc = BasketController()
         present(vc, animated: true)
+        //navigationController?.pushViewController(vc, animated: true)
     }
     
-    func tableApperance() {
-        
+    private func tableApperance() {
         self.tableView = UITableView()
         self.tableView.delegate = self
         self.tableView.backgroundColor = R.Colors.background
@@ -124,22 +134,22 @@ class ProductsController: UIViewController, UITableViewDelegate, UITableViewData
             
         ])
         
-        cardsData = [.init(image: "salmon", price: "1.990 р", title: "Tasty salmon", prodType: .salmon, prodId: 1),
-                     .init(image: "dish", price: "1.990 р", title: "Grilled fish", prodType: .salmon, prodId: 2),
-                     .init(image: "fish2", price: "1.990 р", title: "Tasty frozen fish", prodType: .frozen, prodId: 3),
-                     .init(image: "fish3", price: "1.990 р", title: "Freeze fish", prodType: .frozen, prodId: 4),
-                     .init(image: "fish", price: "1.990 р", title: "Gold fish", prodType: .salmon, prodId: 8)]
+        cardsData = [.init(image: "Tasty salmon", price: 1990, title: "Tasty salmon", prodType: .salmon, prodId: 0),
+                     .init(image: "Grilled fish", price: 2345, title: "Grilled fish", prodType: .salmon, prodId: 1),
+                     .init(image: "Tasty frozen fish", price: 3843, title: "Tasty frozen fish", prodType: .frozen, prodId: 2),
+                     .init(image: "Freeze fish", price: 1345, title: "Freeze fish", prodType: .frozen, prodId: 3),
+                     .init(image: "Gold fish", price: 6799, title: "Gold fish", prodType: .salmon, prodId: 4)]
+        
+        for _ in 0...cardsData.count-1 {
+            basketInfoArray.append([])
+            
+        }
         
         tableView.reloadData()
         
-        buttons.onFilterChange = { newFilter in
-            self.selectedFilter = newFilter
-            self.tableView.reloadData()
-        }
-        
     }
     
-    func constraints() {
+    private func constraints() {
         NSLayoutConstraint.activate([
             basketView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 24),
             basketView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: -16),
@@ -155,6 +165,7 @@ class ProductsController: UIViewController, UITableViewDelegate, UITableViewData
             basketButton.centerYAnchor.constraint(equalTo: basketView.centerYAnchor),
             basketButton.heightAnchor.constraint(equalToConstant: 80),
             basketButton.widthAnchor.constraint(equalTo: basketButton.heightAnchor),
+            
         ])
     }
 }
@@ -162,13 +173,18 @@ class ProductsController: UIViewController, UITableViewDelegate, UITableViewData
 extension ProductsController: CellDelegate, BasketCellDelegate {
     func didTapBasketButton(inCell cell: UITableViewCell) {
         guard let indexPath = tableView.indexPath(for: cell) else { return }
-        print("INDEX OF CELL = \(indexPath.row)")
+        //print("INDEX OF CELL = \(indexPath.row)")
         cardsData[indexPath.row].isInBasket.toggle()
+        let cellData = displayDataSource[indexPath.row]
+        self.cardsData[cellData.prodId].prodCount += 1
         
-        self.cardsData[indexPath.row].prodCount += 1
-        prodDict[indexPath.row] = [self.cardsData[indexPath.row].title]
+        self.basketInfoArray[indexPath.row] = [
+            .init(title: self.cardsData[indexPath.row].title,
+                  price: Double(self.cardsData[indexPath.row].price),
+                  quantity: self.cardsData[indexPath.row].prodCount,
+                  id: self.cardsData[indexPath.row].prodId, inBasket: self.cardsData[indexPath.row].wasInBasket)]
         
-        UserSettings.basket["\(indexPath.row)"] = [self.cardsData[indexPath.row].title]
+        UserSettings.basketInfo = self.basketInfoArray
         
         tableView.reloadRows(at: [indexPath], with: .none)
     }
@@ -181,9 +197,21 @@ extension ProductsController: CellDelegate, BasketCellDelegate {
         let cell = tableView.dequeueReusableCell(withIdentifier: ProductsTableCell.id, for: indexPath) as! ProductsTableCell
         
         let cellData = displayDataSource[indexPath.row]
+        
+        buttons.onFilterChange = { newFilter in
+            //print("FILTER CHANGE")
+            
+            if newFilter == .all {
+                tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
+            } else if newFilter == .frozen {
+                tableView.scrollToRow(at: IndexPath(row: 2, section: 0), at: .top, animated: true)
+            } else {
+                tableView.scrollToRow(at: IndexPath(row: 0, section: 0), at: .top, animated: true)
+            }
+        }
        
         
-        cell.cellConfig(img: cellData.image, price: cellData.price, name: cellData.title, title: cellData.title, prodId: cellData.prodId, prodCount: cellData.prodCount, isInBasket: cellData.isInBasket)
+        cell.cellConfig(img: cellData.image, price: cellData.price, name: cellData.title, title: cellData.title, prodId: cellData.prodId, prodCount: cellData.prodCount, isInBasket: cellData.isInBasket, wasInBasket: cellData.wasInBasket)
         cell.cellDelegate = self
         cell.basketDelegate = self
         cell.buttonClicked = { [self] in
@@ -192,59 +220,77 @@ extension ProductsController: CellDelegate, BasketCellDelegate {
             print(indexPath.row)
         }
         
+        print("TEST TEST TEST TEST")
+      
+        print(indexPath.row)
+        
+        
+        if UserSettings.basketInfo.isEmpty == false {
+            if UserSettings.basketInfo[indexPath.row].isEmpty == false {
+                if UserSettings.basketInfo.count == cardsData.count {
+                    if UserSettings.basketInfo[indexPath.row][0].inBasket == true {
+                        print("\(UserSettings.basketInfo[indexPath.row][0].inBasket) == true")
+                        self.cardsData[indexPath.row].prodCount = UserSettings.basketInfo[indexPath.row][0].quantity
+                        self.cardsData[indexPath.row].isInBasket = false
+                        UserSettings.basketInfo[cellData.prodId] = []
+                        self.basketInfoArray[cellData.prodId] = []
+                        UserSettings.basketInfo = self.basketInfoArray
+                        self.cardsData[indexPath.row].prodCount = 0
+                        DispatchQueue.main.async {
+                            cell.cellConfig(img: cellData.image, price: cellData.price, name: cellData.title,
+                                            title: cellData.title, prodId: cellData.prodId,
+                                            prodCount: self.cardsData[indexPath.row].prodCount, isInBasket: cellData.isInBasket, wasInBasket: cellData.wasInBasket)
+                            tableView.reloadRows(at: [indexPath], with: .none)
+//                            UserSettings.basketInfo[indexPath.row][0].inBasket = false
+                            print("UserSettig Basket == \(UserSettings.basketInfo)")
+                            self.basketInfoArray = UserSettings.basketInfo
+                            
+                        }
+                        print("Delete \(self.basketInfoArray)")
+                    }
+                }
+            }
+        }
+        
         cell.onPlusTap = {
             self.cardsData[indexPath.row].prodCount += 1
+            UserSettings.basketInfo[indexPath.row][0].quantity = self.cardsData[indexPath.row].prodCount
             DispatchQueue.main.async {
                 cell.cellConfig(img: cellData.image, price: cellData.price, name: cellData.title,
                                 title: cellData.title, prodId: cellData.prodId,
-                                prodCount: self.cardsData[indexPath.row].prodCount, isInBasket: cellData.isInBasket)
+                                prodCount: self.cardsData[indexPath.row].prodCount, isInBasket: cellData.isInBasket, wasInBasket: cellData.wasInBasket)
                 tableView.reloadRows(at: [indexPath], with: .none)
                 print("\(self.cardsData[indexPath.row].prodCount) PLUS")
-                
-                self.prodDict[indexPath.row]?.append(self.cardsData[indexPath.row].title)
-                
-                if var productArray = UserSettings.basket["\(indexPath.row)"] as? [String] {
-                    productArray.append(self.cardsData[indexPath.row].title)
-                    UserSettings.basket["\(indexPath.row)"] = productArray
-                } else {
-                    print("Элемент не найден или не является массивом [String]")
-                }
-                print(self.prodDict)
+
+                self.basketInfoArray[indexPath.row][0].quantity = self.cardsData[indexPath.row].prodCount
+
             }
+            print("UserSettig Basket PLUS TAPPED == \(UserSettings.basketInfo)")
+            print(self.basketInfoArray)
         }
         
         cell.onMinusTap = {
             if self.cardsData[indexPath.row].prodCount > 0 {
                 self.cardsData[indexPath.row].prodCount -= 1
+                UserSettings.basketInfo[indexPath.row][0].quantity = self.cardsData[indexPath.row].prodCount
                 if self.cardsData[indexPath.row].prodCount == 0 {
                     self.cardsData[indexPath.row].isInBasket = false
+                    UserSettings.basketInfo[cellData.prodId] = []
+                    self.basketInfoArray[indexPath.row] = []
                 }
                 DispatchQueue.main.async {
                     cell.cellConfig(img: cellData.image, price: cellData.price, name: cellData.title,
                                     title: cellData.title, prodId: cellData.prodId,
-                                    prodCount: self.cardsData[indexPath.row].prodCount, isInBasket: cellData.isInBasket)
+                                    prodCount: self.cardsData[indexPath.row].prodCount, isInBasket: cellData.isInBasket, wasInBasket: cellData.wasInBasket)
                     tableView.reloadRows(at: [indexPath], with: .none)
                     print("\(self.cardsData[indexPath.row].prodCount) MINUS")
                 }
             }
-            self.prodDict[indexPath.row]?.removeLast()
-            
-            if var productArray = UserSettings.basket["\(indexPath.row)"] as? [String] {
-                productArray.removeLast()
-                UserSettings.basket["\(indexPath.row)"] = productArray
-                
-                print("User basket = \(UserSettings.basket ?? [:])")
-            } else {
-                print("Элемент не найден или не является массивом [String]")
-            }
-            
-            print(self.prodDict)
-            
+            print("UserSettig Basket MINUS TAPPED == \(UserSettings.basketInfo)")
+            print(self.basketInfoArray)
         }
-                    
+            
         return cell
-        
-    
     }
     
     func openVc(_ index: Int) {
@@ -256,7 +302,7 @@ extension ProductsController: CellDelegate, BasketCellDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cellData = displayDataSource[indexPath.row]
-        print("cell Data = \(cellData.title)")
+        //print("cell Data = \(cellData.title)")
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {

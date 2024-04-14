@@ -7,27 +7,31 @@
 
 import Foundation
 
+struct BasketInfo: Codable {
+    let title: String
+    let price: Double
+    var quantity: Int
+    let id: Int
+    var inBasket: Bool
+    
+}
+
 final class UserSettings {
     
     private enum SettingsKeys: String {
-        case basket
+        case basketInfo
         
     }
     
-    static var basket: [String:Any]! {
+    static var basketInfo: [[BasketInfo]]! {
         get {
-            return UserDefaults.standard.dictionary(forKey: SettingsKeys.basket.rawValue)
+            guard let data = UserDefaults.standard.data(forKey: SettingsKeys.basketInfo.rawValue) else { return nil }
+            let decoder = JSONDecoder()
+            return try? decoder.decode([[BasketInfo]].self, from: data)
         } set {
-            
-            let defaults = UserDefaults.standard
-            let key = SettingsKeys.basket.rawValue
-            if let basket = newValue {
-                //print("value: \(basket) was added to key \(key)")
-                print(basket)
-                defaults.set(basket, forKey: key)
-            } else {
-                defaults.removeObject(forKey: key)
-            }
+            let encoder = JSONEncoder()
+            let encoded = try? encoder.encode(newValue)
+            UserDefaults.standard.set(encoded, forKey: SettingsKeys.basketInfo.rawValue)
         }
     }
 }

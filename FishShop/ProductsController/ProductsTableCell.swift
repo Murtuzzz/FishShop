@@ -173,12 +173,11 @@ final class ProductsTableCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func cellConfig(img: String, price: String, name: String, title: String, prodId: Int, prodCount: Int, isInBasket: Bool) {
+    func cellConfig(img: String, price: Int, name: String, title: String, prodId: Int, prodCount: Int, isInBasket: Bool, wasInBasket:Bool) {
         container.image = UIImage(named: img)
-        priceLabel.text = price
+        priceLabel.text = "\(price) р"
         titleLabel.text = title
         prodCountLabel.text = "\(prodCount)"
-        
         basketButton.alpha = isInBasket ? 0 : 1
         addButton.alpha = isInBasket ? 1 : 0
         removeButton.alpha = isInBasket ? 1 : 0
@@ -205,7 +204,6 @@ final class ProductsTableCell: UITableViewCell {
     
     @objc func basketButtonAction() {
         basketDelegate?.didTapBasketButton(inCell: self)
-        //basketButtonActionx()
         print("basketButtonAction")
     }
     
@@ -285,8 +283,6 @@ final class ProductsTableCell: UITableViewCell {
     }
     
 }
-
-
 extension ProductsTableCell {
     func blurEffect(someView: UIView) {
         // Создание объекта `UIBlurEffect` со стилем эффекта.
