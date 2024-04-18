@@ -31,6 +31,22 @@ class ProductsController: UIViewController, UITableViewDelegate, UITableViewData
         return view
     }()
     
+    private var allBasketProdCount = 0
+    private var allBasketProdLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textAlignment = .center
+        label.textColor = .white
+        label.alpha = 0
+        label.text = "6"
+        label.layer.masksToBounds = true
+        label.layer.cornerRadius = 15
+        label.layer.borderColor = R.Colors.background.cgColor
+        label.layer.borderWidth = 4
+        label.backgroundColor = .systemOrange.withAlphaComponent(0.7)
+        return label
+    }()
+    
     private let profileView: UIView = {
         let view = UIView()
         view.backgroundColor = R.Colors.barBg.withAlphaComponent(0.5)
@@ -77,6 +93,7 @@ class ProductsController: UIViewController, UITableViewDelegate, UITableViewData
         view.addSubview(basketView)
         view.addSubview(basketButton)
         view.addSubview(profileView)
+        view.addSubview(allBasketProdLabel)
         
         title = "Products"
         let textAttributes = [NSAttributedString.Key.foregroundColor:UIColor.white]
@@ -96,10 +113,8 @@ class ProductsController: UIViewController, UITableViewDelegate, UITableViewData
           // Обновите данные вашей пользовательской настройки здесь
         tableView.reloadData() // или обновление, специфичное для вашего UI
         print("NOTIFICATION TEST")
-        
       }
 
-    
     @objc
     func basketAction() {
         let vc = BasketController()
@@ -131,7 +146,6 @@ class ProductsController: UIViewController, UITableViewDelegate, UITableViewData
             
             buttons.bottomAnchor.constraint(equalTo: tableView.topAnchor, constant: -8),
             buttons.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            
         ])
         
         cardsData = [.init(image: "Tasty salmon", price: 1990, title: "Tasty salmon", prodType: .salmon, prodId: 0),
@@ -166,6 +180,10 @@ class ProductsController: UIViewController, UITableViewDelegate, UITableViewData
             basketButton.heightAnchor.constraint(equalToConstant: 80),
             basketButton.widthAnchor.constraint(equalTo: basketButton.heightAnchor),
             
+            allBasketProdLabel.leadingAnchor.constraint(equalTo: basketView.trailingAnchor, constant: -18),
+            allBasketProdLabel.centerYAnchor.constraint(equalTo: basketView.centerYAnchor, constant: -24),
+            allBasketProdLabel.heightAnchor.constraint(equalToConstant: 32),
+            allBasketProdLabel.widthAnchor.constraint(equalTo: allBasketProdLabel.heightAnchor),
         ])
     }
 }
@@ -173,10 +191,17 @@ class ProductsController: UIViewController, UITableViewDelegate, UITableViewData
 extension ProductsController: CellDelegate, BasketCellDelegate {
     func didTapBasketButton(inCell cell: UITableViewCell) {
         guard let indexPath = tableView.indexPath(for: cell) else { return }
-        //print("INDEX OF CELL = \(indexPath.row)")
+       
         cardsData[indexPath.row].isInBasket.toggle()
         let cellData = displayDataSource[indexPath.row]
         self.cardsData[cellData.prodId].prodCount += 1
+        
+        if cellData.prodCount == 0 {
+            allBasketProdCount += 1
+            allBasketProdLabel.text = "\(allBasketProdCount)"
+            allBasketProdLabel.alpha = 1
+            UserSettings.basketProdQuant = allBasketProdCount
+        }
         
         self.basketInfoArray[indexPath.row] = [
             .init(title: self.cardsData[indexPath.row].title,
@@ -187,6 +212,8 @@ extension ProductsController: CellDelegate, BasketCellDelegate {
         UserSettings.basketInfo = self.basketInfoArray
         
         tableView.reloadRows(at: [indexPath], with: .none)
+        
+        //print(UserSettings.basketInfo)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -216,43 +243,51 @@ extension ProductsController: CellDelegate, BasketCellDelegate {
         cell.basketDelegate = self
         cell.buttonClicked = { [self] in
             self.openVc(indexPath.row)
-            
-            print(indexPath.row)
         }
-        
-        print("TEST TEST TEST TEST")
-      
-        print(indexPath.row)
-        
         
         if UserSettings.basketInfo.isEmpty == false {
             if UserSettings.basketInfo[indexPath.row].isEmpty == false {
-                if UserSettings.basketInfo.count == cardsData.count {
-                    if UserSettings.basketInfo[indexPath.row][0].inBasket == true {
-                        print("\(UserSettings.basketInfo[indexPath.row][0].inBasket) == true")
-                        self.cardsData[indexPath.row].prodCount = UserSettings.basketInfo[indexPath.row][0].quantity
+                //print(UserSettings.basketInfo)
+                for el in UserSettings.basketInfo[indexPath.row] {
+                    if el.inBasket == true {
+                        print("\(el.title) was deleted from basket")
+                        
+                        //Кол-во товаров в корзине(индикатор)
+                        self.allBasketProdCount = UserSettings.basketProdQuant
+                        if UserSettings.basketInfo.isEmpty {
+                            UserSettings.basketProdQuant = 0
+                        }
+                        if UserSettings.basketProdQuant == 0 {
+                            self.allBasketProdLabel.alpha = 0
+                        } else {
+                            self.allBasketProdLabel.text = "\(self.allBasketProdCount)"
+                        }
+                        
+                        UserSettings.basketInfo[indexPath.row] = []
                         self.cardsData[indexPath.row].isInBasket = false
-                        UserSettings.basketInfo[cellData.prodId] = []
-                        self.basketInfoArray[cellData.prodId] = []
-                        UserSettings.basketInfo = self.basketInfoArray
                         self.cardsData[indexPath.row].prodCount = 0
+                        self.basketInfoArray[indexPath.row] = []
+                        //UserSettings.basketInfo = self.basketInfoArray
+                        
                         DispatchQueue.main.async {
                             cell.cellConfig(img: cellData.image, price: cellData.price, name: cellData.title,
                                             title: cellData.title, prodId: cellData.prodId,
                                             prodCount: self.cardsData[indexPath.row].prodCount, isInBasket: cellData.isInBasket, wasInBasket: cellData.wasInBasket)
                             tableView.reloadRows(at: [indexPath], with: .none)
-//                            UserSettings.basketInfo[indexPath.row][0].inBasket = false
-                            print("UserSettig Basket == \(UserSettings.basketInfo)")
-                            self.basketInfoArray = UserSettings.basketInfo
-                            
                         }
-                        print("Delete \(self.basketInfoArray)")
+                        
+                        self.basketInfoArray = UserSettings.basketInfo
+                        
+                        //print("deleted cell = \(UserSettings.basketInfo[indexPath.row])")
+                        //print(UserSettings.basketInfo)
                     }
                 }
             }
         }
         
         cell.onPlusTap = {
+            self.allBasketProdCount += 1
+            self.allBasketProdLabel.text = "\(self.allBasketProdCount)"
             self.cardsData[indexPath.row].prodCount += 1
             UserSettings.basketInfo[indexPath.row][0].quantity = self.cardsData[indexPath.row].prodCount
             DispatchQueue.main.async {
@@ -260,18 +295,20 @@ extension ProductsController: CellDelegate, BasketCellDelegate {
                                 title: cellData.title, prodId: cellData.prodId,
                                 prodCount: self.cardsData[indexPath.row].prodCount, isInBasket: cellData.isInBasket, wasInBasket: cellData.wasInBasket)
                 tableView.reloadRows(at: [indexPath], with: .none)
-                print("\(self.cardsData[indexPath.row].prodCount) PLUS")
+//                print("\(self.cardsData[indexPath.row].prodCount) PLUS")
 
                 self.basketInfoArray[indexPath.row][0].quantity = self.cardsData[indexPath.row].prodCount
-
             }
-            print("UserSettig Basket PLUS TAPPED == \(UserSettings.basketInfo)")
-            print(self.basketInfoArray)
         }
         
         cell.onMinusTap = {
             if self.cardsData[indexPath.row].prodCount > 0 {
                 self.cardsData[indexPath.row].prodCount -= 1
+                self.allBasketProdCount -= 1
+                self.allBasketProdLabel.text = "\(self.allBasketProdCount)"
+                if self.allBasketProdCount == 0 {
+                    self.allBasketProdLabel.alpha = 0
+                }
                 UserSettings.basketInfo[indexPath.row][0].quantity = self.cardsData[indexPath.row].prodCount
                 if self.cardsData[indexPath.row].prodCount == 0 {
                     self.cardsData[indexPath.row].isInBasket = false
@@ -283,9 +320,11 @@ extension ProductsController: CellDelegate, BasketCellDelegate {
                                     title: cellData.title, prodId: cellData.prodId,
                                     prodCount: self.cardsData[indexPath.row].prodCount, isInBasket: cellData.isInBasket, wasInBasket: cellData.wasInBasket)
                     tableView.reloadRows(at: [indexPath], with: .none)
-                    print("\(self.cardsData[indexPath.row].prodCount) MINUS")
+//                    print("\(self.cardsData[indexPath.row].prodCount) MINUS")
                 }
             }
+            
+            
             print("UserSettig Basket MINUS TAPPED == \(UserSettings.basketInfo)")
             print(self.basketInfoArray)
         }
@@ -302,7 +341,6 @@ extension ProductsController: CellDelegate, BasketCellDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cellData = displayDataSource[indexPath.row]
-        //print("cell Data = \(cellData.title)")
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -313,11 +351,7 @@ extension ProductsController: CellDelegate, BasketCellDelegate {
     
     func infoButtonTapped(cell: UITableViewCell) {
         guard tableView.indexPath(for: cell) != nil else { return }
-        //let vc = CardInfoController()
-        
-        //present(CardInfoController(), animated: true)
-//        navigationController?.pushViewController(vc, animated: true)
-    }
 
+    }
 }
 

@@ -20,6 +20,7 @@ final class UserSettings {
     
     private enum SettingsKeys: String {
         case basketInfo
+        case basketProdQuant
         
     }
     
@@ -32,6 +33,22 @@ final class UserSettings {
             let encoder = JSONEncoder()
             let encoded = try? encoder.encode(newValue)
             UserDefaults.standard.set(encoded, forKey: SettingsKeys.basketInfo.rawValue)
+        }
+    }
+    
+    static var basketProdQuant: Int! {
+        get {
+            return UserDefaults.standard.integer(forKey: SettingsKeys.basketProdQuant.rawValue)
+        } set {
+            
+            let defaults = UserDefaults.standard
+            let key = SettingsKeys.basketProdQuant.rawValue
+            if let today = newValue {
+                print("value: \(today) was added to key \(key)")
+                defaults.set(today, forKey: key)
+            } else {
+                defaults.removeObject(forKey: key)
+            }
         }
     }
 }

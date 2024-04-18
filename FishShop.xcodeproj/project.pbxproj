@@ -10,6 +10,7 @@
 		B40EF3622BC0513E00F06662 /* BasketController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B40EF3612BC0513E00F06662 /* BasketController.swift */; };
 		B40EF3642BC0529900F06662 /* BasketCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B40EF3632BC0529900F06662 /* BasketCell.swift */; };
 		B425FCEC2BB2AC2D00F2FA27 /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = B425FCEB2BB2AC2D00F2FA27 /* UserSettings.swift */; };
+		B4DBE76D2BCCF86D000A2C6D /* PricesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4DBE76C2BCCF86D000A2C6D /* PricesView.swift */; };
 		B4DC5CF82B977A73006D3E42 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4DC5CF72B977A72006D3E42 /* TabBarController.swift */; };
 		B4DC5CFA2B9B3674006D3E42 /* NavBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4DC5CF92B9B3674006D3E42 /* NavBarController.swift */; };
 		B4DC5CFC2B9B3AA8006D3E42 /* Stack.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4DC5CFB2B9B3AA8006D3E42 /* Stack.swift */; };
@@ -37,6 +38,7 @@
 		B40EF3612BC0513E00F06662 /* BasketController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasketController.swift; sourceTree = "<group>"; };
 		B40EF3632BC0529900F06662 /* BasketCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasketCell.swift; sourceTree = "<group>"; };
 		B425FCEB2BB2AC2D00F2FA27 /* UserSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettings.swift; sourceTree = "<group>"; };
+		B4DBE76C2BCCF86D000A2C6D /* PricesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PricesView.swift; sourceTree = "<group>"; };
 		B4DC5CF72B977A72006D3E42 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		B4DC5CF92B9B3674006D3E42 /* NavBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavBarController.swift; sourceTree = "<group>"; };
 		B4DC5CFB2B9B3AA8006D3E42 /* Stack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stack.swift; sourceTree = "<group>"; };
@@ -78,6 +80,7 @@
 			children = (
 				B40EF3612BC0513E00F06662 /* BasketController.swift */,
 				B40EF3632BC0529900F06662 /* BasketCell.swift */,
+				B4DBE76C2BCCF86D000A2C6D /* PricesView.swift */,
 			);
 			path = BasketController;
 			sourceTree = "<group>";
@@ -258,6 +261,7 @@
 				B4DC5D1E2BA71466006D3E42 /* RoundedView.swift in Sources */,
 				B4DC5D022B9B3B31006D3E42 /* R.swift in Sources */,
 				B4DC5D122B9DCDDD006D3E42 /* FilterButtons.swift in Sources */,
+				B4DBE76D2BCCF86D000A2C6D /* PricesView.swift in Sources */,
 				B4F38FA12B91E7A100B96806 /* AppDelegate.swift in Sources */,
 				B4DC5D142B9DCE26006D3E42 /* ProdButton.swift in Sources */,
 				B4DC5D082B9B4134006D3E42 /* ProfileController.swift in Sources */,
