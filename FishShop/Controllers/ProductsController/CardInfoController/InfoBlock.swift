@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class InfoBlock: UIView {
+final class ProdInfoView: UIView {
     
     private let title: UILabel = {
         let label = UILabel()

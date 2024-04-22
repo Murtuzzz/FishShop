@@ -87,6 +87,22 @@ class ProductsController: UIViewController, UITableViewDelegate, UITableViewData
         
         NotificationCenter.default.addObserver(self, selector: #selector(updateProductData), name: NSNotification.Name("basketUpdated"), object: nil)
         
+//        if let gif = UIImage.gifAsset {
+//            let imageView = UIImageView(image: gif)
+//            imageView.contentMode = .scaleAspectFit
+//            
+//            imageView.translatesAutoresizingMaskIntoConstraints = false
+//
+//            view.addSubview(imageView)
+//            
+//            NSLayoutConstraint.activate([
+//                imageView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+//                imageView.topAnchor.constraint(equalTo: view.topAnchor,constant: 16),
+//                imageView.heightAnchor.constraint(equalToConstant: 256),
+//                imageView.widthAnchor.constraint(equalTo: imageView.heightAnchor)
+//            ])
+//        }
+        
         view.backgroundColor = R.Colors.background
         UserSettings.basketInfo = []
         view.addSubview(buttons)
@@ -102,6 +118,9 @@ class ProductsController: UIViewController, UITableViewDelegate, UITableViewData
         buttonActions()
         tableApperance()
         constraints()
+        
+        
+       
     }
     
     private func buttonActions() {
@@ -253,7 +272,6 @@ extension ProductsController: CellDelegate, BasketCellDelegate {
                         print("\(el.title) was deleted from basket")
                         
                         //Кол-во товаров в корзине(индикатор)
-                        self.allBasketProdCount = UserSettings.basketProdQuant
                         if UserSettings.basketInfo.isEmpty {
                             UserSettings.basketProdQuant = 0
                         }
@@ -262,6 +280,12 @@ extension ProductsController: CellDelegate, BasketCellDelegate {
                         } else {
                             self.allBasketProdLabel.text = "\(self.allBasketProdCount)"
                         }
+                        
+                        self.allBasketProdCount = UserSettings.basketProdQuant
+                        
+                        self.allBasketProdLabel.text = "\(self.allBasketProdCount)"
+                        
+                        print(self.allBasketProdCount)
                         
                         UserSettings.basketInfo[indexPath.row] = []
                         self.cardsData[indexPath.row].isInBasket = false
@@ -299,6 +323,8 @@ extension ProductsController: CellDelegate, BasketCellDelegate {
 
                 self.basketInfoArray[indexPath.row][0].quantity = self.cardsData[indexPath.row].prodCount
             }
+            
+            UserSettings.basketProdQuant = self.allBasketProdCount
         }
         
         cell.onMinusTap = {
@@ -322,10 +348,11 @@ extension ProductsController: CellDelegate, BasketCellDelegate {
                     tableView.reloadRows(at: [indexPath], with: .none)
 //                    print("\(self.cardsData[indexPath.row].prodCount) MINUS")
                 }
+                UserSettings.basketProdQuant = self.allBasketProdCount
             }
             
             
-            print("UserSettig Basket MINUS TAPPED == \(UserSettings.basketInfo)")
+//            print("UserSettig Basket MINUS TAPPED == \(UserSettings.basketInfo)")
             print(self.basketInfoArray)
         }
             
@@ -340,7 +367,7 @@ extension ProductsController: CellDelegate, BasketCellDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let cellData = displayDataSource[indexPath.row]
+        //let cellData = displayDataSource[indexPath.row]
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -353,5 +380,7 @@ extension ProductsController: CellDelegate, BasketCellDelegate {
         guard tableView.indexPath(for: cell) != nil else { return }
 
     }
+    
+    
 }
 

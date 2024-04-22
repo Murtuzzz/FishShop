@@ -16,7 +16,7 @@ struct Basket {
 
 import UIKit
 
-class BasketController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class BasketController: UIViewController, UITableViewDelegate, UITableViewDataSource,AddressPickerDelegate {
     
     var basketProdData: [Basket] = []
     
@@ -104,7 +104,7 @@ class BasketController: UIViewController, UITableViewDelegate, UITableViewDataSo
     }()
     
     override func viewWillAppear(_ animated: Bool) {
-        print(UserSettings.basketInfo)
+        
     }
     
     override func viewDidLoad() {
@@ -120,6 +120,7 @@ class BasketController: UIViewController, UITableViewDelegate, UITableViewDataSo
         navigationController?.navigationBar.titleTextAttributes = textAttributes
         
         tableApperance()
+        buttonsActions()
     }
     
     func tableApperance() {
@@ -140,6 +141,22 @@ class BasketController: UIViewController, UITableViewDelegate, UITableViewDataSo
         view.addSubview(basketImage)
         basketConfig()
     }
+    
+    func buttonsActions() {
+        locationButton.addTarget(self, action: #selector(locationButtonAction), for: .touchUpInside)
+    }
+    
+    @objc
+    func locationButtonAction() {
+        let addressPickerVC = AddressPickerViewController()
+        addressPickerVC.delegate = self
+        present(addressPickerVC, animated: true, completion: nil)
+    }
+    
+    func addressDidPick(_ address: String) {
+        locationButton.setTitle(address, for: .normal)
+    }
+
     
     func basketConfig() {
         print("BasketConfig")
@@ -271,9 +288,11 @@ extension BasketController {
             for el in UserSettings.basketInfo[basketData.id] {
                 print(el)
             }
+            print(UserSettings.basketProdQuant)
             UserSettings.basketProdQuant -= UserSettings.basketInfo[basketData.id][0].quantity
             UserSettings.basketInfo[basketData.id][0].quantity = 0
             basketInfo.remove(at: indexPath.row)
+            print(UserSettings.basketProdQuant)
         
             totalBasketPrice = totalBasketPrice - Double((basketProdData[indexPath.row].price * basketProdData[indexPath.row].quantity))
 

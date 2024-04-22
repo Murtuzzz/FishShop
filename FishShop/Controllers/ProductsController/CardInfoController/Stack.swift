@@ -25,9 +25,9 @@ final class Stack: UIView {
     init(title: String, weight: String, size: String, temp: String) {
         super.init(frame: .zero)
         
-        let weightInfo = InfoBlock(title: "weight", info: weight)
-        let sizeInfo = InfoBlock(title: "size", info: size)
-        let tempInfo = InfoBlock(title: "temp", info: temp)
+        let weightInfo = ProdInfoView(title: "weight", info: weight)
+        let sizeInfo = ProdInfoView(title: "size", info: size)
+        let tempInfo = ProdInfoView(title: "temp", info: temp)
         
         stackView.addArrangedSubview(weightInfo)
         stackView.addArrangedSubview(sizeInfo)

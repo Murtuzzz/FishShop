@@ -45,5 +45,9 @@ enum R {
         static func trebuchet(with size: CGFloat) -> UIFont {
             UIFont(name: "TrebuchetMS-Bold", size: size) ?? UIFont()
         }
+        
+        static func gillSans(with size: CGFloat) -> UIFont {
+            UIFont(name: "Gill Sans", size: size) ?? UIFont()
+        }
     }
 }
