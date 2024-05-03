@@ -105,6 +105,7 @@ class ProductsController: UIViewController, UITableViewDelegate, UITableViewData
         
         view.backgroundColor = R.Colors.background
         UserSettings.basketInfo = []
+        UserSettings.address = "-Выберите адресс доставки-"
         view.addSubview(buttons)
         view.addSubview(basketView)
         view.addSubview(basketButton)

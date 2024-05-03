@@ -82,7 +82,15 @@ class RegistrationController: UIViewController {
         
         registerButton.addTarget(self, action: #selector(loginButtonTapped), for: .touchUpInside)
         
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
+        tapGesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapGesture)
+        
         constraints()
+    }
+    
+    @objc func hideKeyboard() {
+        view.endEditing(true)
     }
 
     func constraints() {

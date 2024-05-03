@@ -50,7 +50,7 @@ class BasketController: UIViewController, UITableViewDelegate, UITableViewDataSo
     private let locationButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("г. Владикавказ, ул. Ардонская, д. 159", for: .normal)
+        button.setTitle(UserSettings.address ?? "г. Сосло, ул Щекера Берекера", for: .normal)
         button.contentMode = .scaleAspectFit
         button.tintColor = .systemOrange
         return button
@@ -104,7 +104,7 @@ class BasketController: UIViewController, UITableViewDelegate, UITableViewDataSo
     }()
     
     override func viewWillAppear(_ animated: Bool) {
-        
+        print(UserSettings.basketInfo)
     }
     
     override func viewDidLoad() {
@@ -232,6 +232,7 @@ class BasketController: UIViewController, UITableViewDelegate, UITableViewDataSo
             locationImage.widthAnchor.constraint(equalTo: locationImage.heightAnchor),
             
             locationButton.leadingAnchor.constraint(equalTo: locationImage.trailingAnchor, constant: 8),
+            //locationButton.widthAnchor.constraint(equalToConstant: 64),
             locationButton.centerYAnchor.constraint(equalTo: locationImage.centerYAnchor),
             
             payButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -64),
@@ -288,11 +289,10 @@ extension BasketController {
             for el in UserSettings.basketInfo[basketData.id] {
                 print(el)
             }
-            print(UserSettings.basketProdQuant)
+           
             UserSettings.basketProdQuant -= UserSettings.basketInfo[basketData.id][0].quantity
             UserSettings.basketInfo[basketData.id][0].quantity = 0
             basketInfo.remove(at: indexPath.row)
-            print(UserSettings.basketProdQuant)
         
             totalBasketPrice = totalBasketPrice - Double((basketProdData[indexPath.row].price * basketProdData[indexPath.row].quantity))
 

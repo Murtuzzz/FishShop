@@ -34,7 +34,7 @@ class TabBarController: UITabBarController {
         tabBar()
         tabBarApperance()
         //updateProfileTab()
-        switchTo(tab: .search)
+        switchTo(tab: .products)
     }
 
     func switchTo(tab: Tabs) {

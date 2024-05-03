@@ -13,7 +13,6 @@ struct BasketInfo: Codable {
     var quantity: Int
     let id: Int
     var inBasket: Bool
-    
 }
 
 final class UserSettings {
@@ -21,7 +20,7 @@ final class UserSettings {
     private enum SettingsKeys: String {
         case basketInfo
         case basketProdQuant
-        
+        case address
     }
     
     static var basketInfo: [[BasketInfo]]! {
@@ -43,6 +42,22 @@ final class UserSettings {
             
             let defaults = UserDefaults.standard
             let key = SettingsKeys.basketProdQuant.rawValue
+            if let today = newValue {
+                print("value: \(today) was added to key \(key)")
+                defaults.set(today, forKey: key)
+            } else {
+                defaults.removeObject(forKey: key)
+            }
+        }
+    }
+    
+    static var address: String! {
+        get {
+            return UserDefaults.standard.string(forKey: SettingsKeys.address.rawValue)
+        } set {
+            
+            let defaults = UserDefaults.standard
+            let key = SettingsKeys.address.rawValue
             if let today = newValue {
                 print("value: \(today) was added to key \(key)")
                 defaults.set(today, forKey: key)

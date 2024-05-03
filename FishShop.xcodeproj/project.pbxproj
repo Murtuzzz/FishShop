@@ -10,6 +10,7 @@
 		B40EF3622BC0513E00F06662 /* BasketController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B40EF3612BC0513E00F06662 /* BasketController.swift */; };
 		B40EF3642BC0529900F06662 /* BasketCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B40EF3632BC0529900F06662 /* BasketCell.swift */; };
 		B425FCEC2BB2AC2D00F2FA27 /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = B425FCEB2BB2AC2D00F2FA27 /* UserSettings.swift */; };
+		B48C74072BD9237600D6B45E /* TapGesture.swift in Sources */ = {isa = PBXBuildFile; fileRef = B48C74062BD9237600D6B45E /* TapGesture.swift */; };
 		B4DBE76D2BCCF86D000A2C6D /* PricesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4DBE76C2BCCF86D000A2C6D /* PricesView.swift */; };
 		B4DC5CF82B977A73006D3E42 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4DC5CF72B977A72006D3E42 /* TabBarController.swift */; };
 		B4DC5CFA2B9B3674006D3E42 /* NavBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4DC5CF92B9B3674006D3E42 /* NavBarController.swift */; };
@@ -28,7 +29,7 @@
 		B4DC5D222BA80D27006D3E42 /* Ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4DC5D212BA80D27006D3E42 /* Ext.swift */; };
 		B4DC5D242BA80D4C006D3E42 /* InfoBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4DC5D232BA80D4C006D3E42 /* InfoBlock.swift */; };
 		B4EF187A2BD655B900CB3C8C /* ProfileTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4EF18792BD655B900CB3C8C /* ProfileTableCell.swift */; };
-		B4EF187C2BD6FF4600CB3C8C /* AdressPickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4EF187B2BD6FF4600CB3C8C /* AdressPickerController.swift */; };
+		B4EF187E2BD7455200CB3C8C /* AddressPickerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4EF187D2BD7455200CB3C8C /* AddressPickerViewController.swift */; };
 		B4F38FA12B91E7A100B96806 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F38FA02B91E7A100B96806 /* AppDelegate.swift */; };
 		B4F38FA32B91E7A100B96806 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F38FA22B91E7A100B96806 /* SceneDelegate.swift */; };
 		B4F38FA52B91E7A100B96806 /* ProductsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F38FA42B91E7A100B96806 /* ProductsController.swift */; };
@@ -44,6 +45,7 @@
 		B40EF3612BC0513E00F06662 /* BasketController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasketController.swift; sourceTree = "<group>"; };
 		B40EF3632BC0529900F06662 /* BasketCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasketCell.swift; sourceTree = "<group>"; };
 		B425FCEB2BB2AC2D00F2FA27 /* UserSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettings.swift; sourceTree = "<group>"; };
+		B48C74062BD9237600D6B45E /* TapGesture.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TapGesture.swift; sourceTree = "<group>"; };
 		B4DBE76C2BCCF86D000A2C6D /* PricesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PricesView.swift; sourceTree = "<group>"; };
 		B4DC5CF72B977A72006D3E42 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		B4DC5CF92B9B3674006D3E42 /* NavBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavBarController.swift; sourceTree = "<group>"; };
@@ -62,7 +64,7 @@
 		B4DC5D212BA80D27006D3E42 /* Ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Ext.swift; sourceTree = "<group>"; };
 		B4DC5D232BA80D4C006D3E42 /* InfoBlock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoBlock.swift; sourceTree = "<group>"; };
 		B4EF18792BD655B900CB3C8C /* ProfileTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileTableCell.swift; sourceTree = "<group>"; };
-		B4EF187B2BD6FF4600CB3C8C /* AdressPickerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdressPickerController.swift; sourceTree = "<group>"; };
+		B4EF187D2BD7455200CB3C8C /* AddressPickerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddressPickerViewController.swift; sourceTree = "<group>"; };
 		B4F38F9D2B91E7A100B96806 /* FishShop.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FishShop.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B4F38FA02B91E7A100B96806 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B4F38FA22B91E7A100B96806 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -206,7 +208,8 @@
 				B4F38FA92B91E7A400B96806 /* Assets.xcassets */,
 				B4F38FAB2B91E7A400B96806 /* LaunchScreen.storyboard */,
 				B4F38FAE2B91E7A400B96806 /* Info.plist */,
-				B4EF187B2BD6FF4600CB3C8C /* AdressPickerController.swift */,
+				B4EF187D2BD7455200CB3C8C /* AddressPickerViewController.swift */,
+				B48C74062BD9237600D6B45E /* TapGesture.swift */,
 			);
 			path = FishShop;
 			sourceTree = "<group>";
@@ -307,13 +310,13 @@
 				B4F38FA52B91E7A100B96806 /* ProductsController.swift in Sources */,
 				B425FCEC2BB2AC2D00F2FA27 /* UserSettings.swift in Sources */,
 				B4DC5CF82B977A73006D3E42 /* TabBarController.swift in Sources */,
+				B48C74072BD9237600D6B45E /* TapGesture.swift in Sources */,
 				B4DC5CFE2B9B3ACF006D3E42 /* Color.swift in Sources */,
 				B4F7E4B82BD1336100DE225E /* CustomTextField.swift in Sources */,
 				B40EF3622BC0513E00F06662 /* BasketController.swift in Sources */,
 				B4DC5D1E2BA71466006D3E42 /* RoundedView.swift in Sources */,
 				B4DC5D022B9B3B31006D3E42 /* R.swift in Sources */,
 				B4DC5D122B9DCDDD006D3E42 /* FilterButtons.swift in Sources */,
-				B4EF187C2BD6FF4600CB3C8C /* AdressPickerController.swift in Sources */,
 				B4DBE76D2BCCF86D000A2C6D /* PricesView.swift in Sources */,
 				B4EF187A2BD655B900CB3C8C /* ProfileTableCell.swift in Sources */,
 				B4F38FA12B91E7A100B96806 /* AppDelegate.swift in Sources */,
@@ -325,6 +328,7 @@
 				B4DC5D222BA80D27006D3E42 /* Ext.swift in Sources */,
 				B4DC5D062B9B4107006D3E42 /* SearchController.swift in Sources */,
 				B4F7E4B22BD106D600DE225E /* LoginController.swift in Sources */,
+				B4EF187E2BD7455200CB3C8C /* AddressPickerViewController.swift in Sources */,
 				B4DC5CFC2B9B3AA8006D3E42 /* Stack.swift in Sources */,
 				B4DC5D242BA80D4C006D3E42 /* InfoBlock.swift in Sources */,
 				B40EF3642BC0529900F06662 /* BasketCell.swift in Sources */,
