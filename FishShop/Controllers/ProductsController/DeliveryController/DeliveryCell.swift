@@ -14,7 +14,7 @@ final class DeliveryCell: UITableViewCell {
     private let mainView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = R.Colors.barBg
+        view.backgroundColor = .clear
         view.layer.cornerRadius = 15
         return view
     }()
@@ -25,7 +25,7 @@ final class DeliveryCell: UITableViewCell {
         label.numberOfLines = 0
         label.textColor = .white
         label.text = ""
-        label.font = UIFont.boldSystemFont(ofSize: 22)
+        label.font = UIFont.boldSystemFont(ofSize: 18)
         return label
     }()
     
@@ -91,12 +91,12 @@ final class DeliveryCell: UITableViewCell {
             priceLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor),
             priceLabel.widthAnchor.constraint(equalToConstant: bounds.width - 24),
             
-            prodImage.leadingAnchor.constraint(equalTo: mainView.leadingAnchor, constant: 16),
+            prodImage.leadingAnchor.constraint(equalTo: mainView.leadingAnchor, constant: 8),
             prodImage.centerYAnchor.constraint(equalTo: centerYAnchor),
-            prodImage.widthAnchor.constraint(equalToConstant: 80),
-            prodImage.heightAnchor.constraint(equalToConstant: 80),
+            prodImage.widthAnchor.constraint(equalToConstant: 64),
+            prodImage.heightAnchor.constraint(equalToConstant: 64),
             
-            countLabel.trailingAnchor.constraint(equalTo: mainView.trailingAnchor, constant: -40),
+            countLabel.trailingAnchor.constraint(equalTo: mainView.trailingAnchor, constant: -16),
             countLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
             countLabel.widthAnchor.constraint(equalToConstant: 8),
             countLabel.heightAnchor.constraint(equalToConstant: 24),

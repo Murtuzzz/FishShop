@@ -22,6 +22,15 @@ class DeliveryViewController: UIViewController, UITableViewDelegate, UITableView
         return view
     }()
     
+    private let cancelButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.tintColor = .systemGray
+        //button.setTitle("Отменить заказ", for: .normal)
+        button.setAttributedTitle(NSAttributedString(string: "Отменить заказ", attributes: [.underlineStyle: NSUnderlineStyle.single.rawValue]), for: .normal)
+        return button
+    }()
+    
     private let fullScreenView: UIImageView = {
         let view = UIImageView()
         view.image = UIImage(systemName: "arrow.up.left.and.arrow.down.right")?.withRenderingMode(.alwaysTemplate)
@@ -42,10 +51,12 @@ class DeliveryViewController: UIViewController, UITableViewDelegate, UITableView
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
         title = "Delivery"
         setupMapView()
         setupOrderInfoView()
         tableApperance()
+        view.addSubview(cancelButton)
         setupConstraints()
         view.backgroundColor = R.Colors.mapColor
         // Настройка маршрута на карте
@@ -120,9 +131,14 @@ class DeliveryViewController: UIViewController, UITableViewDelegate, UITableView
             fullScreenView.bottomAnchor.constraint(equalTo: mapView.bottomAnchor, constant: -32),
             
             tableView.topAnchor.constraint(equalTo: orderInfoView.topAnchor,constant: 80),
-            tableView.leadingAnchor.constraint(equalTo: orderInfoView.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: orderInfoView.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: orderInfoView.bottomAnchor),
+            tableView.leadingAnchor.constraint(equalTo: orderInfoView.leadingAnchor, constant: 24),
+            tableView.trailingAnchor.constraint(equalTo: orderInfoView.trailingAnchor, constant: -24),
+            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -view.bounds.height/4),
+            
+            cancelButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -8),
+            cancelButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            cancelButton.widthAnchor.constraint(equalToConstant: view.bounds.width/2),
+            cancelButton.heightAnchor.constraint(equalToConstant: 16)
         ])
         
     }
@@ -180,8 +196,9 @@ class DeliveryViewController: UIViewController, UITableViewDelegate, UITableView
     func tableApperance() {
         self.tableView = UITableView()
         self.tableView.delegate = self
-        self.tableView.backgroundColor = R.Colors.background
+        self.tableView.backgroundColor = R.Colors.barBg
         self.tableView.estimatedRowHeight = 150
+        self.tableView.layer.cornerRadius = 20
         self.tableView.allowsSelection = false
         self.tableView.isEditing = false
         self.tableView.rowHeight = UITableView.automaticDimension
@@ -231,7 +248,7 @@ extension DeliveryViewController: MKMapViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 88
+        return 72
         
     }
 }

@@ -28,7 +28,7 @@ class TabBarController: UITabBarController {
     
     private let productNavController = NavBarController(rootViewController: ProductsController())
     private let searchNavController = NavBarController(rootViewController: ProfileController(login: "Henry", id: ""))
-    private var profileController = NavBarController(rootViewController: DeliveryViewController())
+    private var profileController = NavBarController(rootViewController: LoginController())
     
     override func viewDidLoad() {
         tabBar()
