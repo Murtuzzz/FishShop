@@ -12,6 +12,7 @@ struct Basket {
     let quantity: Int
     let price: Int
     let id: Int
+    let time: String
 }
 
 import UIKit
@@ -143,6 +144,8 @@ class BasketController: UIViewController, UITableViewDelegate, UITableViewDataSo
         let textAttributes = [NSAttributedString.Key.foregroundColor:UIColor.white]
         navigationController?.navigationBar.titleTextAttributes = textAttributes
         
+        print("INFO = \(UserSettings.basketInfo)")
+        
         tableApperance()
         buttonsActions()
         print("basketInfo = \(UserSettings.basketInfo)")
@@ -158,13 +161,15 @@ class BasketController: UIViewController, UITableViewDelegate, UITableViewDataSo
     func payButtonAction() {
         if UserSettings.activeOrder == false {
             print("payButtonAction")
-            print(basketInfo)
-            print(basketProdData)
+            print("basketInfo = \(basketInfo)")
+            UserSettings.orderSum = totalBasketPrice
             //UserSettings.orderInfo = ba
             
             //UserSettings.basketProdQuant = 0
             
             UserSettings.orderInfo = basketInfo
+            
+            print("orderInfo = \(UserSettings.orderInfo)")
             
             UserSettings.basketInfo = []
             basketProdData = []
@@ -293,16 +298,28 @@ class BasketController: UIViewController, UITableViewDelegate, UITableViewDataSo
         
         prices = prices.sorted { $0.count > $1.count }
         
+        // Создаем экземпляр текущей даты и времени
+        let currentDate = Date()
+        // Инициализируем DateFormatter
+        let dateFormatter = DateFormatter()
+        // Устанавливаем нужный формат даты и времени
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        // Преобразуем текущую дату в строку согласно установленному формату
+        let dateString = dateFormatter.string(from: currentDate)
+        // Выводим текущую дату и время
+        print("Текущая дата и время: \(dateString)")
+
+        
         //print("userBasketCount = \(userBasket.count) basketInfoCount = \(basketInfo.count)")
         
         basketInfo = basketInfo.sorted { $0.count < $1.count }
         if basketInfo.count > 0 {
             for i in 0...basketInfo.count-1 {
-                basketProdData.append(.init(title: basketInfo[i][0].title, quantity: basketInfo[i][0].quantity, price: Int(basketInfo[i][0].price), id: basketInfo[i][0].id))
+                basketProdData.append(.init(title: basketInfo[i][0].title, quantity: basketInfo[i][0].quantity, price: Int(basketInfo[i][0].price), id: basketInfo[i][0].id, time: dateString))
                 
                 totalBasketPrice += basketInfo[i][0].price * Double(basketInfo[i][0].quantity)
                 
-                //print("BASKET INFO in CONTR. Title =  \(basketInfo[i][0].title)")
+                //print("BASKET INFO in CONTR. Title = \(basketInfo[i][0].title)")
             }
         } else {
             basketProdData = []

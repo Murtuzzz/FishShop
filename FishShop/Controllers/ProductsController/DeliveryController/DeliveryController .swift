@@ -6,6 +6,7 @@ struct Order {
     let quantity: Int
     let price: Int
     let id: Int
+    let time: String
 }
 
 class DeliveryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
@@ -22,12 +23,40 @@ class DeliveryViewController: UIViewController, UITableViewDelegate, UITableView
         return view
     }()
     
+    private let priceLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = R.Fonts.avenirBook(with: 24)
+        label.textColor = .white
+        label.textAlignment = .center
+        label.text = "Сумма заказа: \(UserSettings.orderSum ?? 0)"
+        return label
+    }()
+    
+    private let payType: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = R.Fonts.avenirBook(with: 14)
+        label.textColor = .white
+        label.textAlignment = .center
+        label.text = "Способ оплаты: Наличные"
+        return label
+    }()
+    
     private let cancelButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.tintColor = .systemGray
         //button.setTitle("Отменить заказ", for: .normal)
         button.setAttributedTitle(NSAttributedString(string: "Отменить заказ", attributes: [.underlineStyle: NSUnderlineStyle.single.rawValue]), for: .normal)
+        return button
+    }()
+    
+    private let orderDoneButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.tintColor = .orange
+        button.setImage(UIImage(systemName: "swift"), for: .normal)
         return button
     }()
     
@@ -57,6 +86,9 @@ class DeliveryViewController: UIViewController, UITableViewDelegate, UITableView
         setupOrderInfoView()
         tableApperance()
         view.addSubview(cancelButton)
+        view.addSubview(orderDoneButton)
+        cancelButton.addTarget(self, action: #selector(cancelButtonAction), for: .touchUpInside)
+        orderDoneButton.addTarget(self, action: #selector(doneButtonAction), for: .touchUpInside)
         setupConstraints()
         view.backgroundColor = R.Colors.mapColor
         // Настройка маршрута на карте
@@ -65,6 +97,45 @@ class DeliveryViewController: UIViewController, UITableViewDelegate, UITableView
         // Добавление жеста на карту для изменения ее размера
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapMapView))
         mapView.addGestureRecognizer(tapGesture)
+    }
+    
+    @objc
+    func cancelButtonAction() {
+        UserSettings.activeOrder = false
+        navigationController?.popViewController(animated: true)
+    }
+    
+    
+    
+    @objc
+    func doneButtonAction() {
+
+        // Создаем экземпляр текущей даты и времени
+        let currentDate = Date()
+        // Инициализируем DateFormatter
+        let dateFormatter = DateFormatter()
+        // Устанавливаем нужный формат даты и времени
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        // Преобразуем текущую дату в строку согласно установленному формату
+        let dateString = dateFormatter.string(from: currentDate)
+
+        // Выводим текущую дату и время
+        print("Текущая дата и время: \(dateString)")
+        
+        print("OrderDone")
+        UserSettings.activeOrder = false
+        if UserSettings.ordersHistory == nil {
+            UserSettings.ordersHistory = []
+        }
+        print("OrderInfo = \(UserSettings.orderInfo)")
+        
+        var order: [[BasketInfo]] = UserSettings.orderInfo
+        order[0][0].orderTime = dateString
+        
+        
+        UserSettings.ordersHistory.append(order)
+        print("UserHistory = \(UserSettings.ordersHistory)")
+        navigationController?.popViewController(animated: true)
     }
     
     func setupMapView() {
@@ -78,6 +149,7 @@ class DeliveryViewController: UIViewController, UITableViewDelegate, UITableView
     func setupOrderInfoView() {
         orderInfoView.backgroundColor = R.Colors.background
         //orderInfoView.backgroundColor = .clear
+        
         
         let label = UILabel()
         label.text = "Информация о заказе"
@@ -98,6 +170,8 @@ class DeliveryViewController: UIViewController, UITableViewDelegate, UITableView
         orderInfoView.addSubview(orderDetailsLabel)
         
         view.addSubview(orderInfoView)
+        view.addSubview(priceLabel)
+        view.addSubview(payType)
         
         NSLayoutConstraint.activate([
             label.topAnchor.constraint(equalTo: orderInfoView.topAnchor, constant: 16),
@@ -108,6 +182,7 @@ class DeliveryViewController: UIViewController, UITableViewDelegate, UITableView
             //orderDetailsLabel.leadingAnchor.constraint(equalTo: orderInfoView.leadingAnchor, constant: 8),
            // orderDetailsLabel.trailingAnchor.constraint(equalTo: orderInfoView.trailingAnchor, constant: -8),
             orderDetailsLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+            
         ])
     }
     
@@ -138,7 +213,22 @@ class DeliveryViewController: UIViewController, UITableViewDelegate, UITableView
             cancelButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -8),
             cancelButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             cancelButton.widthAnchor.constraint(equalToConstant: view.bounds.width/2),
-            cancelButton.heightAnchor.constraint(equalToConstant: 16)
+            cancelButton.heightAnchor.constraint(equalToConstant: 16),
+            
+            orderDoneButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -8),
+            orderDoneButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            orderDoneButton.widthAnchor.constraint(equalToConstant: 24),
+            orderDoneButton.heightAnchor.constraint(equalToConstant: 24),
+            
+            priceLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            priceLabel.bottomAnchor.constraint(equalTo: cancelButton.topAnchor, constant: -56),
+            priceLabel.heightAnchor.constraint(equalToConstant: 25),
+            priceLabel.widthAnchor.constraint(equalToConstant: view.bounds.width),
+            
+            payType.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            payType.topAnchor.constraint(equalTo: priceLabel.bottomAnchor, constant: 8),
+            payType.heightAnchor.constraint(equalToConstant: 16),
+            payType.widthAnchor.constraint(equalToConstant: view.bounds.width),
         ])
         
     }
@@ -209,7 +299,7 @@ class DeliveryViewController: UIViewController, UITableViewDelegate, UITableView
         
         
         for i in UserSettings.orderInfo {
-            orderProdData.append(.init(title: i[0].title, quantity: i[0].quantity, price: Int(i[0].price), id: i[0].id ))
+            orderProdData.append(.init(title: i[0].title, quantity: i[0].quantity, price: Int(i[0].price), id: i[0].id, time: i[0].orderTime))
         }
         
         view.addSubview(tableView)

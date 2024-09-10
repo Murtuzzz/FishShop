@@ -15,6 +15,7 @@ final class ProfileTableCell: UITableViewCell {
         let label = UILabel()
         label.textColor = .white
         label.text = "Orders history"
+        label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = R.Fonts.gillSans(with: 18)
         return label
@@ -64,7 +65,7 @@ final class ProfileTableCell: UITableViewCell {
     
     func config(title: String, image: String) {
         titleLabel.text = title
-        cellImageView.image = UIImage(systemName: image)
+        cellImageView.image = UIImage(named: image)
     }
     
     func constraints() {
@@ -74,20 +75,22 @@ final class ProfileTableCell: UITableViewCell {
             arrowImageView.heightAnchor.constraint(equalToConstant: 14),
             arrowImageView.widthAnchor.constraint(equalToConstant: 14),
             
-            titleLabel.leadingAnchor.constraint(equalTo: bgImageView.trailingAnchor, constant: 8),
+            //titleLabel.leadingAnchor.constraint(equalTo: bgImageView.trailingAnchor, constant: 8),
             titleLabel.centerYAnchor.constraint(equalTo: bgImageView.centerYAnchor),
+            titleLabel.centerXAnchor.constraint(equalTo: centerXAnchor),
             titleLabel.heightAnchor.constraint(equalToConstant: 16),
             titleLabel.widthAnchor.constraint(equalToConstant: bounds.width),
            
             cellImageView.centerXAnchor.constraint(equalTo: bgImageView.centerXAnchor),
             cellImageView.centerYAnchor.constraint(equalTo: centerYAnchor),
-            cellImageView.heightAnchor.constraint(equalToConstant: bounds.height - 18),
+            cellImageView.heightAnchor.constraint(equalToConstant: bounds.height + 8),
             cellImageView.widthAnchor.constraint(equalTo: cellImageView.heightAnchor),
             
             bgImageView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
             bgImageView.centerYAnchor.constraint(equalTo: centerYAnchor),
-            bgImageView.heightAnchor.constraint(equalToConstant: bounds.height + 32),
+            bgImageView.heightAnchor.constraint(equalToConstant: bounds.height + 16),
             bgImageView.widthAnchor.constraint(equalToConstant: bounds.height + 32),
+            
         
         ])
     }

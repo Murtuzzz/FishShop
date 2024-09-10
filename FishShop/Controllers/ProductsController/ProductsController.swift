@@ -106,6 +106,17 @@ class ProductsController: UIViewController, UITableViewDelegate, UITableViewData
         }
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        if UserSettings.activeOrder != nil {
+            if UserSettings.activeOrder == false {
+                deliveryButton.alpha = 0
+            } else {
+                deliveryButton.alpha = 1
+            }
+        }
+        print("Appear")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         NotificationCenter.default.addObserver(self, selector: #selector(updateProductData), name: NSNotification.Name("basketUpdated"), object: nil)
@@ -117,11 +128,14 @@ class ProductsController: UIViewController, UITableViewDelegate, UITableViewData
         UserSettings.basketInfo = []
         UserSettings.storeData = []
         UserSettings.orderInfo = []
+        //UserSettings.ordersHistory = []
         UserSettings.orderPaid = false
         UserSettings.activeOrder = false
         if UserSettings.activeOrder == nil {
             UserSettings.activeOrder = false 
         }
+        
+        
         print("StoreData = \(UserSettings.storeData)")
         view.addSubview(buttons)
         view.addSubview(deliveryButton)
@@ -186,14 +200,13 @@ class ProductsController: UIViewController, UITableViewDelegate, UITableViewData
         print("Product Deleted From Basket")
     }
     
-    @objc func updateProductController() {
+    @objc 
+    func updateProductController() {
         // Обновите данные вашей пользовательской настройки здесь
         tableView.reloadData() // или обновление, специфичное для вашего UI
         allBasketProdCount = 0
         deliveryButton.alpha = 1
         print("Order paid")
-        
-        
     }
     
     @objc
@@ -314,7 +327,8 @@ extension ProductsController: CellDelegate, BasketCellDelegate {
     }
     func didTapBasketButton(inCell cell: UITableViewCell) {
         guard let indexPath = tableView.indexPath(for: cell) else { return }
-        
+        print("didTapBasketButton tapped")
+        print("\(self.basketInfoArray)")
         cardsData[indexPath.row].isInBasket.toggle()
         let cellData = displayDataSource[indexPath.row]
         self.cardsData[indexPath.row].prodCount += 1
@@ -420,16 +434,19 @@ extension ProductsController: CellDelegate, BasketCellDelegate {
             print("was deleted from basket \(UserSettings.basketInfo)")
             
             //Кол-во товаров в корзине(индикатор)
-            UserSettings.basketProdQuant -= 1
-            
-            self.allBasketProdCount = UserSettings.basketProdQuant
+            UserSettings.basketProdQuant = 0
+            self.allBasketProdCount = 0
             
             self.allBasketProdLabel.text = "\(self.allBasketProdCount)"
             
             print(self.allBasketProdCount)
+            for i in 0...cardsData.count-1 {
+                self.cardsData[i].isInBasket = false
+                self.cardsData[i].prodCount = 0
+            }
             
-            self.cardsData[indexPath.row].isInBasket = false
-            self.cardsData[indexPath.row].prodCount = 0
+            //self.cardsData[indexPath.row].isInBasket = false
+            //self.cardsData[indexPath.row].prodCount = 0
             
             DispatchQueue.main.async {
                 cell.cellConfig(img: cellData.image, price: cellData.price, name: cellData.title,
@@ -438,7 +455,7 @@ extension ProductsController: CellDelegate, BasketCellDelegate {
                 //tableView.reloadRows(at: [indexPath], with: .none)
                 //tableView.reloadData()
             }
-            
+            UserSettings.basketProdQuant = 0
             self.basketInfoArray = UserSettings.basketInfo
             
             if UserSettings.basketProdQuant == 0 {
@@ -451,58 +468,63 @@ extension ProductsController: CellDelegate, BasketCellDelegate {
             self.allBasketProdLabel.alpha = 0
             //print("deleted cell = \(UserSettings.basketInfo[indexPath.row])")
             //print(UserSettings.basketInfo)
-            
+            UserSettings.orderPaid = false
         }
         
         cell.onPlusTap = {
-            print("StoreData \(UserSettings.storeData)")
-            self.allBasketProdCount += 1
-            self.allBasketProdLabel.text = "\(self.allBasketProdCount)"
-            self.cardsData[indexPath.row].prodCount += 1
-            UserSettings.basketInfo[indexPath.row][0].quantity = self.cardsData[indexPath.row].prodCount
-            DispatchQueue.main.async {
-                cell.cellConfig(img: cellData.image, price: cellData.price, name: cellData.title,
-                                title: cellData.title, prodId: cellData.prodId,
-                                prodCount: self.cardsData[indexPath.row].prodCount, isInBasket: cellData.isInBasket, wasInBasket: cellData.wasInBasket)
-                tableView.reloadRows(at: [indexPath], with: .none)
-                //                print("\(self.cardsData[indexPath.row].prodCount) PLUS")
-                
-                self.basketInfoArray[indexPath.row][0].quantity = self.cardsData[indexPath.row].prodCount
-            }
-            
-            UserSettings.basketProdQuant = self.allBasketProdCount
-        }
-        
-        cell.onMinusTap = {
             if self.cardsData[indexPath.row].prodCount > 0 {
-                self.cardsData[indexPath.row].prodCount -= 1
-                self.allBasketProdCount -= 1
+                print("StoreData \(UserSettings.storeData)")
+                self.allBasketProdCount += 1
                 self.allBasketProdLabel.text = "\(self.allBasketProdCount)"
-                if self.allBasketProdCount == 0 {
-                    self.allBasketProdLabel.alpha = 0
-                }
+                self.cardsData[indexPath.row].prodCount += 1
+                print("\(self.cardsData[indexPath.row].prodCount)")
                 UserSettings.basketInfo[indexPath.row][0].quantity = self.cardsData[indexPath.row].prodCount
-                if self.cardsData[indexPath.row].prodCount == 0 {
-                    self.cardsData[indexPath.row].isInBasket = false
-                    UserSettings.basketInfo[indexPath.row] = []
-                    self.basketInfoArray[indexPath.row] = []
-                }
                 DispatchQueue.main.async {
                     cell.cellConfig(img: cellData.image, price: cellData.price, name: cellData.title,
                                     title: cellData.title, prodId: cellData.prodId,
                                     prodCount: self.cardsData[indexPath.row].prodCount, isInBasket: cellData.isInBasket, wasInBasket: cellData.wasInBasket)
                     tableView.reloadRows(at: [indexPath], with: .none)
-                    //                    print("\(self.cardsData[indexPath.row].prodCount) MINUS")
+                    //                print("\(self.cardsData[indexPath.row].prodCount) PLUS")
+                    
+                    self.basketInfoArray[indexPath.row][0].quantity = self.cardsData[indexPath.row].prodCount
                 }
+                
                 UserSettings.basketProdQuant = self.allBasketProdCount
             }
-            
-            
-            //            print("UserSettig Basket MINUS TAPPED == \(UserSettings.basketInfo)")
-            print(self.basketInfoArray)
         }
         
+        cell.onMinusTap = {
+            if self.cardsData[indexPath.row].prodCount > 0 {
+                if self.cardsData[indexPath.row].prodCount > 0 {
+                    self.cardsData[indexPath.row].prodCount -= 1
+                    self.allBasketProdCount -= 1
+                    self.allBasketProdLabel.text = "\(self.allBasketProdCount)"
+                    if self.allBasketProdCount == 0 {
+                        self.allBasketProdLabel.alpha = 0
+                    }
+                    UserSettings.basketInfo[indexPath.row][0].quantity = self.cardsData[indexPath.row].prodCount
+                    if self.cardsData[indexPath.row].prodCount == 0 {
+                        self.cardsData[indexPath.row].isInBasket = false
+                        UserSettings.basketInfo[indexPath.row] = []
+                        self.basketInfoArray[indexPath.row] = []
+                    }
+                    DispatchQueue.main.async {
+                        cell.cellConfig(img: cellData.image, price: cellData.price, name: cellData.title,
+                                        title: cellData.title, prodId: cellData.prodId,
+                                        prodCount: self.cardsData[indexPath.row].prodCount, isInBasket: cellData.isInBasket, wasInBasket: cellData.wasInBasket)
+                        tableView.reloadRows(at: [indexPath], with: .none)
+                        //                    print("\(self.cardsData[indexPath.row].prodCount) MINUS")
+                    }
+                    UserSettings.basketProdQuant = self.allBasketProdCount
+                }
+                
+                
+                //            print("UserSettig Basket MINUS TAPPED == \(UserSettings.basketInfo)")
+                print(self.basketInfoArray)
+            }
+        }
         return cell
+            
     }
     
     func openVc(_ index: Int) {

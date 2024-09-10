@@ -10,6 +10,7 @@ import UIKit
 struct ProfileData {
     let title: String
     let image: String
+    let time: String
 }
 
 class ProfileController: UIViewController, UITableViewDelegate, UITableViewDataSource {
@@ -23,6 +24,16 @@ class ProfileController: UIViewController, UITableViewDelegate, UITableViewDataS
         view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.cornerRadius = 25
         return view
+    }()
+    
+    private let orderHistoryLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .systemGray
+        label.text = "История заказов"
+        label.textAlignment = .left
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = R.Fonts.gillSans(with: 18)
+        return label
     }()
     
     private let logoutButton: UIButton = {
@@ -59,6 +70,10 @@ class ProfileController: UIViewController, UITableViewDelegate, UITableViewDataS
         return view
     }()
     
+    override func viewWillAppear(_ animated: Bool) {
+        
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.addSubview(containerView)
@@ -66,6 +81,7 @@ class ProfileController: UIViewController, UITableViewDelegate, UITableViewDataS
         view.addSubview(nameLabel)
         view.addSubview(basketView)
         view.addSubview(logoutButton)
+        view.addSubview(orderHistoryLabel)
         title = "Profile"
         let textAttributes = [NSAttributedString.Key.foregroundColor:UIColor.white]
         navigationController?.navigationBar.titleTextAttributes = textAttributes
@@ -97,7 +113,7 @@ class ProfileController: UIViewController, UITableViewDelegate, UITableViewDataS
         self.tableView.delegate = self
         self.tableView.dataSource = self
         self.tableView.separatorColor = R.Colors.background
-        self.tableView.isScrollEnabled = false
+        self.tableView.isScrollEnabled = true
         self.tableView.backgroundColor = R.Colors.barBg
         self.tableView.layer.cornerRadius = 20
         self.tableView.register(ProfileTableCell.self, forCellReuseIdentifier: ProfileTableCell.id)
@@ -109,14 +125,14 @@ class ProfileController: UIViewController, UITableViewDelegate, UITableViewDataS
         
         NSLayoutConstraint.activate([
             tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -8),
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8),
+            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8),
             tableView.topAnchor.constraint(equalTo: containerView.topAnchor, constant: -16),
             
             containerView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -8),
-            containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            containerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: view.bounds.height / 3),
+            containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8),
+            containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8),
+            containerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: view.bounds.height / 2.5),
             
             nameLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             nameLabel.topAnchor.constraint(equalTo: profileImage.bottomAnchor, constant: -48),
@@ -135,13 +151,22 @@ class ProfileController: UIViewController, UITableViewDelegate, UITableViewDataS
             logoutButton.centerYAnchor.constraint(equalTo: basketView.centerYAnchor),
             logoutButton.heightAnchor.constraint(equalToConstant: 80),
             logoutButton.widthAnchor.constraint(equalTo: logoutButton.heightAnchor),
+            
+            orderHistoryLabel.bottomAnchor.constraint(equalTo: tableView.topAnchor, constant: -8),
+            orderHistoryLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
+            orderHistoryLabel.heightAnchor.constraint(equalToConstant: 24),
+            orderHistoryLabel.widthAnchor.constraint(equalToConstant: view.bounds.width)
         ])
         
+        for i in stride(from: UserSettings.ordersHistory.count-1, through: 0, by: -1) {
+            profileData.append(.init(title: UserSettings.ordersHistory[i][0][0].title, image: UserSettings.ordersHistory[i][0][0].title, time: UserSettings.ordersHistory[i][0][0].orderTime))
+        }
         
-        profileData = [.init(title: "Orders History", image: "cart"),
-                       .init(title: "BekeSheke", image: "figure.socialdance"),
-                       .init(title: "Settings", image: "gear"),
-                       .init(title: "Change password", image: "person.crop.circle")]
+        tableView.reloadData()
+//        profileData = [.init(title: "04.08.24", image: "Grilled fish"),
+//                       .init(title: "03.08.24", image: "Grilled fish"),
+//                       .init(title: "02.08.24", image: "Grilled fish"),
+//                       .init(title: "01.08.24", image: "Grilled fish")]
     }
 }
 
@@ -149,15 +174,17 @@ class ProfileController: UIViewController, UITableViewDelegate, UITableViewDataS
 // MARK: - UITableView
 extension ProfileController {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        profileData.count
+        UserSettings.ordersHistory.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ProfileTableCell.id, for: indexPath) as! ProfileTableCell
         
+        print("profileData = \(profileData)")
+        print("index = \(indexPath.row)")
         let cellData = profileData[indexPath.row]
         
-        cell.config(title: cellData.title, image: cellData.image)
+        cell.config(title: cellData.time, image: cellData.image)
         cell.selectionStyle = .gray
         
         return cell

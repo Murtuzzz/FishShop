@@ -16,6 +16,7 @@ struct BasketInfo: Codable {
     let catId: Int
     let inStock: Bool
     let prodCount: Int
+    var orderTime: String = ""
     
 }
 
@@ -44,6 +45,8 @@ final class UserSettings {
         case orderInfo
         case adress
         case activeOrder
+        case orderSum
+        case ordersHistory
     }
     
     static var basketInfo: [[BasketInfo]]! {
@@ -126,6 +129,21 @@ final class UserSettings {
         }
     }
     
+    static var orderSum: Double! {
+        get {
+            return UserDefaults.standard.double(forKey: SettingsKeys.orderSum.rawValue)
+        } set {
+            let defaults = UserDefaults.standard
+            let key = SettingsKeys.orderSum.rawValue
+            if let today = newValue {
+                print("value: \(today) was added to key \(key)")
+                defaults.set(today, forKey: key)
+            } else {
+                defaults.removeObject(forKey: key)
+            }
+        }
+    }
+    
     static var orderPaid: Bool! {
         get {
             return UserDefaults.standard.bool(forKey: SettingsKeys.orderPaid.rawValue)
@@ -158,5 +176,16 @@ final class UserSettings {
         }
     }
     
+    static var ordersHistory: [[[BasketInfo]]]! {
+        get {
+            guard let data = UserDefaults.standard.data(forKey: SettingsKeys.ordersHistory.rawValue) else { return nil }
+            let decoder = JSONDecoder()
+            return try? decoder.decode([[[BasketInfo]]].self, from: data)
+        } set {
+            let encoder = JSONEncoder()
+            let encoded = try? encoder.encode(newValue)
+            UserDefaults.standard.set(encoded, forKey: SettingsKeys.ordersHistory.rawValue)
+        }
+    }
     
 }
