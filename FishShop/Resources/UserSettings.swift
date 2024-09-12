@@ -47,6 +47,7 @@ final class UserSettings {
         case activeOrder
         case orderSum
         case ordersHistory
+        case isLocChanging
     }
     
     static var basketInfo: [[BasketInfo]]! {
@@ -167,6 +168,22 @@ final class UserSettings {
             
             let defaults = UserDefaults.standard
             let key = SettingsKeys.activeOrder.rawValue
+            if let today = newValue {
+                print("value: \(today) was added to key \(key)")
+                defaults.set(today, forKey: key)
+            } else {
+                defaults.removeObject(forKey: key)
+            }
+        }
+    }
+    
+    static var isLocChanging: Bool! {
+        get {
+            return UserDefaults.standard.bool(forKey: SettingsKeys.isLocChanging.rawValue)
+        } set {
+            
+            let defaults = UserDefaults.standard
+            let key = SettingsKeys.isLocChanging.rawValue
             if let today = newValue {
                 print("value: \(today) was added to key \(key)")
                 defaults.set(today, forKey: key)

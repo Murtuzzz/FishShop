@@ -45,9 +45,10 @@ class BasketController: UIViewController, UITableViewDelegate, UITableViewDataSo
     private let locationTextField: UITextField = {
         let textField = UITextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
-        textField.placeholder = "Введите адрес доставки"
+        //textField.placeholder = "Введите адрес доставки"
         textField.textColor = .white
         textField.tintColor = .white
+        textField.attributedPlaceholder = NSAttributedString(string: "Введите адрес доставки", attributes: [NSAttributedString.Key.foregroundColor: UIColor.systemGray])
         //textField.text = ""
         return textField
     }()
@@ -159,29 +160,34 @@ class BasketController: UIViewController, UITableViewDelegate, UITableViewDataSo
     
     @objc
     func payButtonAction() {
-        if UserSettings.activeOrder == false {
-            print("payButtonAction")
-            print("basketInfo = \(basketInfo)")
-            UserSettings.orderSum = totalBasketPrice
-            //UserSettings.orderInfo = ba
-            
-            //UserSettings.basketProdQuant = 0
-            
-            UserSettings.orderInfo = basketInfo
-            
-            print("orderInfo = \(UserSettings.orderInfo)")
-            
-            UserSettings.basketInfo = []
-            basketProdData = []
-            basketInfo = []
-            
-            tableView.reloadData()
-            NotificationCenter.default.post(name: NSNotification.Name("OrderPaid"), object: nil)
-            UserSettings.orderPaid = true
-            UserSettings.activeOrder = true
-            dismiss(animated: true)
+        if locationTextField.hasText == true {
+            if UserSettings.activeOrder == false {
+                print("payButtonAction")
+                print("basketInfo = \(basketInfo)")
+                UserSettings.orderSum = totalBasketPrice
+                //UserSettings.orderInfo = ba
+                
+                //UserSettings.basketProdQuant = 0
+                
+                UserSettings.orderInfo = basketInfo
+                
+                print("orderInfo = \(UserSettings.orderInfo)")
+                
+                UserSettings.basketInfo = []
+                basketProdData = []
+                basketInfo = []
+                
+                tableView.reloadData()
+                NotificationCenter.default.post(name: NSNotification.Name("OrderPaid"), object: nil)
+                UserSettings.orderPaid = true
+                UserSettings.activeOrder = true
+                UserSettings.isLocChanging = true
+                dismiss(animated: true)
+            } else {
+                displayOrderAlert()
+            }
         } else {
-            displayOrderAlert()
+            displaySaveError()
         }
     }
     
@@ -215,16 +221,18 @@ class BasketController: UIViewController, UITableViewDelegate, UITableViewDataSo
     
     @objc
     func saveLocationButtonAction() {
-        adress = locationTextField.text!
-        view.endEditing(true)
-        if locationTextField != nil {
-            searchForAddress(locationTextField.text!)
+        if UserSettings.isLocChanging == false {
+            adress = locationTextField.text!
+            view.endEditing(true)
+            if locationTextField != nil {
+                searchForAddress(locationTextField.text!)
+            } else {
+                displaySaveError()
+            }
+            displayAddressAlert(address: "")
         } else {
-            displaySaveError()
+            displayLocSaveError()
         }
-        displayAddressAlert(address: "")
-        
-        
     }
     
     @objc
@@ -250,11 +258,18 @@ class BasketController: UIViewController, UITableViewDelegate, UITableViewDataSo
         present(alertController, animated: true)
     }
     
+    func displayLocSaveError() {
+        let alertController = UIAlertController(title: "Ошибка", message: "Дождитесь завершения заказа и введите адрес еще раз", preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alertController, animated: true)
+    }
+    
     func displayOrderAlert() {
         let alertController = UIAlertController(title: "Обработка", message: "Дождитесь завершения предыдущего заказа", preferredStyle: .alert)
         alertController.addAction(UIAlertAction(title: "OK", style: .default))
         present(alertController, animated: true)
     }
+    
     
     func searchForAddress(_ address: String) {
         print("adress == \(address)")

@@ -47,7 +47,7 @@ class ProfileController: UIViewController, UITableViewDelegate, UITableViewDataS
     private let nameLabel: UILabel = {
         let label = UILabel()
         label.textColor = .white
-        label.text = "Henry"
+        label.text = "Dinglbob"
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = R.Fonts.avenirBook(with: 32)
         return label
@@ -132,7 +132,7 @@ class ProfileController: UIViewController, UITableViewDelegate, UITableViewDataS
             containerView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -8),
             containerView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 8),
             containerView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -8),
-            containerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: view.bounds.height / 2.5),
+            containerView.topAnchor.constraint(equalTo: nameLabel.bottomAnchor, constant: 64),
             
             nameLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             nameLabel.topAnchor.constraint(equalTo: profileImage.bottomAnchor, constant: -48),
@@ -158,8 +158,10 @@ class ProfileController: UIViewController, UITableViewDelegate, UITableViewDataS
             orderHistoryLabel.widthAnchor.constraint(equalToConstant: view.bounds.width)
         ])
         
-        for i in stride(from: UserSettings.ordersHistory.count-1, through: 0, by: -1) {
-            profileData.append(.init(title: UserSettings.ordersHistory[i][0][0].title, image: UserSettings.ordersHistory[i][0][0].title, time: UserSettings.ordersHistory[i][0][0].orderTime))
+        if UserSettings.ordersHistory != nil {
+            for i in stride(from: UserSettings.ordersHistory.count-1, through: 0, by: -1) {
+                profileData.append(.init(title: UserSettings.ordersHistory[i][0][0].title, image: UserSettings.ordersHistory[i][0][0].title, time: UserSettings.ordersHistory[i][0][0].orderTime))
+            }
         }
         
         tableView.reloadData()
@@ -174,7 +176,7 @@ class ProfileController: UIViewController, UITableViewDelegate, UITableViewDataS
 // MARK: - UITableView
 extension ProfileController {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        UserSettings.ordersHistory.count
+        profileData.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

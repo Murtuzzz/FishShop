@@ -128,6 +128,7 @@ class ProductsController: UIViewController, UITableViewDelegate, UITableViewData
         UserSettings.basketInfo = []
         UserSettings.storeData = []
         UserSettings.orderInfo = []
+        UserSettings.isLocChanging = false 
         //UserSettings.ordersHistory = []
         UserSettings.orderPaid = false
         UserSettings.activeOrder = false
@@ -135,7 +136,7 @@ class ProductsController: UIViewController, UITableViewDelegate, UITableViewData
             UserSettings.activeOrder = false 
         }
         
-        
+        print(view.bounds.height)
         print("StoreData = \(UserSettings.storeData)")
         view.addSubview(buttons)
         view.addSubview(deliveryButton)
@@ -540,9 +541,16 @@ extension ProductsController: CellDelegate, BasketCellDelegate {
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let height = view.bounds.height
-        return height/2.65
-        
+        var height = view.bounds.height
+        if view.bounds.height == 603 {
+            height = view.bounds.height/2.35
+            print(view.bounds.height)
+        } else {
+            height = view.bounds.height/2.65
+            //print(view.bounds.height)
+            //return height/2.65
+        }
+        return height
     }
     
     func infoButtonTapped(cell: UITableViewCell) {

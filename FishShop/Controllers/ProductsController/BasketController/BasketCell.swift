@@ -68,6 +68,7 @@ final class BasketCell: UITableViewCell {
         button.layer.cornerRadius = 9
         button.contentMode = .scaleAspectFit
         button.tintColor = .white
+        button.alpha = 0
         return button
     }()
     
@@ -80,6 +81,7 @@ final class BasketCell: UITableViewCell {
         button.layer.cornerRadius = 9
         button.contentMode = .scaleAspectFit
         button.tintColor = .white
+        button.alpha = 0
         return button
     }()
     
@@ -139,7 +141,7 @@ final class BasketCell: UITableViewCell {
             
             countLabel.trailingAnchor.constraint(equalTo: mainView.trailingAnchor, constant: -40),
             countLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
-            countLabel.widthAnchor.constraint(equalToConstant: 8),
+            countLabel.widthAnchor.constraint(equalToConstant: 16),
             countLabel.heightAnchor.constraint(equalToConstant: 24),
             
             addButton.leadingAnchor.constraint(equalTo: countLabel.trailingAnchor, constant: 8),

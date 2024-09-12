@@ -105,11 +105,9 @@ class DeliveryViewController: UIViewController, UITableViewDelegate, UITableView
         navigationController?.popViewController(animated: true)
     }
     
-    
-    
     @objc
     func doneButtonAction() {
-
+        
         // Создаем экземпляр текущей даты и времени
         let currentDate = Date()
         // Инициализируем DateFormatter
@@ -118,7 +116,7 @@ class DeliveryViewController: UIViewController, UITableViewDelegate, UITableView
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
         // Преобразуем текущую дату в строку согласно установленному формату
         let dateString = dateFormatter.string(from: currentDate)
-
+        
         // Выводим текущую дату и время
         print("Текущая дата и время: \(dateString)")
         
@@ -132,7 +130,7 @@ class DeliveryViewController: UIViewController, UITableViewDelegate, UITableView
         var order: [[BasketInfo]] = UserSettings.orderInfo
         order[0][0].orderTime = dateString
         
-        
+        UserSettings.isLocChanging = false
         UserSettings.ordersHistory.append(order)
         print("UserHistory = \(UserSettings.ordersHistory)")
         navigationController?.popViewController(animated: true)
@@ -180,7 +178,7 @@ class DeliveryViewController: UIViewController, UITableViewDelegate, UITableView
             
             orderDetailsLabel.topAnchor.constraint(equalTo: label.bottomAnchor, constant: 8),
             //orderDetailsLabel.leadingAnchor.constraint(equalTo: orderInfoView.leadingAnchor, constant: 8),
-           // orderDetailsLabel.trailingAnchor.constraint(equalTo: orderInfoView.trailingAnchor, constant: -8),
+            // orderDetailsLabel.trailingAnchor.constraint(equalTo: orderInfoView.trailingAnchor, constant: -8),
             orderDetailsLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
             
         ])
