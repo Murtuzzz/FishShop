@@ -21,12 +21,14 @@ struct BasketInfo: Codable {
 }
 
 struct StoreData: Codable {
-    let title: String
-    let price: String
-    var quantity: Int
-    let inStock: Bool
     let id: Int
+    let title: String
+    let description: String
+    let price: String
+    let inStock: Bool
+    var quantity: Int
     let categoryId: Int
+    
 }
 
 struct Adress: Codable {

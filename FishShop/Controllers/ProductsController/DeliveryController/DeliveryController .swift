@@ -12,6 +12,7 @@ struct Order {
 class DeliveryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     var orderProdData: [Order] = []
+    var timer: Timer?
     
     private var tableView = UITableView()
     private var mapView: MKMapView!
@@ -93,6 +94,7 @@ class DeliveryViewController: UIViewController, UITableViewDelegate, UITableView
         view.backgroundColor = R.Colors.mapColor
         // Настройка маршрута на карте
         setupRoute()
+        startCheckingStatus()
         
         // Добавление жеста на карту для изменения ее размера
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapMapView))
@@ -338,5 +340,48 @@ extension DeliveryViewController: MKMapViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 72
         
+    }
+    
+    
+    func startCheckingStatus() {
+        timer = Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(checkDeliveryStatus), userInfo: nil, repeats: true)
+    }
+    
+    
+    //--MARK: Back: checkStatus bbb
+    @objc func checkDeliveryStatus() {
+        guard let url = URL(string: "http://192.168.31.49:5002/checkStatus") else { return }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "GET"
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                print("Error: \(error)")
+                return
+            }
+            
+            guard let data = data else { return }
+            
+            do {
+                if let jsonResponse = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+                   let deliveryStatus = jsonResponse["delivered"] as? Bool {
+                    print("Delivery Status: \(deliveryStatus)")
+                    
+                    if deliveryStatus {
+                        self.timer?.invalidate()
+                        self.timer = nil
+                        print("Delivery confirmed. Stopping checks.")
+                        DispatchQueue.main.async {
+                            self.doneButtonAction()
+                        }
+                    }
+                }
+            } catch {
+                print("Error parsing response: \(error)")
+            }
+        }
+        
+        task.resume()
     }
 }

@@ -160,6 +160,10 @@ class BasketController: UIViewController, UITableViewDelegate, UITableViewDataSo
     
     @objc
     func payButtonAction() {
+        print(" ")
+        print("--#FUNC = payButtonAction")
+        
+        
         if locationTextField.hasText == true {
             if UserSettings.activeOrder == false {
                 print("payButtonAction")
@@ -170,7 +174,7 @@ class BasketController: UIViewController, UITableViewDelegate, UITableViewDataSo
                 //UserSettings.basketProdQuant = 0
                 
                 UserSettings.orderInfo = basketInfo
-                
+                sendDataToServer(orders: basketInfo)
                 print("orderInfo = \(UserSettings.orderInfo)")
                 
                 UserSettings.basketInfo = []
@@ -190,6 +194,41 @@ class BasketController: UIViewController, UITableViewDelegate, UITableViewDataSo
             displaySaveError()
         }
     }
+    
+    
+    //MARK: - Back: send order Info To Server bbb
+    func sendDataToServer(orders: [[BasketInfo]]) {
+           guard let url = URL(string: "http://192.168.31.49:5002/api/orders") else { return }
+
+           var request = URLRequest(url: url)
+           request.httpMethod = "POST"
+           request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+           do {
+               let jsonData = try JSONEncoder().encode(orders)
+               request.httpBody = jsonData
+           } catch {
+               print("Error encoding JSON: \(error)")
+               return
+           }
+
+           let task = URLSession.shared.dataTask(with: request) { data, response, error in
+               if let error = error {
+                   print("Error: \(error)")
+                   return
+               }
+
+               if let response = response as? HTTPURLResponse, response.statusCode == 201 {
+                   print("Orders sent successfully!")
+               } else {
+                   print("Failed to send orders.")
+               }
+           }
+
+           task.resume()
+       }
+    
+
     
     @objc func hideKeyboard() {
         view.endEditing(true)
@@ -246,6 +285,8 @@ class BasketController: UIViewController, UITableViewDelegate, UITableViewDataSo
         locationButton.setTitle(address, for: .normal)
     }
     
+    
+    //--MARK: Alerts
     func displayAddressAlert(address: String) {
         let alertController = UIAlertController(title: "Готово", message: "Адрес доставки сохранен", preferredStyle: .alert)
         alertController.addAction(UIAlertAction(title: "OK", style: .default))

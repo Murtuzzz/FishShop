@@ -25,6 +25,7 @@ class ProductsController: UIViewController, UITableViewDelegate, UITableViewData
     
     private var tableView = UITableView()
     private var basketInfoArray: [[BasketInfo]] = []
+    private var isJsonLoaded: Bool = false
     
     let jsonString = """
 [
@@ -65,6 +66,24 @@ class ProductsController: UIViewController, UITableViewDelegate, UITableViewData
         view.backgroundColor = R.Colors.barBg.withAlphaComponent(0.5)
         view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.cornerRadius = 25
+        return view
+    }()
+    
+    private let emptyView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = R.Colors.barBg
+        view.layer.masksToBounds = true
+        view.layer.cornerRadius = 20
+        return view
+    }()
+    
+    private let emptyView2: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = R.Colors.barBg
+        view.layer.masksToBounds = true
+        view.layer.cornerRadius = 20
         return view
     }()
     
@@ -143,6 +162,8 @@ class ProductsController: UIViewController, UITableViewDelegate, UITableViewData
         view.addSubview(basketView)
         view.addSubview(basketButton)
         view.addSubview(profileView)
+        //view.addSubview(emptyView)
+        //view.addSubview(emptyView2)
         view.addSubview(allBasketProdLabel)
         
         title = "Products"
@@ -150,45 +171,26 @@ class ProductsController: UIViewController, UITableViewDelegate, UITableViewData
         navigationController?.navigationBar.titleTextAttributes = textAttributes
         
         buttonActions()
-        tableApperance()
+        
+        setJsonProductsOnScreen {
+            //self.tableView.reloadData()
+            print("setJsonProductsOnScreen")
+            DispatchQueue.main.async {
+                self.tableApperance()
+                
+            }
+                
+        }
         constraints()
         //getDataFromStore()
         //getDataFromStore()
-        //        getUrl { prodList in
-        //            print(prodList)
-        //        }
         
+                
     }
     
-    func getUrl(completion: @escaping (String) -> Void) {
-        
-        let url = URL(string: "http://127.0.0.1:8000/catalog/products/?format=json")
-        
-        let task = URLSession.shared.dataTask(with: url!) { (data, response, error) in
-            // Обработка ошибок
-            if let error = error {
-                print("Error: \(error)")
-            } else if let data = data {
-                print("")
-                // Добавим эту строку для распечатки полученных данных
-                print("Received data: \(String(describing: String(data: data, encoding: .utf8)))")
-                do {
-                    // Попробуйте декодировать ответ в JSON
-                    if let json = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [String: String] {
-                        // Получите URL из JSON, если он существует
-                        if let urlStr = json["url"] {
-                            print("URL: \(urlStr)")
-                            completion(urlStr)
-                            // Здесь ваш код для использования urlStr в WebView
-                        }
-                    }
-                } catch {
-                    print("Invalid response data: \(error)")
-                }
-            }
-        }
-        task.resume()
-    }
+    
+    //func getUrl(completion: @escaping ([[String: Any]]) -> Void) {
+
     
     private func buttonActions() {
         basketButton.addTarget(self, action: #selector(basketAction), for: .touchUpInside)
@@ -257,11 +259,11 @@ class ProductsController: UIViewController, UITableViewDelegate, UITableViewData
         //                     .init(image: "Gold fish", price: 6799, title: "Gold fish", prodType: .salmon, prodId: 4)]
         //
         
-        getDataFromStore()
+        //getDataFromStore()
+        
         
         for _ in 0...cardsData.count-1 {
             basketInfoArray.append([])
-            
         }
         
         tableView.reloadData()
@@ -278,7 +280,7 @@ class ProductsController: UIViewController, UITableViewDelegate, UITableViewData
                 
                 if product.inStock == true {
                     
-                    UserSettings.storeData.append([.init(title: product.name, price: product.price , quantity: Int(product.productCount), inStock: product.inStock, id: product.id, categoryId: product.category)])
+                    UserSettings.storeData.append([.init(id: product.id, title: product.name, description: product.name, price: product.price , inStock: product.inStock, quantity: Int(product.productCount), categoryId: product.category)])
                     //print(UserSettings.storeData)
                     
                     print(product.price)
@@ -316,6 +318,16 @@ class ProductsController: UIViewController, UITableViewDelegate, UITableViewData
             allBasketProdLabel.centerYAnchor.constraint(equalTo: basketView.centerYAnchor, constant: -24),
             allBasketProdLabel.heightAnchor.constraint(equalToConstant: 32),
             allBasketProdLabel.widthAnchor.constraint(equalTo: allBasketProdLabel.heightAnchor),
+            
+//            emptyView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 144),
+//            emptyView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
+//            emptyView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
+//            emptyView.heightAnchor.constraint(equalToConstant: view.bounds.height/4),
+//            
+//            emptyView2.topAnchor.constraint(equalTo: emptyView.bottomAnchor, constant: 24),
+//            emptyView2.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
+//            emptyView2.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 24),
+//            emptyView2.heightAnchor.constraint(equalToConstant: view.bounds.height/3.6),
         ])
     }
 }
@@ -427,8 +439,6 @@ extension ProductsController: CellDelegate, BasketCellDelegate {
                 }
             }
         }
-        
-        
         
         if UserSettings.orderPaid == true {
             //print(UserSettings.basketInfo)
@@ -558,7 +568,65 @@ extension ProductsController: CellDelegate, BasketCellDelegate {
         
     }
     
+    func setJsonProductsOnScreen(completion: @escaping () -> Void) {
+        self.getUrl { prodList in
+            print("--FUNC getUrl# prodList = \(prodList)")
+            
+            for product in prodList {
+                print(product)
+             
+                // Убедитесь, что product имеет доступ к ожидаемым ключам
+                if let name = product["name"] as? String,
+                   let price = product["price"] as? String,
+                   let description = product["description"] as? String,
+                   let id = product["id"] as? Int,
+                   let category = product["category"] as? Int,
+                   let inStock = product["in_stock"] as? Bool,
+                   let productCount = product["product_count"] as? Int {
+                       
+                    print("Product Name: \(name), Price: \(price), id: \(id - 1), category: \(category), in stock: \(inStock), count: \(productCount)")
+                    
+                    if inStock == true {
+                        UserSettings.storeData.append([.init(id: id, title: name, description: self.description, price: price, inStock: inStock, quantity: productCount, categoryId: category)])
+                        
+                        self.cardsData.append(.init(image: name, price: Int(Double(price)!), title: name, prodType: .salmon, prodId: id - 1, catId: Int(category) ?? 0, productCount: Int(productCount), inStock: inStock))
+                        
+                        //print("CARDS DATA = \(self.cardsData)")
+
+                    }
+                }
+                else {
+                    print("ERROR 567")
+                }
+            }
+            completion()
+            
+        }
+    }
+    //MARK: - Back: Get products from server bbb
+    func getUrl(completion: @escaping ([[String: Any]]) -> Void) {
+        //let url = URL(string: "http://127.0.0.1:5002/get-url")
+        let url = URL(string: "http://192.168.31.49:5002/get-url")
+        let task = URLSession.shared.dataTask(with: url!) { (data, response, error) in
+            if let error = error {
+                print("Error: \(error)")
+            } else if let data = data {
+                print("--FUNC getURL")
+                do {
+                    if let productArray = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [[String: Any]] {
+                        print("Products: \(productArray)")
+                        completion(productArray)
+                    }
+                } catch {
+                    print("Invalid response data: \(error)")
+                }
+            }
+        }
+        task.resume()
+    }
+    
     func parseProducts(from jsonString: String) -> [Product]? {
+        print("--FUNC parseProducts")
         guard let jsonData = jsonString.data(using: .utf8) else { return nil }
         
         let decoder = JSONDecoder()
@@ -570,6 +638,5 @@ extension ProductsController: CellDelegate, BasketCellDelegate {
             return nil
         }
     }
-    
-}
 
+}
