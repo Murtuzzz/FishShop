@@ -606,7 +606,7 @@ extension ProductsController: CellDelegate, BasketCellDelegate {
     //MARK: - Back: Get products from server bbb
     func getUrl(completion: @escaping ([[String: Any]]) -> Void) {
         //let url = URL(string: "http://127.0.0.1:5002/get-url")
-        let url = URL(string: "http://192.168.31.49:5002/get-url")
+        let url = URL(string: "http://192.168.0.111:5002/get-url")
         let task = URLSession.shared.dataTask(with: url!) { (data, response, error) in
             if let error = error {
                 print("Error: \(error)")

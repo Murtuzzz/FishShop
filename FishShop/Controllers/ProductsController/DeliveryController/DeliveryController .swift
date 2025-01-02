@@ -350,7 +350,7 @@ extension DeliveryViewController: MKMapViewDelegate {
     
     //--MARK: Back: checkStatus bbb
     @objc func checkDeliveryStatus() {
-        guard let url = URL(string: "http://192.168.31.49:5002/checkStatus") else { return }
+        guard let url = URL(string: "http://192.168.0.111:5002/checkStatus") else { return }
         
         var request = URLRequest(url: url)
         request.httpMethod = "GET"

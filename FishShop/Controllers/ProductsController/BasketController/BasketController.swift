@@ -21,6 +21,9 @@ import MapKit
 class BasketController: UIViewController, UITableViewDelegate, UITableViewDataSource,AddressPickerDelegate {
     
     var basketProdData: [Basket] = []
+    var isProductsInStock = false
+    var unavailableInd: [Int] = []
+    var unavailableProducts = [[BasketInfo]]()
     
     private var tableView = UITableView()
     private var basketProdCount = 0
@@ -162,75 +165,120 @@ class BasketController: UIViewController, UITableViewDelegate, UITableViewDataSo
     func payButtonAction() {
         print(" ")
         print("--#FUNC = payButtonAction")
+        sendDataToServer(orders: basketInfo)
         
-        
-        if locationTextField.hasText == true {
-            if UserSettings.activeOrder == false {
-                print("payButtonAction")
-                print("basketInfo = \(basketInfo)")
-                UserSettings.orderSum = totalBasketPrice
-                //UserSettings.orderInfo = ba
-                
-                //UserSettings.basketProdQuant = 0
-                
-                UserSettings.orderInfo = basketInfo
-                sendDataToServer(orders: basketInfo)
-                print("orderInfo = \(UserSettings.orderInfo)")
-                
-                UserSettings.basketInfo = []
-                basketProdData = []
-                basketInfo = []
-                
-                tableView.reloadData()
-                NotificationCenter.default.post(name: NSNotification.Name("OrderPaid"), object: nil)
-                UserSettings.orderPaid = true
-                UserSettings.activeOrder = true
-                UserSettings.isLocChanging = true
-                dismiss(animated: true)
+        if isProductsInStock == true {
+            if locationTextField.hasText == true {
+                if UserSettings.activeOrder == false {
+                    print("payButtonAction")
+                    print("basketInfo = \(basketInfo)")
+                    UserSettings.orderSum = totalBasketPrice
+                    //UserSettings.orderInfo = ba
+                    
+                    //UserSettings.basketProdQuant = 0
+                    
+                    UserSettings.orderInfo = basketInfo
+                    sendDataToServer(orders: basketInfo)
+                    print("orderInfo = \(UserSettings.orderInfo)")
+                    
+                    UserSettings.basketInfo = []
+                    basketProdData = []
+                    basketInfo = []
+                    
+                    tableView.reloadData()
+                    NotificationCenter.default.post(name: NSNotification.Name("OrderPaid"), object: nil)
+                    UserSettings.orderPaid = true
+                    UserSettings.activeOrder = true
+                    UserSettings.isLocChanging = true
+                    dismiss(animated: true)
+                } else {
+                    displayOrderAlert()
+                }
             } else {
-                displayOrderAlert()
+                displaySaveError()
             }
         } else {
-            displaySaveError()
+            //displayBasketAlert()
         }
     }
     
-    
     //MARK: - Back: send order Info To Server bbb
     func sendDataToServer(orders: [[BasketInfo]]) {
-           guard let url = URL(string: "http://192.168.31.49:5002/api/orders") else { return }
-
-           var request = URLRequest(url: url)
-           request.httpMethod = "POST"
-           request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-
-           do {
-               let jsonData = try JSONEncoder().encode(orders)
-               request.httpBody = jsonData
-           } catch {
-               print("Error encoding JSON: \(error)")
-               return
-           }
-
-           let task = URLSession.shared.dataTask(with: request) { data, response, error in
-               if let error = error {
-                   print("Error: \(error)")
-                   return
-               }
-
-               if let response = response as? HTTPURLResponse, response.statusCode == 201 {
-                   print("Orders sent successfully!")
-               } else {
-                   print("Failed to send orders.")
-               }
-           }
-
-           task.resume()
-       }
+        guard let url = URL(string: "http://192.168.0.111:5002/api/orders") else { return }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        do {
+            let jsonData = try JSONEncoder().encode(orders)
+            request.httpBody = jsonData
+        } catch {
+            print("Error encoding JSON: \(error)")
+            return
+        }
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                print("Error: \(error)")
+                return
+            } else if let data = data {
+                //guard let data = data else { return }
+                do {
+                    if let jsonResponse = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+                       let unavailableProducts = jsonResponse["unavailable_items"] as? [Int],
+                       let isProductsAvailable = jsonResponse["success"] as? Bool {
+                        print("All items are available: \(isProductsAvailable)")
+                        
+                        if isProductsAvailable {
+                            print("Products are available")
+                            self.isProductsInStock = true
+                        } else {
+                            print(isProductsAvailable)
+                            print(unavailableProducts)
+                            self.unavailableInd = unavailableProducts
+                            for i in self.unavailableInd {
+                                self.unavailableProducts.append(self.basketInfo[i])
+                            }
+                            DispatchQueue.main.async {
+                                self.displayBasketAlert()
+                                self.unavailableProducts = []
+                            }
+                        }
+                    }
+                    
+                } catch {
+                    print("Error parsing response: \(error)")
+                }
+                
+                if let response = response as? HTTPURLResponse, response.statusCode == 201 {
+                    print("Orders sent successfully!")
+                    
+                } else {
+                    print("Failed to send orders.")
+                }
+                
+            }
+        }
+        task.resume()
+    }
     
-
+    func displayBasketAlert() {
+        print("func displayBasketAlert")
+        var products = ""
+        for i in 0...self.unavailableProducts[0].count-1 {
+            products += " \(self.unavailableProducts[0][i].title)"
+        }
+        print(products)
+        let alertController = UIAlertController(title: "Готово", message: "Товаров нет в наличии: \(products)", preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alertController, animated: true)
+        
+        
+    }
     
-    @objc func hideKeyboard() {
+    @objc
+    func hideKeyboard() {
         view.endEditing(true)
     }
     
