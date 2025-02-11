@@ -80,8 +80,6 @@ class DeliveryViewController: UIViewController, UITableViewDelegate, UITableView
     }
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
         title = "Delivery"
         setupMapView()
         setupOrderInfoView()
@@ -94,7 +92,11 @@ class DeliveryViewController: UIViewController, UITableViewDelegate, UITableView
         view.backgroundColor = R.Colors.mapColor
         // Настройка маршрута на карте
         setupRoute()
-        startCheckingStatus()
+        
+        if UserSettings.activeOrder == false {
+            UserSettings.activeOrder = true
+            startCheckingStatus()
+        }
         
         // Добавление жеста на карту для изменения ее размера
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(didTapMapView))
@@ -109,7 +111,6 @@ class DeliveryViewController: UIViewController, UITableViewDelegate, UITableView
     
     @objc
     func doneButtonAction() {
-        
         // Создаем экземпляр текущей даты и времени
         let currentDate = Date()
         // Инициализируем DateFormatter
@@ -342,15 +343,13 @@ extension DeliveryViewController: MKMapViewDelegate {
         
     }
     
-    
     func startCheckingStatus() {
         timer = Timer.scheduledTimer(timeInterval: 10, target: self, selector: #selector(checkDeliveryStatus), userInfo: nil, repeats: true)
     }
     
-    
     //--MARK: Back: checkStatus bbb
     @objc func checkDeliveryStatus() {
-        guard let url = URL(string: "http://192.168.0.111:5002/checkStatus") else { return }
+        guard let url = URL(string: "http://192.168.31.48:5002/checkStatus") else { return }
         
         var request = URLRequest(url: url)
         request.httpMethod = "GET"

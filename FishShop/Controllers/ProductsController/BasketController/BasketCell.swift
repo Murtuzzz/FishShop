@@ -157,7 +157,7 @@ final class BasketCell: UITableViewCell {
             mainView.topAnchor.constraint(equalTo: topAnchor,constant: 8),
             mainView.leadingAnchor.constraint(equalTo: leadingAnchor,constant: 16),
             mainView.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
-            mainView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8)
+            //mainView.bottomAnchor.constraint(equalTo: bottomAnchor, constant: -8)
         ])
     }
 }

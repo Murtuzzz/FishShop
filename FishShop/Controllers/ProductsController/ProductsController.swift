@@ -26,6 +26,21 @@ class ProductsController: UIViewController, UITableViewDelegate, UITableViewData
     private var tableView = UITableView()
     private var basketInfoArray: [[BasketInfo]] = []
     private var isJsonLoaded: Bool = false
+     // Получаем текущую дату и время
+    let currentTime: DateFormatter = {
+        let date = DateFormatter()
+        date.dateFormat = "HH:mm:ss"
+        return date
+    }()
+
+    
+    private var unavailableProducts = [[BasketInfo]]() {
+        didSet {
+            //print(" ####UNAVAILABLE PROD \(unavailableProducts)")
+        }
+    }
+    private var unavailableInd: [Int] = []
+    private var basketInfo = [[BasketInfo]]()
     
     let jsonString = """
 [
@@ -139,6 +154,7 @@ class ProductsController: UIViewController, UITableViewDelegate, UITableViewData
     override func viewDidLoad() {
         super.viewDidLoad()
         NotificationCenter.default.addObserver(self, selector: #selector(updateProductData), name: NSNotification.Name("basketUpdated"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(deilveryButtonAction), name: NSNotification.Name("orderPaid"), object: nil)
         
         NotificationCenter.default.addObserver(self, selector: #selector(updateProductController), name: NSNotification.Name("OrderPaid"), object: nil)
         
@@ -147,7 +163,8 @@ class ProductsController: UIViewController, UITableViewDelegate, UITableViewData
         UserSettings.basketInfo = []
         UserSettings.storeData = []
         UserSettings.orderInfo = []
-        UserSettings.isLocChanging = false 
+        UserSettings.unavailableProducts = []
+        UserSettings.isLocChanging = false
         //UserSettings.ordersHistory = []
         UserSettings.orderPaid = false
         UserSettings.activeOrder = false
@@ -203,10 +220,15 @@ class ProductsController: UIViewController, UITableViewDelegate, UITableViewData
         print("Product Deleted From Basket")
     }
     
+    @objc func orderPaid() {
+        // Обновите данные вашей пользовательской настройки здесь
+         // или обновление, специфичное для вашего UI
+        
+    }
+    
     @objc 
     func updateProductController() {
-        // Обновите данные вашей пользовательской настройки здесь
-        tableView.reloadData() // или обновление, специфичное для вашего UI
+        tableView.reloadData()
         allBasketProdCount = 0
         deliveryButton.alpha = 1
         print("Order paid")
@@ -214,9 +236,102 @@ class ProductsController: UIViewController, UITableViewDelegate, UITableViewData
     
     @objc
     func basketAction() {
+        basketInfo = UserSettings.basketInfo
+        print("\(currentTime.string(from:Date())) BASKET INFO 1 \(basketInfo)")
+        checkAvailableProd(orders: basketInfo)
+       
+        print("\(currentTime.string(from:Date())) Проверка наличия товара на складе")
+        //print(UserSettings.basketInfo)
+        print("\(currentTime.string(from:Date())) UnavailableProducts = \(unavailableProducts)")
         let vc = BasketController()
         present(vc, animated: true)
-        //navigationController?.pushViewController(vc, animated: true)
+        
+    }
+    
+    func checkAvailableProd(orders: [[BasketInfo]]) {
+        guard let url = URL(string: "http://192.168.31.48:5002/api/orders") else { return }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        do {
+            let jsonData = try JSONEncoder().encode(orders)
+            request.httpBody = jsonData
+        } catch {
+            print("Error encoding JSON: \(error)")
+            return
+        }
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                print("Error: \(error)")
+                return
+            } else if let data = data {
+                //guard let data = data else { return }
+                do {
+                    if let jsonResponse = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
+                       let unavailableProducts = jsonResponse["unavailable_items"] as? [Int],
+                       let isProductsAvailable = jsonResponse["success"] as? Bool {
+                        print("\(self.currentTime.string(from:Date())) All items are available: \(isProductsAvailable)")
+                        
+                        if isProductsAvailable {
+                            print("Products are available")
+                            //self.isProductsInStock = true
+                        } else {
+                            self.unavailableProducts = []
+                            //print(isProductsAvailable)
+                            //print(unavailableProducts)
+                            self.unavailableInd = unavailableProducts
+                            
+                            for i in 1...self.basketInfo.count {
+                                //if self.unavailableProducts.count != 0 {
+                                    //print("basket info = \(self.basketInfo)")
+                                    for u in self.unavailableInd {
+                                        if self.basketInfo[i-1].isEmpty == false {
+                                            //print(self.basketInfo[i-1][0])
+                                            if self.basketInfo[i-1][0].id == u {
+                                                self.unavailableProducts.append(self.basketInfo[i-1])
+                                                print("Succsess adding \(u)")
+                                            } else {
+                                                //print("\(self.basketInfo[i-1][0].id) AND \(u)")
+                                            }
+                                        }
+                                    }
+                                }
+                        
+                            
+                            DispatchQueue.main.async {
+                                //print("---unavailableProducts = \(self.unavailableProducts)")
+                                //print("---baksetInfo = \(self.basketInfo)")
+                                UserSettings.unavailableProducts = self.unavailableProducts
+                                
+                                
+                                //self.prodToDel = self.unavailableProducts
+                                //self.displayBasketAlert()
+                                //self.unavailableProducts = []
+                            }
+                        }
+                    } else {
+                        print("ALL ITEMS AVAILABLE")
+                        //self.isProductsInStock = true
+                    }
+                    
+                } catch {
+                    print("Error parsing response: \(error)")
+                }
+                
+//                if let response = response as? HTTPURLResponse, response.statusCode == 201 {
+//                    print("Orders sent successfully!")
+//                    
+//                    
+//                } else {
+//                    print("Failed to send orders.")
+//                }
+                
+            }
+        }
+        task.resume()
     }
     
     @objc
@@ -606,7 +721,7 @@ extension ProductsController: CellDelegate, BasketCellDelegate {
     //MARK: - Back: Get products from server bbb
     func getUrl(completion: @escaping ([[String: Any]]) -> Void) {
         //let url = URL(string: "http://127.0.0.1:5002/get-url")
-        let url = URL(string: "http://192.168.0.111:5002/get-url")
+        let url = URL(string: "http://192.168.31.48:5002/get-url")
         let task = URLSession.shared.dataTask(with: url!) { (data, response, error) in
             if let error = error {
                 print("Error: \(error)")

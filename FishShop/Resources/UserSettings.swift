@@ -18,6 +18,9 @@ struct BasketInfo: Codable {
     let prodCount: Int
     var orderTime: String = ""
     
+    static func == (lhs: BasketInfo, rhs: BasketInfo) -> Bool {
+            return lhs.id == rhs.id && lhs.title == rhs.title
+        }
 }
 
 struct StoreData: Codable {
@@ -41,6 +44,7 @@ final class UserSettings {
     
     private enum SettingsKeys: String {
         case basketInfo
+        case unavailableProducts
         case basketProdQuant
         case address
         case orderPaid
@@ -61,6 +65,18 @@ final class UserSettings {
             let encoder = JSONEncoder()
             let encoded = try? encoder.encode(newValue)
             UserDefaults.standard.set(encoded, forKey: SettingsKeys.basketInfo.rawValue)
+        }
+    }
+    
+    static var unavailableProducts: [[BasketInfo]]! {
+        get {
+            guard let data = UserDefaults.standard.data(forKey: SettingsKeys.unavailableProducts.rawValue) else { return nil }
+            let decoder = JSONDecoder()
+            return try? decoder.decode([[BasketInfo]].self, from: data)
+        } set {
+            let encoder = JSONEncoder()
+            let encoded = try? encoder.encode(newValue)
+            UserDefaults.standard.set(encoded, forKey: SettingsKeys.unavailableProducts.rawValue)
         }
     }
     
