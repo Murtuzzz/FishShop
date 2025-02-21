@@ -128,9 +128,13 @@ class BasketController: UIViewController, UITableViewDelegate, UITableViewDataSo
     
     override func viewWillAppear(_ animated: Bool) {
         //     locationButton.setTitle("г. Владикавказ, ул. \(UserSettings.adress[0][0].adress)", for: .normal)
-        print("UNAVAILABLE BASKET ITEMS = \(UserSettings.unavailableProducts)")
+        //print("UNAVAILABLE BASKET ITEMS = \(UserSettings.unavailableProducts)")
         print("BASKET ITEMS = \(UserSettings.basketInfo)")
-        
+        if UserSettings.unavailableProducts.isEmpty {
+            isProductsInStock = true
+        } else {
+            isProductsInStock = false
+        }
         //print("fl1 = \(flatBasketInfo)")
         //print("fl2 = \(flatUnavailableProducts)")
         // Поиск совпадений
@@ -180,14 +184,15 @@ class BasketController: UIViewController, UITableViewDelegate, UITableViewDataSo
         print("locationTextField.hasText = \(locationTextField.hasText)")
         print("UserSettings.activeOrder = \(UserSettings.activeOrder)")
         
-        if isProductsInStock {
-            refreshingBasket()
-            
+        if UserSettings.activeOrder == false {
+            if isProductsInStock {
+                refreshingBasket()
+            } else {
+                sendDataToServer(orders: basketInfo)
+            }
         } else {
-            sendDataToServer(orders: basketInfo)
+            displayOrderAlert()
         }
-        
-        
     }
     
     func refreshingBasket() {
@@ -603,19 +608,20 @@ extension BasketController {
             var prodToDel = UserSettings.unavailableProducts
             
             //print("     basket = \(bskt)")
-            
             //print("     prodTODel1 = \(prodToDel)")
             
-            for i in 0...prodToDel!.count-1 {
-                if prodToDel!.count > i {
-                    for el in prodToDel![i] {
-                        //print("PRODUCT TO DELETE = \(el.title)")
-                        prodToDel!.removeAll { sublist in
-                            sublist.contains(where: { $0.id == basketData.id })
-                        }
-                        
-                        bskt!.removeAll { sublist in
-                            sublist.contains(where: { $0.id == basketData.id })
+            if prodToDel!.isEmpty == false {
+                for i in 0...prodToDel!.count-1 {
+                    if prodToDel!.count > i {
+                        for el in prodToDel![i] {
+                            //print("PRODUCT TO DELETE = \(el.title)")
+                            prodToDel!.removeAll { sublist in
+                                sublist.contains(where: { $0.id == basketData.id })
+                            }
+                            
+                            bskt!.removeAll { sublist in
+                                sublist.contains(where: { $0.id == basketData.id })
+                            }
                         }
                     }
                 }
@@ -661,7 +667,6 @@ extension BasketController {
             }
             
         }
-        
         //print("Basket info after all = \(basketInfo)")
         //print("BasketData After All = \(UserSettings.basketInfo)")
     }

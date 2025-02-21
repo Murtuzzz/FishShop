@@ -10,6 +10,8 @@
 		B40EF3622BC0513E00F06662 /* BasketController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B40EF3612BC0513E00F06662 /* BasketController.swift */; };
 		B40EF3642BC0529900F06662 /* BasketCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B40EF3632BC0529900F06662 /* BasketCell.swift */; };
 		B425FCEC2BB2AC2D00F2FA27 /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = B425FCEB2BB2AC2D00F2FA27 /* UserSettings.swift */; };
+		B4292CC22D5E188C00754265 /* UILableBG.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4292CC12D5E188C00754265 /* UILableBG.swift */; };
+		B4292CC42D621EFD00754265 /* tst.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4292CC32D621EFD00754265 /* tst.swift */; };
 		B4660C682C6E4DDE00CF9474 /* DeliveryController .swift in Sources */ = {isa = PBXBuildFile; fileRef = B4660C672C6E4DDE00CF9474 /* DeliveryController .swift */; };
 		B4660C6B2C6F73EE00CF9474 /* DeliveryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4660C6A2C6F73EE00CF9474 /* DeliveryCell.swift */; };
 		B4660C992C88754C00CF9474 /* SettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4660C982C88754C00CF9474 /* SettingsController.swift */; };
@@ -49,6 +51,8 @@
 		B40EF3612BC0513E00F06662 /* BasketController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasketController.swift; sourceTree = "<group>"; };
 		B40EF3632BC0529900F06662 /* BasketCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasketCell.swift; sourceTree = "<group>"; };
 		B425FCEB2BB2AC2D00F2FA27 /* UserSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettings.swift; sourceTree = "<group>"; };
+		B4292CC12D5E188C00754265 /* UILableBG.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UILableBG.swift; sourceTree = "<group>"; };
+		B4292CC32D621EFD00754265 /* tst.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = tst.swift; sourceTree = "<group>"; };
 		B4660C672C6E4DDE00CF9474 /* DeliveryController .swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DeliveryController .swift"; sourceTree = "<group>"; };
 		B4660C6A2C6F73EE00CF9474 /* DeliveryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveryCell.swift; sourceTree = "<group>"; };
 		B4660C982C88754C00CF9474 /* SettingsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsController.swift; sourceTree = "<group>"; };
@@ -155,6 +159,7 @@
 			children = (
 				B4DC5CF72B977A72006D3E42 /* TabBarController.swift */,
 				B4DC5CF92B9B3674006D3E42 /* NavBarController.swift */,
+				B4292CC32D621EFD00754265 /* tst.swift */,
 			);
 			path = NavigationControllers;
 			sourceTree = "<group>";
@@ -166,6 +171,7 @@
 				B4DC5D192BA1EDDF006D3E42 /* CardInfoController.swift */,
 				B4DC5D232BA80D4C006D3E42 /* InfoBlock.swift */,
 				B4DC5CFB2B9B3AA8006D3E42 /* Stack.swift */,
+				B4292CC12D5E188C00754265 /* UILableBG.swift */,
 			);
 			path = CardInfoController;
 			sourceTree = "<group>";
@@ -332,6 +338,8 @@
 				B4DC5CF82B977A73006D3E42 /* TabBarController.swift in Sources */,
 				B4DC5CFE2B9B3ACF006D3E42 /* Color.swift in Sources */,
 				B4F7E4B82BD1336100DE225E /* CustomTextField.swift in Sources */,
+				B4292CC42D621EFD00754265 /* tst.swift in Sources */,
+				B4292CC22D5E188C00754265 /* UILableBG.swift in Sources */,
 				B40EF3622BC0513E00F06662 /* BasketController.swift in Sources */,
 				B4DC5D1E2BA71466006D3E42 /* RoundedView.swift in Sources */,
 				B4DC5D022B9B3B31006D3E42 /* R.swift in Sources */,

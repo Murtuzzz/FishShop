@@ -173,7 +173,7 @@ final class ProductsTableCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func cellConfig(img: String, price: Int, name: String, title: String, prodId: Int, prodCount: Int, isInBasket: Bool, wasInBasket:Bool) {
+    func cellConfig(img: String, price: Int, name: String, title: String, prodId: Int, prodCount: Int, isInBasket: Bool, wasInBasket:Bool, inStock: Bool) {
         container.image = UIImage(named: img)
         priceLabel.text = "\(price) р"
         titleLabel.text = title
@@ -183,6 +183,7 @@ final class ProductsTableCell: UITableViewCell {
         removeButton.alpha = isInBasket ? 1 : 0
         prodCountLabel.alpha = isInBasket ? 1 : 0
         basketView.alpha = isInBasket ? 1 : 0
+        addButton.alpha = inStock ? 1 : 0
         
         if isInBasket == false {
             if prodCount == 0 {
@@ -191,6 +192,16 @@ final class ProductsTableCell: UITableViewCell {
                 removeButton.alpha = 0
                 prodCountLabel.alpha = 0
             }
+        }
+    }
+    
+    func plusButtonAlpha(state: Bool) {
+        if state {
+            print("state = \(state)")
+            addButton.alpha = 0
+        } else {
+            print("state = \(state)")
+            addButton.alpha = 1
         }
     }
     
