@@ -26,6 +26,8 @@ class ProductsController: UIViewController, UITableViewDelegate, UITableViewData
     private var tableView = UITableView()
     private var basketInfoArray: [[BasketInfo]] = []
     private var isJsonLoaded: Bool = false
+    private var isProdDeletedNow: Bool = true
+    //let basketController = BasketController()
     
     // Получаем текущую дату и время
     let currentTime: DateFormatter = {
@@ -156,16 +158,17 @@ class ProductsController: UIViewController, UITableViewDelegate, UITableViewData
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("viewDidLoad")
         NotificationCenter.default.addObserver(self, selector: #selector(updateProductData), name: NSNotification.Name("basketUpdated"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(deilveryButtonAction), name: NSNotification.Name("orderPaid"), object: nil)
-        
         NotificationCenter.default.addObserver(self, selector: #selector(updateProductController), name: NSNotification.Name("OrderPaid"), object: nil)
-        
+        NotificationCenter.default.addObserver(self, selector: #selector(prodDeletedFromBasketNow), name: NSNotification.Name("prodDeleted"), object: nil)
         
         view.backgroundColor = R.Colors.background
         UserSettings.basketInfo = []
         UserSettings.storeData = []
         UserSettings.orderInfo = []
+        UserSettings.dataFromStore = []
         UserSettings.unavailableProducts = []
         UserSettings.isLocChanging = false
         //UserSettings.ordersHistory = []
@@ -197,36 +200,26 @@ class ProductsController: UIViewController, UITableViewDelegate, UITableViewData
             print("setJsonProductsOnScreen")
             DispatchQueue.main.async {
                 self.tableApperance()
-                
             }
-            
         }
         constraints()
         //getDataFromStore()
         //getDataFromStore()
-        
-        
     }
-    
-    
     //func getUrl(completion: @escaping ([[String: Any]]) -> Void) {
-    
-    
     private func buttonActions() {
         basketButton.addTarget(self, action: #selector(basketAction), for: .touchUpInside)
         deliveryButton.addTarget(self, action: #selector(deilveryButtonAction), for: .touchUpInside)
     }
-    
     @objc func updateProductData() {
         // Обновите данные вашей пользовательской настройки здесь
         tableView.reloadData() // или обновление, специфичное для вашего UI
-        print("Product Deleted From Basket")
+        print("Main tableView updated")
+        print("updatedBasket = \(UserSettings.basketInfo)")
     }
-    
     @objc func orderPaid() {
         // Обновите данные вашей пользовательской настройки здесь
         // или обновление, специфичное для вашего UI
-        
     }
     
     @objc
@@ -234,6 +227,12 @@ class ProductsController: UIViewController, UITableViewDelegate, UITableViewData
         tableView.reloadData()
         allBasketProdCount = 0
         deliveryButton.alpha = 1
+        print("Order paid")
+    }
+    
+    @objc
+    func prodDeletedFromBasketNow() {
+        isProdDeletedNow = true
         print("Order paid")
     }
     
@@ -588,7 +587,7 @@ extension ProductsController: CellDelegate, BasketCellDelegate {
         }
         
         descriptionController.descMinusTap = {
-    
+            
             if self.cardsData[indexPath.row].prodCount > 0 {
                 if self.cardsData[indexPath.row].prodCount > 0 {
                     self.cardsData[indexPath.row].prodCount -= 1
@@ -634,12 +633,17 @@ extension ProductsController: CellDelegate, BasketCellDelegate {
         }
         
         if UserSettings.basketInfo != nil {
+            print(UserSettings.basketInfo)
             if UserSettings.basketInfo.isEmpty == false {
                 if UserSettings.basketInfo[indexPath.row].isEmpty == false {
                     //print(UserSettings.basketInfo)
                     for el in UserSettings.basketInfo[indexPath.row] {
                         if el.inBasket == true {
-                            print("\(el.title) was deleted from basket")
+                            
+                            print("TEST")
+                            print(UserSettings.basketInfo)
+                            
+                            //print("\(el.title) was deleted from basket")
                             
                             //Кол-во товаров в корзине(индикатор)
                             if UserSettings.basketInfo.isEmpty {
@@ -651,15 +655,23 @@ extension ProductsController: CellDelegate, BasketCellDelegate {
                                 self.allBasketProdLabel.text = "\(self.allBasketProdCount)"
                             }
                             
+                            if UserSettings.basketInfo[indexPath.row][0].quantity == 0 {
+                                UserSettings.basketInfo[indexPath.row] = []
+                                // self.cardsData[indexPath.row].isInBasket = false
+                                self.cardsData[indexPath.row].prodCount = 0
+                                self.basketInfoArray[indexPath.row] = []
+                            } else {
+                                self.cardsData[indexPath.row].prodCount = UserSettings.basketInfo[indexPath.row][0].quantity
+                                self.basketInfoArray[indexPath.row] = UserSettings.basketInfo[indexPath.row]
+                                self.cardsData[indexPath.row].isInBasket = false
+                                UserSettings.basketInfo[indexPath.row][0].inBasket = false
+                            }
+                            
                             self.allBasketProdCount = UserSettings.basketProdQuant
                             self.allBasketProdLabel.text = "\(self.allBasketProdCount)"
                             print(self.allBasketProdCount)
                             
-                            UserSettings.basketInfo[indexPath.row] = []
-                            self.cardsData[indexPath.row].isInBasket = false
-                            self.cardsData[indexPath.row].prodCount = 0
-                            self.basketInfoArray[indexPath.row] = []
-                            //UserSettings.basketInfo = self.basketInfoArray
+                            
                             
                             DispatchQueue.main.async {
                                 if let productCount = self.storeProducts[indexPath.row]["quantity"] as? Int {
@@ -681,7 +693,37 @@ extension ProductsController: CellDelegate, BasketCellDelegate {
                             self.basketInfoArray = UserSettings.basketInfo
                             //print("deleted cell = \(UserSettings.basketInfo[indexPath.row])")
                             //print(UserSettings.basketInfo)
+                        } else {
+                            print(UserSettings.basketInfo)
                         }
+                    }
+                } else {
+                    if isProdDeletedNow == true {
+                        
+                        self.cardsData[indexPath.row].prodCount = 0
+                        self.basketInfoArray[indexPath.row] = []
+                        self.allBasketProdCount = UserSettings.basketProdQuant
+                        self.allBasketProdLabel.text = "\(self.allBasketProdCount)"
+                        print(self.allBasketProdCount)
+                        
+                        DispatchQueue.main.async {
+                            if let productCount = self.storeProducts[indexPath.row]["quantity"] as? Int {
+                                if self.cardsData[indexPath.row].prodCount == productCount {
+                                    cell.cellConfig(img: cellData.image, price: cellData.price, name: cellData.title,
+                                                    title: cellData.title, prodId: cellData.prodId,
+                                                    prodCount: self.cardsData[indexPath.row].prodCount, isInBasket: cellData.isInBasket, wasInBasket: cellData.wasInBasket, inStock: false)
+                                    tableView.reloadRows(at: [indexPath], with: .none)
+                                    //descriptionController.checkAvailability(inStock: false)
+                                } else {
+                                    cell.cellConfig(img: cellData.image, price: cellData.price, name: cellData.title,
+                                                    title: cellData.title, prodId: cellData.prodId,
+                                                    prodCount: self.cardsData[indexPath.row].prodCount, isInBasket: cellData.isInBasket, wasInBasket: cellData.wasInBasket, inStock: true)
+                                    tableView.reloadRows(at: [indexPath], with: .none)
+                                    //descriptionController.checkAvailability(inStock: true)
+                                }
+                            }
+                        }
+                        isProdDeletedNow = false
                     }
                 }
             }
@@ -898,6 +940,7 @@ extension ProductsController: CellDelegate, BasketCellDelegate {
                         print("Products: \(productArray)")
                         self.storeProducts = productArray
                         completion(productArray)
+                        UserSettings.dataFromStore = productArray
                     }
                 } catch {
                     print("Invalid response data: \(error)")

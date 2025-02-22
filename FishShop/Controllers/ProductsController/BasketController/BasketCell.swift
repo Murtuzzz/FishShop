@@ -10,6 +10,10 @@ import UIKit
 final class BasketCell: UITableViewCell {
     
     static var id = "BasketCell"
+    var prodCount = 0
+    var baskMinusTap: (() -> Void)?
+    var baskPlusTap: (() -> Void)?
+    var bskt: [[BasketInfo]] = []
     
     private let mainView: UIView = {
         let view = UIView()
@@ -68,7 +72,7 @@ final class BasketCell: UITableViewCell {
         button.layer.cornerRadius = 9
         button.contentMode = .scaleAspectFit
         button.tintColor = .white
-        button.alpha = 0
+        button.alpha = 1
         return button
     }()
     
@@ -81,12 +85,13 @@ final class BasketCell: UITableViewCell {
         button.layer.cornerRadius = 9
         button.contentMode = .scaleAspectFit
         button.tintColor = .white
-        button.alpha = 0
+        button.alpha = 1
         return button
     }()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        bskt = UserSettings.basketInfo
         addSubview(mainView)
         addSubview(prodImage)
         addSubview(titleLabel)
@@ -95,18 +100,28 @@ final class BasketCell: UITableViewCell {
         contentView.addSubview(addButton)
         contentView.addSubview(delButton)
         backgroundColor = .clear
+        buttonsActions()
         constraints()
+        
+        //setProdCountLabel()
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func config(title: String, quantity: Int, price: Int) {
+    func config(title: String, quantity: Int, price: Int, inStock: Bool) {
         self.titleLabel.text = "\(title)"
         prodImage.image = UIImage(named: "\(title)")
         countLabel.text = "\(quantity)"
         priceLabel.text = "\(price) ₽"
+        prodCount = quantity
+        
+        if inStock == false {
+            addButton.alpha = 0
+        } else {
+            addButton.alpha = 1
+        }
     }
     
     func buttonsActions() {
@@ -114,14 +129,62 @@ final class BasketCell: UITableViewCell {
         delButton.addTarget(self, action: #selector(delButtonAction), for: .touchUpInside)
     }
     
-    @objc
-    func addButtonAction() {
-        print("delButtonAction")
+    func updateProdCount(in lists: inout [[BasketInfo]], newValue: Int) {
+        for (listIndex, list) in lists.enumerated() {
+            if let itemIndex = list.firstIndex(where: { $0.title == self.titleLabel.text }) {
+                
+                lists[listIndex][itemIndex].inBasket = true
+                
+                //lists[listIndex][itemIndex].quantity = newValue
+                if newValue == 0 {
+                    lists[listIndex] = []
+                } else {
+                    lists[listIndex][itemIndex].quantity = newValue
+                } // Верно изменяем имя элемента
+                break // После модификации выходим
+            }
+        }
     }
     
     @objc
     func delButtonAction() {
+        baskMinusTap?()
+        updateProdCount(in: &bskt, newValue: prodCount)
+        print("delButtonAction")
+        print(UserSettings.basketInfo)
+        print(bskt)
+        UserSettings.basketInfo = bskt
+        UserSettings.basketProdQuant -= 1
+//        if prodCount != 0 {
+//            //prodCount -= 1
+//            countLabel.text = "\(prodCount)"
+//            
+//            print("Basket = \(UserSettings.basketInfo)")
+//            print("bskt = \(bskt)")
+////            updateProdCount(in: &bskt, newValue: prodCount)
+//            print("Basket = \(UserSettings.basketInfo)")
+//            print("bskt \(bskt)")
+//            
+//            
+//            UserSettings.basketInfo = bskt
+//            UserSettings.basketProdQuant -= 1
+//            print(UserSettings.basketInfo)
+//            print("basketProdQuant = \(UserSettings.basketProdQuant)")
+//        }
+    }
+    
+    @objc
+    func addButtonAction() {
+        baskPlusTap?()
         print("addButtonAction")
+        //prodCount += 1
+        countLabel.text = "\(prodCount)"
+        
+        updateProdCount(in: &bskt, newValue: prodCount)
+        UserSettings.basketProdQuant += 1
+        UserSettings.basketInfo = bskt
+        print(UserSettings.basketInfo)
+        print("basketProdQuant = \(UserSettings.basketProdQuant)")
     }
     
     func constraints() {
@@ -141,7 +204,7 @@ final class BasketCell: UITableViewCell {
             
             countLabel.trailingAnchor.constraint(equalTo: mainView.trailingAnchor, constant: -40),
             countLabel.centerYAnchor.constraint(equalTo: centerYAnchor),
-            countLabel.widthAnchor.constraint(equalToConstant: 16),
+            countLabel.widthAnchor.constraint(equalToConstant: 50),
             countLabel.heightAnchor.constraint(equalToConstant: 24),
             
             addButton.leadingAnchor.constraint(equalTo: countLabel.trailingAnchor, constant: 8),

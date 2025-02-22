@@ -153,7 +153,9 @@ final class CardInfoController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.bskt = UserSettings.basketInfo
+        if UserSettings.basketInfo != nil {
+            self.bskt = UserSettings.basketInfo
+        }
         print("instock = \(self.inStock)")
         print("BasketInfo = \(UserSettings.basketInfo)")
         print("bskt = \(bskt)")
@@ -267,8 +269,8 @@ final class CardInfoController: UIViewController {
                     print("\(self.titleLabel.text), index: \(itemIndex), lists[listIndex] = \(lists[listIndex]) ")
                 } else {
                     lists[listIndex][itemIndex].quantity = newValue
-                } // Верно изменяем имя элемента
-                break // После модификации выходим
+                }
+                break
             }
         }
     }

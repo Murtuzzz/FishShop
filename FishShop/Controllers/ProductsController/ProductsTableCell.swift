@@ -27,6 +27,7 @@ final class ProductsTableCell: UITableViewCell {
     private var activeTimer: Timer?
     private var inactiveTimer: Timer?
     private var condition = false
+    var bskt: [[BasketInfo]] = []
     
     var buttonClicked: (() -> Void)?
     var onPlusTap: (() -> Void)?
@@ -152,6 +153,7 @@ final class ProductsTableCell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
+        bskt = UserSettings.basketInfo
         addSubview(container)
         addSubview(priceLabel)
         addSubview(titleView)
@@ -173,36 +175,69 @@ final class ProductsTableCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    func cellConfig(img: String, price: Int, name: String, title: String, prodId: Int, prodCount: Int, isInBasket: Bool, wasInBasket:Bool, inStock: Bool) {
-        container.image = UIImage(named: img)
-        priceLabel.text = "\(price) р"
-        titleLabel.text = title
-        prodCountLabel.text = "\(prodCount)"
-        basketButton.alpha = isInBasket ? 0 : 1
-        addButton.alpha = isInBasket ? 1 : 0
-        removeButton.alpha = isInBasket ? 1 : 0
-        prodCountLabel.alpha = isInBasket ? 1 : 0
-        basketView.alpha = isInBasket ? 1 : 0
-        addButton.alpha = inStock ? 1 : 0
-        
-        if isInBasket == false {
-            if prodCount == 0 {
-                basketButton.alpha = 1
-                addButton.alpha = 0
-                removeButton.alpha = 0
-                prodCountLabel.alpha = 0
+    func checkProd() {
+        for (listIndex, list) in bskt.enumerated() { // Итерация по каждому подмассиву
+            if let itemIndex = list.firstIndex(where: { $0.title == self.titleLabel.text }) { // Пытаемся найти индекс элемента
+                if bskt[listIndex][itemIndex].quantity != 0 {
+                    basketButton.alpha = 0
+                    if bskt[listIndex][itemIndex].inStock {
+                        addButton.alpha = 1
+                    } else {
+                        addButton.alpha = 0
+                    }
+                    removeButton.alpha = 1
+                    prodCountLabel.alpha = 1
+                    basketView.alpha = 1
+                } else {
+                    basketButton.alpha = 1
+                    addButton.alpha = 0
+                    removeButton.alpha = 0
+                    prodCountLabel.alpha = 0
+                    basketView.alpha = 0
+                }
+                
+                break
             }
         }
     }
     
-    func plusButtonAlpha(state: Bool) {
-        if state {
-            print("state = \(state)")
-            addButton.alpha = 0
-        } else {
-            print("state = \(state)")
+    func cellConfig(img: String, price: Int, name: String, title: String, prodId: Int, prodCount: Int, isInBasket: Bool, wasInBasket: Bool, inStock: Bool) {
+        container.image = UIImage(named: img)
+        priceLabel.text = "\(price) р"
+        titleLabel.text = title
+        prodCountLabel.text = "\(prodCount)"
+        
+        print("isInBasket = \(isInBasket), prodCount = \(prodCount), name = \(name), inStock = \(inStock)")
+        checkProd()
+        if prodCount != 0 {
+            basketButton.alpha = 0
             addButton.alpha = 1
+            removeButton.alpha = 1
+            prodCountLabel.alpha = 1
+            basketView.alpha = 1
+        } else {
+            basketButton.alpha = 1
+            addButton.alpha = 0
+            removeButton.alpha = 0
+            prodCountLabel.alpha = 0
+            basketView.alpha = 0
         }
+        checkProd()
+//        if prodCount != 0 && inStock {
+//            addButton.alpha = 1
+//        } else {
+//            addButton.alpha = 0
+//        }
+      
+        
+//        if isInBasket == false {
+//            if prodCount == 0 {
+//                basketButton.alpha = 1
+//                addButton.alpha = 0
+//                removeButton.alpha = 0
+//                prodCountLabel.alpha = 0
+//            }
+//        }
     }
     
     func buttonsAction() {

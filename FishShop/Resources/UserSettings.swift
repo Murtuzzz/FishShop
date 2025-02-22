@@ -54,6 +54,32 @@ final class UserSettings {
         case orderSum
         case ordersHistory
         case isLocChanging
+        case storeData
+        case dataFromStore
+    }
+    
+    static var dataFromStore: [[String: Any]]? {
+        get {
+            guard let data = UserDefaults.standard.data(forKey: SettingsKeys.dataFromStore.rawValue) else { return nil }
+            do {
+                return try JSONSerialization.jsonObject(with: data, options: []) as? [[String: Any]]
+            } catch {
+                print("Failed to decode JSON: \(error)")
+                return nil
+            }
+        }
+        set {
+            guard let newValue = newValue else {
+                UserDefaults.standard.removeObject(forKey: SettingsKeys.dataFromStore.rawValue)
+                return
+            }
+            do {
+                let data = try JSONSerialization.data(withJSONObject: newValue, options: [])
+                UserDefaults.standard.set(data, forKey: SettingsKeys.dataFromStore.rawValue)
+            } catch {
+                print("Failed to encode JSON: \(error)")
+            }
+        }
     }
     
     static var basketInfo: [[BasketInfo]]! {
@@ -94,13 +120,13 @@ final class UserSettings {
     
     static var storeData: [[StoreData]]! {
         get {
-            guard let data = UserDefaults.standard.data(forKey: SettingsKeys.basketInfo.rawValue) else { return nil }
+            guard let data = UserDefaults.standard.data(forKey: SettingsKeys.storeData.rawValue) else { return nil }
             let decoder = JSONDecoder()
             return try? decoder.decode([[StoreData]].self, from: data)
         } set {
             let encoder = JSONEncoder()
             let encoded = try? encoder.encode(newValue)
-            UserDefaults.standard.set(encoded, forKey: SettingsKeys.basketInfo.rawValue)
+            UserDefaults.standard.set(encoded, forKey: SettingsKeys.storeData.rawValue)
         }
     }
     
