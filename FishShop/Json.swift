@@ -51,7 +51,6 @@ class Json {
             let products = try decoder.decode([Product].self, from: jsonData)
             return products
         } catch {
-            print("Error decoding JSON: \(error)")
             return nil
         }
     }

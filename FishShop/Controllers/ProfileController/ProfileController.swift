@@ -65,7 +65,7 @@ class ProfileController: UIViewController, UITableViewDelegate, UITableViewDataS
         let view = UIImageView()
         view.image = UIImage(named: "Fish")
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.tintColor = .systemOrange
+        view.tintColor = .systemBlue
         view.contentMode = .scaleAspectFill
         return view
     }()
@@ -182,8 +182,6 @@ extension ProfileController {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: ProfileTableCell.id, for: indexPath) as! ProfileTableCell
         
-        print("profileData = \(profileData)")
-        print("index = \(indexPath.row)")
         let cellData = profileData[indexPath.row]
         
         cell.config(title: cellData.time, image: cellData.image)
@@ -198,7 +196,7 @@ extension ProfileController {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print(indexPath.row)
+        
     }
     
 }

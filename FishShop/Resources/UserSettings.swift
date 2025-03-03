@@ -44,6 +44,7 @@ final class UserSettings {
     
     private enum SettingsKeys: String {
         case basketInfo
+        case deletedFromBasketNow
         case unavailableProducts
         case basketProdQuant
         case address
@@ -64,7 +65,6 @@ final class UserSettings {
             do {
                 return try JSONSerialization.jsonObject(with: data, options: []) as? [[String: Any]]
             } catch {
-                print("Failed to decode JSON: \(error)")
                 return nil
             }
         }
@@ -77,7 +77,6 @@ final class UserSettings {
                 let data = try JSONSerialization.data(withJSONObject: newValue, options: [])
                 UserDefaults.standard.set(data, forKey: SettingsKeys.dataFromStore.rawValue)
             } catch {
-                print("Failed to encode JSON: \(error)")
             }
         }
     }
@@ -150,7 +149,6 @@ final class UserSettings {
             let defaults = UserDefaults.standard
             let key = SettingsKeys.basketProdQuant.rawValue
             if let today = newValue {
-                print("value: \(today) was added to key \(key)")
                 defaults.set(today, forKey: key)
             } else {
                 defaults.removeObject(forKey: key)
@@ -166,7 +164,6 @@ final class UserSettings {
             let defaults = UserDefaults.standard
             let key = SettingsKeys.address.rawValue
             if let today = newValue {
-                print("value: \(today) was added to key \(key)")
                 defaults.set(today, forKey: key)
             } else {
                 defaults.removeObject(forKey: key)
@@ -181,7 +178,6 @@ final class UserSettings {
             let defaults = UserDefaults.standard
             let key = SettingsKeys.orderSum.rawValue
             if let today = newValue {
-                print("value: \(today) was added to key \(key)")
                 defaults.set(today, forKey: key)
             } else {
                 defaults.removeObject(forKey: key)
@@ -197,7 +193,21 @@ final class UserSettings {
             let defaults = UserDefaults.standard
             let key = SettingsKeys.orderPaid.rawValue
             if let today = newValue {
-                print("value: \(today) was added to key \(key)")
+                defaults.set(today, forKey: key)
+            } else {
+                defaults.removeObject(forKey: key)
+            }
+        }
+    }
+    
+    static var deletedFromBasketNow: Bool! {
+        get {
+            return UserDefaults.standard.bool(forKey: SettingsKeys.deletedFromBasketNow.rawValue)
+        } set {
+            
+            let defaults = UserDefaults.standard
+            let key = SettingsKeys.deletedFromBasketNow.rawValue
+            if let today = newValue {
                 defaults.set(today, forKey: key)
             } else {
                 defaults.removeObject(forKey: key)
@@ -213,7 +223,6 @@ final class UserSettings {
             let defaults = UserDefaults.standard
             let key = SettingsKeys.activeOrder.rawValue
             if let today = newValue {
-                print("value: \(today) was added to key \(key)")
                 defaults.set(today, forKey: key)
             } else {
                 defaults.removeObject(forKey: key)
@@ -229,7 +238,6 @@ final class UserSettings {
             let defaults = UserDefaults.standard
             let key = SettingsKeys.isLocChanging.rawValue
             if let today = newValue {
-                print("value: \(today) was added to key \(key)")
                 defaults.set(today, forKey: key)
             } else {
                 defaults.removeObject(forKey: key)

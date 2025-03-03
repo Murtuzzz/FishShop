@@ -24,7 +24,7 @@ class RegistrationController: UIViewController {
         textField.layer.cornerRadius = 30
         textField.layer.borderWidth = 2
         textField.textColor = .white
-        textField.layer.borderColor = UIColor.systemOrange.cgColor
+        textField.layer.borderColor = UIColor.systemBlue.cgColor
         textField.attributedPlaceholder = NSAttributedString(
                     string: "Введите логин",
                     attributes: [NSAttributedString.Key.foregroundColor: UIColor.white.withAlphaComponent(0.5)])
@@ -37,7 +37,7 @@ class RegistrationController: UIViewController {
         textField.textColor = .white
         textField.layer.cornerRadius = 30
         textField.layer.borderWidth = 2
-        textField.layer.borderColor = UIColor.systemOrange.cgColor
+        textField.layer.borderColor = UIColor.systemBlue.cgColor
         textField.isSecureTextEntry = true
         textField.attributedPlaceholder = NSAttributedString(
                     string: "Введите пароль",
@@ -51,7 +51,7 @@ class RegistrationController: UIViewController {
         textField.textColor = .white
         textField.layer.cornerRadius = 30
         textField.layer.borderWidth = 2
-        textField.layer.borderColor = UIColor.systemOrange.cgColor
+        textField.layer.borderColor = UIColor.systemBlue.cgColor
         textField.isSecureTextEntry = true
         textField.attributedPlaceholder = NSAttributedString(
                     string: "Повторите пароль",
@@ -66,7 +66,7 @@ class RegistrationController: UIViewController {
         button.tintColor = .white
         button.layer.cornerRadius = 30
         button.layer.masksToBounds = true
-        button.backgroundColor = .systemOrange
+        button.backgroundColor = .systemBlue
         return button
     }()
         
@@ -116,8 +116,6 @@ class RegistrationController: UIViewController {
     }
 
     @objc func loginButtonTapped() {
-        print("Логин: \(loginTextField.text ?? "")")
-        print("Пароль: \(passwordTextField.text ?? "")")
         
         if let login = loginTextField.text {
             if loginTextField.text != "" {
@@ -125,7 +123,6 @@ class RegistrationController: UIViewController {
                     userData[login] = passwordTextField.text
                     dismiss(animated: true)
                 } else {
-                    print("Пароли не совпадают")
                     passwordTextField.text = ""
                     passwordTextField.layer.borderColor = UIColor.red.cgColor
                     passwordTextField.layer.borderWidth = 1
@@ -135,7 +132,6 @@ class RegistrationController: UIViewController {
                 }
             }
         }
-        print(userData)
         // Переход к другому ViewController el.value == loginTextField.text
         
         

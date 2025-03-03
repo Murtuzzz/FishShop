@@ -41,12 +41,10 @@ final class AddressPickerViewController: UIViewController, MKMapViewDelegate, UI
     
     func mapView(_ mapView: MKMapView, regionDidChangeAnimated animated: Bool) {
         let currentRegion = mapView.region  // Получение текущего региона карты
-        //print(currentRegion)  // Выводим текущий регион для отладки
         let result = cityRegion.includes(region: currentRegion)  // Проверяем, включает ли cityRegion текущий регион
         if !result {
             mapView.setRegion(cityRegion, animated: true)
         } else {
-            print("Does cityRegion include currentRegion? \(result)")
         }
     }
 
@@ -99,12 +97,10 @@ final class AddressPickerViewController: UIViewController, MKMapViewDelegate, UI
         
         geocoder.reverseGeocodeLocation(location) { (placemarks, error) in
             if let error = error {
-                print("Reverse geocoding error: \(error.localizedDescription)")
                 return
             }
             if let placemark = placemarks?.first {
                 let address = [placemark.thoroughfare, placemark.subThoroughfare, placemark.locality, placemark.postalCode, placemark.country].compactMap {$0}.joined(separator: ", ")
-            print("Адрес: \(address)")
             }
         }
     }
@@ -160,7 +156,6 @@ final class AddressPickerViewController: UIViewController, MKMapViewDelegate, UI
         searchBar.resignFirstResponder()
         if let address = searchBar.text {
             searchForAddress(address)
-            print("adress = \(address)")
             adress = address
         }
     }
@@ -170,20 +165,17 @@ final class AddressPickerViewController: UIViewController, MKMapViewDelegate, UI
         geocoder.geocodeAddressString(address) { [weak self] (placemarks, error) in
             guard let strongSelf = self else { return }
             if let error = error {
-                print("Geocoding error: \(error.localizedDescription)")
                 return
             }
             if let placemark = placemarks?.first, let location = placemark.location {
                 let region = MKCoordinateRegion(center: location.coordinate, latitudinalMeters: 100, longitudinalMeters: 100)
                 
                 strongSelf.mapView.setRegion(region, animated: true)
-                print("region = \(region)")
                 
                 UserSettings.adress = []
                 UserSettings.adress.append([])
                 UserSettings.adress[0].append(.init(adress: self!.adress, latitude: region.center.latitude, longitude: region.center.longitude))
                 
-                print(UserSettings.adress)
             }
         }
     }
@@ -225,7 +217,6 @@ final class AddressPickerViewController: UIViewController, MKMapViewDelegate, UI
         
         geocoder.reverseGeocodeLocation(location) { [weak self] (placemarks, error) in
             guard let self = self, let placemark = placemarks?.first, error == nil else {
-                print("Error in reverseGeocoding: \(error?.localizedDescription ?? "Unknown error")")
                 return
             }
             // Получение полного адреса
@@ -248,8 +239,6 @@ final class AddressPickerViewController: UIViewController, MKMapViewDelegate, UI
             
             DispatchQueue.main.async {
                 //self.displayAddressAlert(address: addressString)
-                print(addressString)
-                print(UserSettings.adress[0][0].adress)
                 self.delegate?.addressDidPick(addressString)
                 self.dismiss(animated: true)
             }

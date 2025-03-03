@@ -116,7 +116,6 @@ final class BasketCell: UITableViewCell {
         countLabel.text = "\(quantity)"
         priceLabel.text = "\(price) ₽"
         prodCount = quantity
-        
         if inStock == false {
             addButton.alpha = 0
         } else {
@@ -149,42 +148,31 @@ final class BasketCell: UITableViewCell {
     @objc
     func delButtonAction() {
         baskMinusTap?()
+        bskt = UserSettings.basketInfo
+        print("   #BasketCell#delButtonAction_START_#BasketInfo = \(UserSettings.basketInfo ?? [])")
+        print("   #BasketCell#delButtonAction_START_#bskt = \(bskt)")
         updateProdCount(in: &bskt, newValue: prodCount)
-        print("delButtonAction")
-        print(UserSettings.basketInfo)
-        print(bskt)
         UserSettings.basketInfo = bskt
+        print("   #BasketCell#delButtonAction_END_#BasketInfo = \(UserSettings.basketInfo ?? [])")
+        print("   #BasketCell#delButtonAction_END_#bskt = \(bskt)")
         UserSettings.basketProdQuant -= 1
-//        if prodCount != 0 {
-//            //prodCount -= 1
-//            countLabel.text = "\(prodCount)"
-//            
-//            print("Basket = \(UserSettings.basketInfo)")
-//            print("bskt = \(bskt)")
-////            updateProdCount(in: &bskt, newValue: prodCount)
-//            print("Basket = \(UserSettings.basketInfo)")
-//            print("bskt \(bskt)")
-//            
-//            
-//            UserSettings.basketInfo = bskt
-//            UserSettings.basketProdQuant -= 1
-//            print(UserSettings.basketInfo)
-//            print("basketProdQuant = \(UserSettings.basketProdQuant)")
-//        }
+
     }
     
     @objc
     func addButtonAction() {
         baskPlusTap?()
-        print("addButtonAction")
+        bskt = UserSettings.basketInfo
+        print("   #BasketCell#addButtonAction_START_#BasketInfo = \(UserSettings.basketInfo ?? [])")
+        print("   #BasketCell#addButtonAction_START_#bskt = \(bskt)")
         //prodCount += 1
         countLabel.text = "\(prodCount)"
         
         updateProdCount(in: &bskt, newValue: prodCount)
         UserSettings.basketProdQuant += 1
         UserSettings.basketInfo = bskt
-        print(UserSettings.basketInfo)
-        print("basketProdQuant = \(UserSettings.basketProdQuant)")
+        print("   #BasketCell#addButtonAction_END_#BasketInfo = \(UserSettings.basketInfo ?? [])")
+        print("   #BasketCell#addButtonAction_END_#bskt = \(bskt)")
     }
     
     func constraints() {

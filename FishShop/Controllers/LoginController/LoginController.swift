@@ -39,10 +39,10 @@ final class LoginController: UIViewController {
     private let loginTextField: CustomTextField = {
         let textField = CustomTextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
-        textField.layer.cornerRadius = 30
-        textField.layer.borderWidth = 2
+        textField.layer.cornerRadius = 15
+        textField.layer.borderWidth = 1
         textField.textColor = .white
-        textField.layer.borderColor = UIColor.systemOrange.cgColor
+        textField.layer.borderColor = UIColor.systemBlue.cgColor
         textField.attributedPlaceholder = NSAttributedString(
                     string: "Введите логин",
                     attributes: [NSAttributedString.Key.foregroundColor: UIColor.white.withAlphaComponent(0.5)])
@@ -53,9 +53,9 @@ final class LoginController: UIViewController {
         let textField = CustomTextField()
         textField.translatesAutoresizingMaskIntoConstraints = false
         textField.textColor = .white
-        textField.layer.cornerRadius = 30
-        textField.layer.borderWidth = 2
-        textField.layer.borderColor = UIColor.systemOrange.cgColor
+        textField.layer.cornerRadius = 15
+        textField.layer.borderWidth = 1
+        textField.layer.borderColor = UIColor.systemBlue.cgColor
         textField.isSecureTextEntry = true
         textField.attributedPlaceholder = NSAttributedString(
                     string: "Введите пароль",
@@ -68,9 +68,9 @@ final class LoginController: UIViewController {
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Sing in", for: .normal)
         button.tintColor = .white
-        button.layer.cornerRadius = 30
+        button.layer.cornerRadius = 15
         button.layer.masksToBounds = true
-        button.backgroundColor = .systemOrange
+        button.backgroundColor = .systemBlue
         return button
     }()
     
@@ -78,7 +78,7 @@ final class LoginController: UIViewController {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Создать", for: .normal)
-        button.tintColor = .systemOrange
+        button.tintColor = .systemBlue
         return button
     }()
         
@@ -142,16 +142,12 @@ final class LoginController: UIViewController {
     }
 
     @objc func loginButtonTapped() {
-        print("Логин: \(loginTextField.text ?? "")")
-        print("Пароль: \(passwordTextField.text ?? "")")
-        
         // Переход к другому ViewController el.value == loginTextField.text
         
         for el in userData {
             if el.key == loginTextField.text && el.value == passwordTextField.text {
                 guard let login = loginTextField.text else {return}
                 guard let id = passwordTextField.text else {return}
-                print("Successfully")
                 //self.navigationController?.pushViewController(profileController, animated: true)
                 if let tabBarController = self.tabBarController as? TabBarController {
                     User.isAuthorized = true
@@ -159,8 +155,6 @@ final class LoginController: UIViewController {
                     tabBarController.switchTo(tab: .profile)
                 }
             } else {
-                print(el.key == loginTextField.text)
-                print(el.value == passwordTextField.text)
                                                                  
             }
         }

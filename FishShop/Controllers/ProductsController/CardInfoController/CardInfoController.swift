@@ -92,7 +92,7 @@ final class CardInfoController: UIViewController {
     private let buyButtonView: UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = .systemOrange.withAlphaComponent(0.5)
+        view.backgroundColor = .systemBlue.withAlphaComponent(0.5)
         view.layer.cornerRadius = 10
         view.alpha = 0
         return view
@@ -102,7 +102,7 @@ final class CardInfoController: UIViewController {
         let button = UIButton(type: .system)
         button.setTitle("В корзину", for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
-        button.backgroundColor = .systemOrange.withAlphaComponent(0.5)
+        button.backgroundColor = .systemBlue.withAlphaComponent(0.5)
         button.setTitleColor(.white, for: .normal)
         button.layer.cornerRadius = 10
         button.translatesAutoresizingMaskIntoConstraints = false
@@ -112,7 +112,7 @@ final class CardInfoController: UIViewController {
     private let minusButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(UIImage(systemName:"minus"), for: .normal)
-        button.backgroundColor = .systemOrange.withAlphaComponent(0.5)
+        button.backgroundColor = .systemBlue.withAlphaComponent(0.5)
         button.tintColor = .white
         button.layer.cornerRadius = 10
         button.alpha = 0
@@ -123,7 +123,7 @@ final class CardInfoController: UIViewController {
     private let plusButton: UIButton = {
         let button = UIButton(type: .system)
         button.setImage(UIImage(systemName:"plus"), for: .normal)
-        button.backgroundColor = .systemOrange.withAlphaComponent(0.5)
+        button.backgroundColor = .systemBlue.withAlphaComponent(0.5)
         button.layer.cornerRadius = 10
         button.tintColor = .white
         button.alpha = 0
@@ -147,8 +147,6 @@ final class CardInfoController: UIViewController {
     private let arrowView = RoundedView()
     
     override func viewDidAppear(_ animated: Bool) {
-        print("viewDidAppear")
-        //print("BasketInfo = \(UserSettings.basketInfo)")
     }
     
     override func viewDidLoad() {
@@ -156,9 +154,6 @@ final class CardInfoController: UIViewController {
         if UserSettings.basketInfo != nil {
             self.bskt = UserSettings.basketInfo
         }
-        print("instock = \(self.inStock)")
-        print("BasketInfo = \(UserSettings.basketInfo)")
-        print("bskt = \(bskt)")
         view.backgroundColor = R.Colors.background
         //self.navigationItem.hidesBackButton = false
         navigationController?.navigationBar.barTintColor = .white
@@ -213,7 +208,6 @@ final class CardInfoController: UIViewController {
     }
     
     func setProdCountLabel() {
-        print("setProdCountLabel")
         let bskt = UserSettings.basketInfo
         for (listIndex, list) in bskt!.enumerated() { // Итерация по каждому подмассиву
             if let itemIndex = list.firstIndex(where: { $0.title == self.titleLabel.text }) { // Пытаемся найти индекс элемента
@@ -226,7 +220,6 @@ final class CardInfoController: UIViewController {
         check?()
         
         if prodCount > 0 && inStock == true {
-            print("prodCount > 0 && inStock == true")
             buyButton.alpha = 0
             buyButtonView.alpha = 1
             minusButton.alpha = 1
@@ -235,7 +228,6 @@ final class CardInfoController: UIViewController {
             plusButton.alpha = 1
         } else {
             if prodCount > 0 && inStock == false {
-                print("if prodCount > 0 && inStock == false")
                 buyButton.alpha = 0
                 buyButtonView.alpha = 1
                 minusButton.alpha = 1
@@ -255,7 +247,6 @@ final class CardInfoController: UIViewController {
     
     @objc
     func arrowButtonAction() {
-        print("arrowCloseButton")
         navigationController?.popViewController(animated: true)
     }
     
@@ -266,7 +257,6 @@ final class CardInfoController: UIViewController {
                 
                 if newValue == 0 {
                     lists[listIndex] = []
-                    print("\(self.titleLabel.text), index: \(itemIndex), lists[listIndex] = \(lists[listIndex]) ")
                 } else {
                     lists[listIndex][itemIndex].quantity = newValue
                 }
@@ -278,7 +268,6 @@ final class CardInfoController: UIViewController {
     @objc
     func buyButtonTapped() {
         descBasketTap?()
-        print("buyButtonTapped")
         
         if prodCount == 0 {
             buyButton.alpha = 0
@@ -293,31 +282,21 @@ final class CardInfoController: UIViewController {
         bskt = UserSettings.basketInfo
         //updateProdCount(in: &bskt!, newValue: prodCount)
         //UserSettings.basketInfo = bskt
-        print(UserSettings.basketInfo)
         
     }
     
     @objc
     func minusButtonTapped() {
         descMinusTap?()
-        print("minusButtonTapped")
-        print(UserSettings.basketInfo)
-        print(bskt)
         if prodCount != 0 {
             prodCount -= 1
             prodCountLabel.text = "\(prodCount)"
             
-            print("Basket = \(UserSettings.basketInfo)")
-            print("bskt = \(bskt)")
             updateProdCount(in: &bskt, newValue: prodCount)
-            print("Basket = \(UserSettings.basketInfo)")
-            print("bskt \(bskt)")
             
             
             UserSettings.basketInfo = bskt
             UserSettings.basketProdQuant -= 1
-            print(UserSettings.basketInfo)
-            print("basketProdQuant = \(UserSettings.basketProdQuant)")
         }
         
         if prodCount == 0 {
@@ -332,19 +311,15 @@ final class CardInfoController: UIViewController {
     @objc
     func plusButtonTapped() {
         descPlusTap?()
-        print("plusButtonTapped")
         prodCount += 1
         prodCountLabel.text = "\(prodCount)"
         
         updateProdCount(in: &bskt, newValue: prodCount)
         UserSettings.basketProdQuant += 1
         UserSettings.basketInfo = bskt
-        print(UserSettings.basketInfo)
-        print("basketProdQuant = \(UserSettings.basketProdQuant)")
     }
     
     func checkAvailability(inStock: Bool) {
-        print("checkAvailability")
         if prodCount != 0 {
             if inStock == false {
                 plusButton.alpha = 0

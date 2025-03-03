@@ -121,21 +121,17 @@ class DeliveryViewController: UIViewController, UITableViewDelegate, UITableView
         let dateString = dateFormatter.string(from: currentDate)
         
         // Выводим текущую дату и время
-        print("Текущая дата и время: \(dateString)")
         
-        print("OrderDone")
         UserSettings.activeOrder = false
         if UserSettings.ordersHistory == nil {
             UserSettings.ordersHistory = []
         }
-        print("OrderInfo = \(UserSettings.orderInfo)")
         
         var order: [[BasketInfo]] = UserSettings.orderInfo
         order[0][0].orderTime = dateString
         
         UserSettings.isLocChanging = false
         UserSettings.ordersHistory.append(order)
-        print("UserHistory = \(UserSettings.ordersHistory)")
         navigationController?.popViewController(animated: true)
     }
     
@@ -260,7 +256,6 @@ class DeliveryViewController: UIViewController, UITableViewDelegate, UITableView
         directions.calculate { (response, error) in
             guard let response = response else {
                 if let error = error {
-                    print("Ошибка: \(error.localizedDescription)")
                 }
                 return
             }
@@ -330,12 +325,10 @@ extension DeliveryViewController: MKMapViewDelegate {
             cell.config(title: basketData.title, quantity: basketData.quantity, price: basketData.price)
         }
         
-        //print("UserSettig Basket == \(UserSettings.basketInfo)")
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("CELL")
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -356,7 +349,6 @@ extension DeliveryViewController: MKMapViewDelegate {
         
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
             if let error = error {
-                print("Error: \(error)")
                 return
             }
             
@@ -365,19 +357,16 @@ extension DeliveryViewController: MKMapViewDelegate {
             do {
                 if let jsonResponse = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
                    let deliveryStatus = jsonResponse["delivered"] as? Bool {
-                    print("Delivery Status: \(deliveryStatus)")
                     
                     if deliveryStatus {
                         self.timer?.invalidate()
                         self.timer = nil
-                        print("Delivery confirmed. Stopping checks.")
                         DispatchQueue.main.async {
                             self.doneButtonAction()
                         }
                     }
                 }
             } catch {
-                print("Error parsing response: \(error)")
             }
         }
         

@@ -17,7 +17,7 @@ public extension UIImage {
         return nil
     }
 
-    public static func gif(data: Data) -> UIImage? {
+    static func gif(data: Data) -> UIImage? {
         guard let source = CGImageSourceCreateWithData(data as CFData, nil) else {
             return nil
         }

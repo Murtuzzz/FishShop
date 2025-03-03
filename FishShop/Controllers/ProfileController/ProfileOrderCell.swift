@@ -103,7 +103,6 @@ final class ProfileOrderCell: UITableViewCell {
     
     func config(title: String, quantity: Int, price: Int) {
         self.titleLabel.text = "\(title)"
-        print(title)
         prodImage.image = UIImage(named: "\(title)")
         countLabel.text = "\(quantity)"
         priceLabel.text = "\(price) ₽"
@@ -116,12 +115,10 @@ final class ProfileOrderCell: UITableViewCell {
     
     @objc
     func addButtonAction() {
-        print("delButtonAction")
     }
     
     @objc
     func delButtonAction() {
-        print("addButtonAction")
     }
     
     func constraints() {

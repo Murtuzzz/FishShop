@@ -62,7 +62,7 @@ class CustomTabBar: UITabBar {
         
         let circleLayer = CAShapeLayer()
         circleLayer.path = circlePath.cgPath
-        circleLayer.fillColor = UIColor.orange.cgColor
+        circleLayer.fillColor = UIColor.systemBlue.cgColor
         circleLayer.opacity = 0.5
         
         // Добавляем анимацию появления круга

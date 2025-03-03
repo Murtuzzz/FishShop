@@ -116,7 +116,7 @@ final class ProductsTableCell: UITableViewCell {
         return button
     }()
     
-    private let addButton: UIButton = {
+    let addButton: UIButton = {
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setImage(UIImage(systemName: "plus"), for: .normal)
@@ -180,11 +180,11 @@ final class ProductsTableCell: UITableViewCell {
             if let itemIndex = list.firstIndex(where: { $0.title == self.titleLabel.text }) { // Пытаемся найти индекс элемента
                 if bskt[listIndex][itemIndex].quantity != 0 {
                     basketButton.alpha = 0
-                    if bskt[listIndex][itemIndex].inStock {
-                        addButton.alpha = 1
-                    } else {
-                        addButton.alpha = 0
-                    }
+//                    if bskt[listIndex][itemIndex].inStock {
+//                        addButton.alpha = 1
+//                    } else {
+//                        addButton.alpha = 0
+//                    }
                     removeButton.alpha = 1
                     prodCountLabel.alpha = 1
                     basketView.alpha = 1
@@ -194,6 +194,12 @@ final class ProductsTableCell: UITableViewCell {
                     removeButton.alpha = 0
                     prodCountLabel.alpha = 0
                     basketView.alpha = 0
+                }
+                
+                if bskt[listIndex][itemIndex].inStock == false {
+                    addButton.alpha = 0
+                } else {
+                    addButton.alpha = 1
                 }
                 
                 break
@@ -207,37 +213,47 @@ final class ProductsTableCell: UITableViewCell {
         titleLabel.text = title
         prodCountLabel.text = "\(prodCount)"
         
-        print("isInBasket = \(isInBasket), prodCount = \(prodCount), name = \(name), inStock = \(inStock)")
-        checkProd()
-        if prodCount != 0 {
-            basketButton.alpha = 0
-            addButton.alpha = 1
-            removeButton.alpha = 1
-            prodCountLabel.alpha = 1
-            basketView.alpha = 1
-        } else {
-            basketButton.alpha = 1
+        // Обновляем кнопки
+        if prodCount == 0 {
             addButton.alpha = 0
-            removeButton.alpha = 0
-            prodCountLabel.alpha = 0
-            basketView.alpha = 0
+        } else {
+            if inStock == false {
+                addButton.alpha = 0
+            } else {
+                addButton.alpha = 1
+            }
         }
-        checkProd()
-//        if prodCount != 0 && inStock {
-//            addButton.alpha = 1
-//        } else {
-//            addButton.alpha = 0
-//        }
-      
         
-//        if isInBasket == false {
-//            if prodCount == 0 {
-//                basketButton.alpha = 1
-//                addButton.alpha = 0
-//                removeButton.alpha = 0
-//                prodCountLabel.alpha = 0
-//            }
+        //addButton.alpha = inStock ? 1 : 0
+        basketButton.alpha = prodCount > 0 ? 0 : 1
+        removeButton.alpha = prodCount > 0 ? 1 : 0
+        prodCountLabel.alpha = prodCount > 0 ? 1 : 0
+        
+        basketView.alpha = prodCount > 0 ? 1 : 0
+        
+       
+        
+//        if inStock == false {
+//            addButton.alpha = 0
+//        } else {
+//            addButton.alpha = 1
 //        }
+//        
+//        checkProd()
+//        if prodCount != 0 {
+//            basketButton.alpha = 0
+//            //addButton.alpha = 1
+//            removeButton.alpha = 1
+//            prodCountLabel.alpha = 1
+//            basketView.alpha = 1
+//        } else {
+//            basketButton.alpha = 1
+//            addButton.alpha = 0
+//            removeButton.alpha = 0
+//            prodCountLabel.alpha = 0
+//            basketView.alpha = 0
+//        }
+
     }
     
     func buttonsAction() {
@@ -250,7 +266,6 @@ final class ProductsTableCell: UITableViewCell {
     
     @objc func basketButtonAction() {
         basketDelegate?.didTapBasketButton(inCell: self)
-        print("basketButtonAction")
     }
     
     @objc
@@ -271,7 +286,6 @@ final class ProductsTableCell: UITableViewCell {
     func infoButtonAction() {
         buttonClicked?()
         //delegate?.infoButtonTapped(cell: self)
-        print("tap")
 
     }
     

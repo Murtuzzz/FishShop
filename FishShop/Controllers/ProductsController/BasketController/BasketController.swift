@@ -67,7 +67,7 @@ class BasketController: UIViewController, UITableViewDelegate, UITableViewDataSo
         button.translatesAutoresizingMaskIntoConstraints = false
         //        button.setTitle("г. Владикавказ, ул. \(UserSettings.adress[0][0].adress)", for: .normal)
         button.contentMode = .scaleAspectFit
-        button.tintColor = .systemOrange
+        button.tintColor = .systemBlue
         return button
     }()
     
@@ -83,7 +83,7 @@ class BasketController: UIViewController, UITableViewDelegate, UITableViewDataSo
     private let saveLocationButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.tintColor = .systemOrange.withAlphaComponent(0.5)
+        button.tintColor = .systemBlue.withAlphaComponent(0.5)
         button.setImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
         return button
     }()
@@ -92,7 +92,7 @@ class BasketController: UIViewController, UITableViewDelegate, UITableViewDataSo
         let button = UIButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.tintColor = .white
-        button.backgroundColor = .systemOrange
+        button.backgroundColor = .systemBlue
         button.setTitle("Оплатить", for: .normal)
         button.layer.masksToBounds = true
         button.layer.cornerRadius = 20
@@ -106,7 +106,6 @@ class BasketController: UIViewController, UITableViewDelegate, UITableViewDataSo
         label.font = R.Fonts.avenirBook(with: 32)
         return label
     }()
-    
     
     private let totalLabel: UILabel = {
         let label = UILabel()
@@ -128,16 +127,18 @@ class BasketController: UIViewController, UITableViewDelegate, UITableViewDataSo
     }()
     
     override func viewWillAppear(_ animated: Bool) {
+        print("-------------------------------BasketController------------------------------------")
         //     locationButton.setTitle("г. Владикавказ, ул. \(UserSettings.adress[0][0].adress)", for: .normal)
-        //print("UNAVAILABLE BASKET ITEMS = \(UserSettings.unavailableProducts)")
-        print("BASKET ITEMS = \(UserSettings.basketInfo)")
-        print("Store data = \(UserSettings.dataFromStore)")
         self.storeProducts = UserSettings.dataFromStore ?? []
         if UserSettings.unavailableProducts.isEmpty {
             isProductsInStock = true
         } else {
             isProductsInStock = false
         }
+        
+        print("#BasketController#viewWillAppear#")
+        print("BasketInfo = \(UserSettings.basketInfo ?? [])")
+        print("StoreData = \(UserSettings.dataFromStore ?? [])")
     }
     
     // --MARK: ViewDidLoad
@@ -159,11 +160,8 @@ class BasketController: UIViewController, UITableViewDelegate, UITableViewDataSo
         let textAttributes = [NSAttributedString.Key.foregroundColor:UIColor.white]
         navigationController?.navigationBar.titleTextAttributes = textAttributes
         
-        print("INFO = \(UserSettings.basketInfo)")
-        
         tableApperance()
         buttonsActions()
-        print("basketInfo = \(UserSettings.basketInfo)")
         
         payButton.addTarget(self, action: #selector(payButtonAction), for: .touchUpInside)
         
@@ -177,11 +175,7 @@ class BasketController: UIViewController, UITableViewDelegate, UITableViewDataSo
     
     @objc
     func payButtonAction() {
-        print(" ")
-        print("--#FUNC = payButtonAction")
-        print("isProductsInStock = \(isProductsInStock)")
-        print("locationTextField.hasText = \(locationTextField.hasText)")
-        print("UserSettings.activeOrder = \(UserSettings.activeOrder)")
+    
         
         if UserSettings.activeOrder == false {
             if isProductsInStock {
@@ -195,14 +189,12 @@ class BasketController: UIViewController, UITableViewDelegate, UITableViewDataSo
     }
     
     func refreshingBasket() {
-        print("--#FUNC refreshingBasket")
-        print(self.unavailableProducts)
+
         if isProductsInStock == true {
             if locationTextField.hasText == true {
                 if UserSettings.activeOrder == false {
                     
-                    print("payButtonAction")
-                    print("basketInfo = \(basketInfo)")
+           
                     UserSettings.orderSum = totalBasketPrice
                     //UserSettings.orderInfo = ba
                     
@@ -210,7 +202,7 @@ class BasketController: UIViewController, UITableViewDelegate, UITableViewDataSo
                     
                     UserSettings.orderInfo = basketInfo
                     sendDataToServer(orders: basketInfo)
-                    print("orderInfo = \(UserSettings.orderInfo)")
+              
                     
                     UserSettings.basketInfo = []
                     basketProdData = []
@@ -236,11 +228,7 @@ class BasketController: UIViewController, UITableViewDelegate, UITableViewDataSo
     }
     
     func checkBasket() {
-        //print("------------------------------------------------")
-        //print("--#FUNC checkBasket")
-        //print("UnavailebleProd = \(self.prodToDel)")
-        //print("BasketInfo = \(basketInfo)")
-        ///print("------------------------------------------------")
+   
     }
     
     //MARK: - Back: send order Info To Server bbb
@@ -255,13 +243,11 @@ class BasketController: UIViewController, UITableViewDelegate, UITableViewDataSo
             let jsonData = try JSONEncoder().encode(orders)
             request.httpBody = jsonData
         } catch {
-            print("Error encoding JSON: \(error)")
             return
         }
         
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
             if let error = error {
-                print("Error: \(error)")
                 return
             } else if let data = data {
                 //guard let data = data else { return }
@@ -269,58 +255,44 @@ class BasketController: UIViewController, UITableViewDelegate, UITableViewDataSo
                     if let jsonResponse = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
                        let unavailableProducts = jsonResponse["unavailable_items"] as? [Int],
                        let isProductsAvailable = jsonResponse["success"] as? Bool {
-                        print("All items are available: \(isProductsAvailable)")
+                       
                         
                         if isProductsAvailable {
-                            print("Products are available")
                             self.isProductsInStock = true
                         } else {
                             self.unavailableProducts = []
-                            print(isProductsAvailable)
-                            print(unavailableProducts)
+                     
                             self.unavailableInd = unavailableProducts
-                            //                            for i in self.unavailableInd {
-                            //                                print("basket info = \(self.basketInfo)")
-                            //                                self.unavailableProducts.append(self.basketInfo[i])
-                            //                            }
                             
                             for i in 1...self.basketInfo.count {
                                 //if self.unavailableProducts.count != 0 {
-                                print("basket info = \(self.basketInfo)")
                                 for u in self.unavailableInd {
-                                    print(self.basketInfo[i-1][0])
                                     if self.basketInfo[i-1][0].id == u {
                                         self.unavailableProducts.append(self.basketInfo[i-1])
-                                        print("Succsess adding \(u)")
                                     } else {
-                                        print("\(self.basketInfo[i-1][0].id) AND \(u)")
+                                        
                                     }
                                 }
                             }
                             
                             
                             DispatchQueue.main.async {
-                                print("unavailableProducts = \(self.unavailableProducts)")
                                 self.prodToDel = self.unavailableProducts
                                 self.displayBasketAlert()
                                 //self.unavailableProducts = []
                             }
                         }
                     } else {
-                        print("ALL ITEMS AVAILABLE")
                         self.isProductsInStock = true
                     }
                     
                 } catch {
-                    print("Error parsing response: \(error)")
                 }
                 
                 if let response = response as? HTTPURLResponse, response.statusCode == 201 {
-                    print("Orders sent successfully!")
                     
                     
                 } else {
-                    print("Failed to send orders.")
                 }
                 
             }
@@ -329,13 +301,11 @@ class BasketController: UIViewController, UITableViewDelegate, UITableViewDataSo
     }
     
     func displayBasketAlert() {
-        print("func displayBasketAlert")
-        print("unavailableProductsCount = \(self.unavailableProducts.count)")
         var products = ""
         for i in 0...self.unavailableProducts.count-1 {
             products += " \(self.unavailableProducts[i][0].title)"
         }
-        print(products)
+      
         let alertController = UIAlertController(title: "Готово", message: "Товаров нет в наличии: \(products)", preferredStyle: .alert)
         alertController.addAction(UIAlertAction(title: "OK", style: .default))
         present(alertController, animated: true)
@@ -427,32 +397,72 @@ class BasketController: UIViewController, UITableViewDelegate, UITableViewDataSo
     
     
     func searchForAddress(_ address: String) {
-        print("adress == \(address)")
         let geocoder = CLGeocoder()
         geocoder.geocodeAddressString("г. Владикавказ, ул.\(adress)") { [weak self] (placemarks, error) in
             guard let strongSelf = self else { return }
             if let error = error {
-                print("Geocoding error: \(error.localizedDescription)")
                 return
             }
             if let placemark = placemarks?.first, let location = placemark.location {
                 let region = MKCoordinateRegion(center: location.coordinate, latitudinalMeters: 100, longitudinalMeters: 100)
                 
                 //strongSelf.mapView.setRegion(region, animated: true)
-                print("region = \(region)")
                 
                 UserSettings.adress = []
                 UserSettings.adress.append([])
                 UserSettings.adress[0].append(.init(adress: self!.adress, latitude: region.center.latitude, longitude: region.center.longitude))
                 
-                print(UserSettings.adress)
             }
         }
     }
     
+    func basketRefresh() {
+        basketProdData = []
+        basketInfo = UserSettings.basketInfo ?? []
+        var indexesToDelete: [Int] = []
+        for (index, el) in basketInfo.enumerated() {
+            if el.isEmpty {
+                indexesToDelete.append(index)
+            } else if el[0].quantity == 0 {
+                indexesToDelete.append(index)
+            }
+        }
+        for index in indexesToDelete.reversed() {
+            basketInfo.remove(at: index)
+        }
+        
+       
+        let currentDate = Date()
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
+        let dateString = dateFormatter.string(from: currentDate)
+        
+        basketInfo = basketInfo.sorted { $0.count < $1.count }
+        if basketInfo.count > 0 {
+            for i in 0...basketInfo.count-1 {
+                basketProdData.append(.init(title: basketInfo[i][0].title, quantity: basketInfo[i][0].quantity, price: Int(basketInfo[i][0].price), id: basketInfo[i][0].id, time: dateString))
+            }
+        } else {
+            basketProdData = []
+        }
+//        totalLabelSum.text = "\(totalBasketPrice)"
+//        self.pricesView = PricesView(totalSum: totalBasketPrice)
+//        view.addSubview(pricesView)
+        tableView.reloadData()
+        
+        if basketProdData.isEmpty {
+            basketImage.alpha = 1
+            pricesView.alpha = 0
+            payButton.alpha = 0
+        } else {
+            basketImage.alpha = 0
+            payButton.alpha = 1
+            pricesView.alpha = 1
+        }
+    }
     
     func basketConfig() {
-        print("BasketConfig")
+        basketProdData = []
         basketInfo = UserSettings.basketInfo ?? []
         var indexesToDelete: [Int] = []
         for (index, el) in basketInfo.enumerated() {
@@ -468,19 +478,11 @@ class BasketController: UIViewController, UITableViewDelegate, UITableViewDataSo
         
         prices = prices.sorted { $0.count > $1.count }
         
-        // Создаем экземпляр текущей даты и времени
+       
         let currentDate = Date()
-        // Инициализируем DateFormatter
         let dateFormatter = DateFormatter()
-        // Устанавливаем нужный формат даты и времени
         dateFormatter.dateFormat = "yyyy-MM-dd HH:mm:ss"
-        // Преобразуем текущую дату в строку согласно установленному формату
         let dateString = dateFormatter.string(from: currentDate)
-        // Выводим текущую дату и время
-        print("Текущая дата и время: \(dateString)")
-        
-        
-        //print("userBasketCount = \(userBasket.count) basketInfoCount = \(basketInfo.count)")
         
         basketInfo = basketInfo.sorted { $0.count < $1.count }
         if basketInfo.count > 0 {
@@ -489,7 +491,7 @@ class BasketController: UIViewController, UITableViewDelegate, UITableViewDataSo
                 
                 totalBasketPrice += basketInfo[i][0].price * Double(basketInfo[i][0].quantity)
                 
-                //print("BASKET INFO in CONTR. Title = \(basketInfo[i][0].title)")
+                
             }
         } else {
             basketProdData = []
@@ -572,70 +574,153 @@ extension BasketController {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: BasketCell.id, for: indexPath) as! BasketCell
         var basketData = self.basketProdData[indexPath.row]
-        var bskt = UserSettings.basketInfo
         
         if basketData.quantity != 0 {
-            cell.config(title: basketData.title, quantity: basketData.quantity, price: basketData.price, inStock: true)
-        }
-        
-        cell.baskMinusTap = {
-            print("baskMinusTap")
-            print(basketData.title)
-            if basketData.quantity != 0 {
-                basketData.quantity -= 1
-                print("self.basketInfo[indexPath.row][0] = \(self.basketInfo[indexPath.row])")
-                self.basketInfo[basketData.id][0].quantity -= 1
-                //self.updateProdCount(in: &bskt!, newValue: basketData.quantity)
-                if let productCount = self.storeProducts[indexPath.row]["quantity"] as? Int {
-                    if basketData.quantity == productCount {
-                        cell.config(title: basketData.title, quantity: basketData.quantity, price: basketData.price, inStock: false)
-                        //tableView.reloadRows(at: [indexPath], with: .none)
-                    } else {
-                        cell.config(title: basketData.title, quantity: basketData.quantity, price: basketData.price, inStock: true)
-                        //tableView.reloadRows(at: [indexPath], with: .none)
+            for el in self.storeProducts {
+                if el["name"] as? String == basketData.title {
+                    if let productCount = el["quantity"] as? Int {
+                        if basketData.quantity == productCount {
+                            cell.config(title: basketData.title, quantity: basketData.quantity, price: basketData.price, inStock: false)
+                            tableView.reloadRows(at: [indexPath], with: .none)
+                        } else {
+                            cell.config(title: basketData.title, quantity: basketData.quantity, price: basketData.price, inStock: true)
+                            tableView.reloadRows(at: [indexPath], with: .none)
+                        }
                     }
                 }
-                //UserSettings.basketInfo = bskt
+            }
+        }
+        
+
+        
+        cell.baskMinusTap = {
+            print("#BasketController#cell.baskMinusTap-START-#BasketInfo = \(UserSettings.basketInfo ?? [])")
+            if basketData.quantity != 0 {
+                basketData.quantity -= 1
+             
+                for i in 1...self.basketInfo.count {
+                    for el in self.basketInfo[i-1] {
+                        if el.title == basketData.title {
+                          
+                            self.basketInfo[i-1][0].quantity -= 1
+                            self.totalBasketPrice = self.totalBasketPrice - self.basketInfo[i-1][0].price
+                            self.totalLabelSum.text = "\(self.totalBasketPrice)"
+                            self.pricesView.removeFromSuperview()
+                            self.priceViewApperance(totalPrice: self.totalBasketPrice)
+        
+                            break
+                        }
+                    }
+                }
+                
+                outerLoop: for el in UserSettings.basketInfo {
+                    for ind in 0...UserSettings.basketInfo.count-1 {
+                        if UserSettings.basketInfo[ind].isEmpty == false {
+                            //print("ind = \(ind)")
+                            if UserSettings.basketInfo[ind][0].title == basketData.title {
+                                
+                                print("ind = \(ind)")
+                                print("UserSettings.basketInfo[ind][0].title = \(UserSettings.basketInfo[ind][0].title)")
+                                print("basketData.title = \(basketData.title)")
+                                UserSettings.basketInfo[ind][0].quantity -= 1
+                               
+                                
+                                break outerLoop // Выход из обоих циклов
+                            }
+                        }
+                    }
+                }
+                
+                for el in self.storeProducts {
+                    if el["name"] as? String == basketData.title {
+                        if let productCount = el["quantity"] as? Int {
+                            if basketData.quantity == productCount {
+                                cell.config(title: basketData.title, quantity: basketData.quantity, price: basketData.price, inStock: false)
+                                //tableView.reloadRows(at: [indexPath], with: .none)
+                            } else {
+                                cell.config(title: basketData.title, quantity: basketData.quantity, price: basketData.price, inStock: true)
+                                //tableView.reloadRows(at: [indexPath], with: .none)
+                            }
+                        }
+                    }
+                }
             }
             
             if basketData.quantity == 0 {
-                NotificationCenter.default.post(name: NSNotification.Name("prodDeleted"), object: nil)
                 self.basketInfo[indexPath.row] = []
-                print("test1 \(self.basketProdData)")
+                UserSettings.deletedFromBasketNow = true
                 self.basketProdData.remove(at: indexPath.row)
-                print("test2 \(self.basketProdData)")
-                tableView.reloadData()
-                //UserSettings.basketInfo = bskt
+                outerLoop2: for _ in UserSettings.basketInfo {
+                    for ind in 0...UserSettings.basketInfo.count-1 {
+                        if UserSettings.basketInfo[ind].isEmpty == false {
+                            //print("ind = \(ind)")
+                            if UserSettings.basketInfo[ind][0].title == basketData.title {
+                                UserSettings.basketInfo[ind] = []
+                                NotificationCenter.default.post(name: NSNotification.Name("prodDeleted"), object: nil)
+                                break outerLoop2 // Выход из обоих циклов
+                            }
+                        }
+                    }
+                }
+                //self.basketConfig()
+                self.basketRefresh()
+                
             }
             NotificationCenter.default.post(name: NSNotification.Name("basketUpdated"), object: nil)
-            print("UserSettings.basketInfo = \(UserSettings.basketInfo)")
+            print("#BasketController#cell.baskMinusTap-END-#BasketInfo = \(UserSettings.basketInfo ?? [])")
         }
         
         cell.baskPlusTap = {
+            
+            print("#BasketController#cell.baskPlusTap-START-#BasketInfo = \(UserSettings.basketInfo ?? [])")
             basketData.quantity += 1
             self.basketInfo[indexPath.row][0].quantity += 1
-            print("baskPlusTap")
-            print("indexPath row = \(indexPath.row)")
-            print("basketInfo = \(self.basketInfo)")
-            print("storeData = \(self.storeProducts)")
-            //self.updateProdCount(in: &bskt!, newValue: basketData.quantity)
+            self.totalBasketPrice = self.totalBasketPrice + self.basketInfo[indexPath.row][0].price
+            self.totalLabelSum.text = "\(self.totalBasketPrice)"
+            self.pricesView.removeFromSuperview()
+            self.priceViewApperance(totalPrice: self.totalBasketPrice)
             
-            if let productCount = self.storeProducts[indexPath.row]["quantity"] as? Int {
-                if basketData.quantity == productCount {
-                    cell.config(title: basketData.title, quantity: basketData.quantity, price: basketData.price, inStock: false)
-                    //tableView.reloadRows(at: [indexPath], with: .none)
-                } else {
-                    cell.config(title: basketData.title, quantity: basketData.quantity, price: basketData.price, inStock: true)
-                    //tableView.reloadRows(at: [indexPath], with: .none)
+            outerLoop: for el in UserSettings.basketInfo {
+                for ind in 0...UserSettings.basketInfo.count-1 {
+                    if UserSettings.basketInfo[ind].isEmpty == false {
+                        print("el = \(el)")
+                        //print("ind = \(ind)")
+                        if UserSettings.basketInfo[ind][0].title == basketData.title {
+                            print("ind = \(ind)")
+                            print("UserSettings.basketInfo[ind][0].title = \(UserSettings.basketInfo[ind][0].title)")
+                            print("basketData.title = \(basketData.title)")
+                            UserSettings.basketInfo[ind][0].quantity += 1
+                            print("\(UserSettings.basketInfo[ind][0])")
+                            break outerLoop // Выход из обоих циклов
+                        }
+                    }
+                }
+            }
+            
+            print("#outerLoop#UserSettings.basketInfo = \(UserSettings.basketInfo ?? [])")
+            
+            
+            for el in self.storeProducts {
+                if el["name"] as? String == basketData.title {
+                    if let productCount = el["quantity"] as? Int {
+                        if basketData.quantity == productCount {
+                            cell.config(title: basketData.title, quantity: basketData.quantity, price: basketData.price, inStock: false)
+                            //tableView.reloadRows(at: [indexPath], with: .none)
+                        } else {
+                            cell.config(title: basketData.title, quantity: basketData.quantity, price: basketData.price, inStock: true)
+                            //tableView.reloadRows(at: [indexPath], with: .none)
+                        }
+                    }
                 }
             }
             NotificationCenter.default.post(name: NSNotification.Name("basketUpdated"), object: nil)
+            print("#BasketController#cell.baskPlusTap-END-#BasketInfo = \(UserSettings.basketInfo ?? [])")
         }
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print(indexPath.row)
+       
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -643,28 +728,19 @@ extension BasketController {
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        print("------------------------------------------------------------------")
         if editingStyle == .delete {
-            //print("     indexPath.row = \(indexPath.row)")
-            //print("     BasketInfo = \(UserSettings.basketInfo)")
-            //print("basketProdData = \(basketProdData)")
-            //print("UNAVAILABLE PROD = \(UserSettings.unavailableProducts)")
             let basketData = self.basketProdData[indexPath.row]
             UserSettings.basketInfo[basketData.id][0].inBasket = true
             
-            //print("     UserSettings.basketInfo[indexPath.row] = \(UserSettings.basketInfo[indexPath.row])")
             
             var bskt = UserSettings.basketInfo
             var prodToDel = UserSettings.unavailableProducts
-            
-            //print("     basket = \(bskt)")
-            //print("     prodTODel1 = \(prodToDel)")
             
             if prodToDel!.isEmpty == false {
                 for i in 0...prodToDel!.count-1 {
                     if prodToDel!.count > i {
                         for el in prodToDel![i] {
-                            //print("PRODUCT TO DELETE = \(el.title)")
+                           
                             prodToDel!.removeAll { sublist in
                                 sublist.contains(where: { $0.id == basketData.id })
                             }
@@ -676,22 +752,18 @@ extension BasketController {
                     }
                 }
             }
-            //print("     prodTODel2 = \(prodToDel)")
             UserSettings.unavailableProducts = prodToDel
             self.unavailableProducts = prodToDel!
-            
-            print(UserSettings.basketProdQuant)
+        
             UserSettings.basketProdQuant -= UserSettings.basketInfo[basketData.id][0].quantity
             UserSettings.basketInfo[basketData.id][0].quantity = 0
             basketInfo.remove(at: indexPath.row)
-            print(UserSettings.basketProdQuant)
             
             totalBasketPrice = totalBasketPrice - Double((basketProdData[indexPath.row].price * basketProdData[indexPath.row].quantity))
             
             basketProdData.remove(at: indexPath.row)
             
-            tableView.deleteRows(at: [indexPath], with: .fade)
-            //print("indexPath = \(indexPath.row)")
+            //tableView.deleteRows(at: [indexPath], with: .fade)
             totalLabelSum.text = "\(totalBasketPrice)"
             
             self.pricesView.removeFromSuperview()
@@ -706,20 +778,13 @@ extension BasketController {
                 pricesView.alpha = 1
             }
             
-            tableView.reloadData()
-            
             NotificationCenter.default.post(name: NSNotification.Name("basketUpdated"), object: nil)
             
-            print("Basket to send = \(bskt!)")
-            print("Unavailable items = \(prodToDel)")
             if prodToDel!.isEmpty {
                 isProductsInStock = true
             }
-            
+            tableView.reloadData()
         }
-        //print("Basket info after all = \(basketInfo)")
-        //print("BasketData After All = \(UserSettings.basketInfo)")
+       // tableView.reloadData()
     }
 }
-
-
