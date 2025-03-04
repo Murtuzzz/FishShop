@@ -69,7 +69,6 @@ class RegistrationController: UIViewController {
         button.backgroundColor = .systemBlue
         return button
     }()
-        
 
     override func viewDidLoad() {
         super.viewDidLoad()

@@ -96,11 +96,11 @@ final class AddressPickerViewController: UIViewController, MKMapViewDelegate, UI
         let location = CLLocation(latitude: center.latitude, longitude: center.longitude)
         
         geocoder.reverseGeocodeLocation(location) { (placemarks, error) in
-            if let error = error {
+            if error != nil {
                 return
             }
             if let placemark = placemarks?.first {
-                let address = [placemark.thoroughfare, placemark.subThoroughfare, placemark.locality, placemark.postalCode, placemark.country].compactMap {$0}.joined(separator: ", ")
+                _ = [placemark.thoroughfare, placemark.subThoroughfare, placemark.locality, placemark.postalCode, placemark.country].compactMap {$0}.joined(separator: ", ")
             }
         }
     }
@@ -164,7 +164,7 @@ final class AddressPickerViewController: UIViewController, MKMapViewDelegate, UI
         let geocoder = CLGeocoder()
         geocoder.geocodeAddressString(address) { [weak self] (placemarks, error) in
             guard let strongSelf = self else { return }
-            if let error = error {
+            if error != nil {
                 return
             }
             if let placemark = placemarks?.first, let location = placemark.location {

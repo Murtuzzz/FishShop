@@ -146,7 +146,8 @@ final class CardInfoController: UIViewController {
     
     private let arrowView = RoundedView()
     
-    override func viewDidAppear(_ animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
+        print("-------------------------------CardInfoController------------------------------------")
     }
     
     override func viewDidLoad() {
@@ -283,6 +284,7 @@ final class CardInfoController: UIViewController {
         //updateProdCount(in: &bskt!, newValue: prodCount)
         //UserSettings.basketInfo = bskt
         
+        print("#CardInfoController#buyButtonTapped#BasketInfo = \(UserSettings.basketInfo ?? [])")
     }
     
     @objc
@@ -306,6 +308,8 @@ final class CardInfoController: UIViewController {
             plusButton.alpha = 0
             prodCountLabel.alpha = 0
         }
+        
+        print("#CardInfoController#minusButtonTapped#BasketInfo = \(UserSettings.basketInfo ?? [])")
     }
     
     @objc
@@ -329,6 +333,7 @@ final class CardInfoController: UIViewController {
                 self.inStock = inStock
             }
         }
+        print("#CardInfoController#plusButtonTapped#BasketInfo = \(UserSettings.basketInfo ?? [])")
     }
     
     func constraints() {

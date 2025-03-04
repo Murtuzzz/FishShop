@@ -247,7 +247,7 @@ class BasketController: UIViewController, UITableViewDelegate, UITableViewDataSo
         }
         
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            if let error = error {
+            if error != nil {
                 return
             } else if let data = data {
                 //guard let data = data else { return }
@@ -347,7 +347,7 @@ class BasketController: UIViewController, UITableViewDelegate, UITableViewDataSo
         if UserSettings.isLocChanging == false {
             adress = locationTextField.text!
             view.endEditing(true)
-            if locationTextField != nil {
+            if locationTextField.text != nil {
                 searchForAddress(locationTextField.text!)
             } else {
                 displaySaveError()
@@ -397,6 +397,7 @@ class BasketController: UIViewController, UITableViewDelegate, UITableViewDataSo
     
     
     func searchForAddress(_ address: String) {
+        print("address = \(adress)")
         let geocoder = CLGeocoder()
         geocoder.geocodeAddressString("г. Владикавказ, ул.\(adress)") { [weak self] (placemarks, error) in
             guard let strongSelf = self else { return }
@@ -407,6 +408,7 @@ class BasketController: UIViewController, UITableViewDelegate, UITableViewDataSo
                 let region = MKCoordinateRegion(center: location.coordinate, latitudinalMeters: 100, longitudinalMeters: 100)
                 
                 //strongSelf.mapView.setRegion(region, animated: true)
+                
                 
                 UserSettings.adress = []
                 UserSettings.adress.append([])
@@ -613,7 +615,7 @@ extension BasketController {
                     }
                 }
                 
-                outerLoop: for el in UserSettings.basketInfo {
+                outerLoop: for _ in UserSettings.basketInfo {
                     for ind in 0...UserSettings.basketInfo.count-1 {
                         if UserSettings.basketInfo[ind].isEmpty == false {
                             //print("ind = \(ind)")
@@ -729,6 +731,7 @@ extension BasketController {
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
+            print("#BasketController#editingStyle =.delete#basketInfo = \(UserSettings.basketInfo ?? [])")
             let basketData = self.basketProdData[indexPath.row]
             UserSettings.basketInfo[basketData.id][0].inBasket = true
             
@@ -739,7 +742,7 @@ extension BasketController {
             if prodToDel!.isEmpty == false {
                 for i in 0...prodToDel!.count-1 {
                     if prodToDel!.count > i {
-                        for el in prodToDel![i] {
+                        for _ in prodToDel![i] {
                            
                             prodToDel!.removeAll { sublist in
                                 sublist.contains(where: { $0.id == basketData.id })
@@ -756,18 +759,47 @@ extension BasketController {
             self.unavailableProducts = prodToDel!
         
             UserSettings.basketProdQuant -= UserSettings.basketInfo[basketData.id][0].quantity
-            UserSettings.basketInfo[basketData.id][0].quantity = 0
             basketInfo.remove(at: indexPath.row)
             
-            totalBasketPrice = totalBasketPrice - Double((basketProdData[indexPath.row].price * basketProdData[indexPath.row].quantity))
+            print("#BasketController#editingStyle =.delete#basketProdData[indexPath.row].price = \(basketProdData[indexPath.row].price)")
+            print("#BasketController#editingStyle =.delete#basketProdData[indexPath.row].quantity = \(basketProdData[indexPath.row].quantity)")
             
+            outerLoop: for el in UserSettings.basketInfo {
+                for ind in 0...UserSettings.basketInfo.count-1 {
+                    if UserSettings.basketInfo[ind].isEmpty == false {
+                        print("el = \(el)")
+                        //print("ind = \(ind)")
+                        if UserSettings.basketInfo[ind][0].title == basketData.title {
+                            if UserSettings.basketInfo[ind][0].quantity == 1 {
+                                self.totalBasketPrice = totalBasketPrice - UserSettings.basketInfo[ind][0].price
+                                UserSettings.basketInfo[ind][0].quantity = 0
+                                self.pricesView.removeFromSuperview()
+                                priceViewApperance(totalPrice: self.totalBasketPrice)
+                                totalLabelSum.text = "\(self.totalBasketPrice)"
+                                break outerLoop
+                            } else {
+                                totalBasketPrice = totalBasketPrice - Double(UserSettings.basketInfo[ind][0].price) * Double(UserSettings.basketInfo[ind][0].quantity)
+                                UserSettings.basketInfo[ind][0].quantity = 0
+                                self.pricesView.removeFromSuperview()
+                                priceViewApperance(totalPrice: self.totalBasketPrice)
+                                totalLabelSum.text = "\(self.totalBasketPrice)"
+                                break outerLoop
+                            }// Выход из обоих циклов
+                        }
+                    }
+                }
+            }
+            
+            
+            
+            //basketData.id
+            
+            //UserSettings.basketInfo[basketData.id][0].quantity = 0
             basketProdData.remove(at: indexPath.row)
             
             //tableView.deleteRows(at: [indexPath], with: .fade)
-            totalLabelSum.text = "\(totalBasketPrice)"
             
-            self.pricesView.removeFromSuperview()
-            priceViewApperance(totalPrice: totalBasketPrice)
+            
             if totalBasketPrice == 0 {
                 basketImage.alpha = 1
                 pricesView.alpha = 0
@@ -783,7 +815,8 @@ extension BasketController {
             if prodToDel!.isEmpty {
                 isProductsInStock = true
             }
-            tableView.reloadData()
+            self.basketRefresh()
+            //tableView.reloadData()
         }
        // tableView.reloadData()
     }

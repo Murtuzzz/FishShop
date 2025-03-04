@@ -782,6 +782,8 @@ extension ProductsController: CellDelegate, BasketCellDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let cellData = displayDataSource[indexPath.row]
+        //let descriptionController = CardInfoController(title: cellData.title, image: cellData.image)
+        //navigationController?.pushViewController(descriptionController, animated: true)
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -817,7 +819,7 @@ extension ProductsController: CellDelegate, BasketCellDelegate {
                     if inStock == true {
                         UserSettings.storeData.append([.init(id: id, title: name, description: self.description, price: price, inStock: inStock, quantity: productCount, categoryId: category)])
                         
-                        self.cardsData.append(.init(image: name, price: Int(Double(price)!), title: name, prodType: .salmon, prodId: id - 1, catId: Int(category) ?? 0, productCount: Int(productCount), inStock: inStock))
+                        self.cardsData.append(.init(image: name, price: Int(Double(price)!), title: name, prodType: .salmon, prodId: id - 1, catId: Int(category), productCount: Int(productCount), inStock: inStock))
                         
                         
                     }
@@ -834,7 +836,7 @@ extension ProductsController: CellDelegate, BasketCellDelegate {
         //let url = URL(string: "http://127.0.0.1:5002/get-url")
         let url = URL(string: "http://192.168.31.48:5002/get-url")
         let task = URLSession.shared.dataTask(with: url!) { (data, response, error) in
-            if let error = error {
+            if error != nil {
             } else if let data = data {
                 do {
                     if let productArray = try JSONSerialization.jsonObject(with: data, options: .allowFragments) as? [[String: Any]] {

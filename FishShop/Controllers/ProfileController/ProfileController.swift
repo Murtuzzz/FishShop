@@ -71,7 +71,7 @@ class ProfileController: UIViewController, UITableViewDelegate, UITableViewDataS
     }()
     
     override func viewWillAppear(_ animated: Bool) {
-        
+        print("------------------------------ProfileController---------------------------------")
     }
     
     override func viewDidLoad() {
@@ -196,7 +196,15 @@ extension ProfileController {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("#ProfileController#didSelectRowAt#UserSettings.orderHistory = \(UserSettings.ordersHistory ?? [])")
         
+        //let cell = tableView.dequeueReusableCell(withIdentifier: ProfileTableCell.id, for: indexPath) as! ProfileTableCell
+        
+        //let cellData = profileData[indexPath.row]
+        
+        navigationController?.pushViewController(OrderInfoTable(ind: indexPath.row), animated: true)
+        
+        print(profileData)
     }
     
 }

@@ -111,6 +111,7 @@ class DeliveryViewController: UIViewController, UITableViewDelegate, UITableView
     
     @objc
     func doneButtonAction() {
+        
         // Создаем экземпляр текущей даты и времени
         let currentDate = Date()
         // Инициализируем DateFormatter
@@ -123,6 +124,7 @@ class DeliveryViewController: UIViewController, UITableViewDelegate, UITableView
         // Выводим текущую дату и время
         
         UserSettings.activeOrder = false
+        self.timer?.invalidate()
         if UserSettings.ordersHistory == nil {
             UserSettings.ordersHistory = []
         }
@@ -157,7 +159,7 @@ class DeliveryViewController: UIViewController, UITableViewDelegate, UITableView
         orderInfoView.addSubview(label)
         
         let orderDetailsLabel = UILabel()
-        orderDetailsLabel.text = "г. Владикавказ, ул. \(UserSettings.adress[0][0].adress)"
+        orderDetailsLabel.text = "г. Владикавказ, ул. \(UserSettings.adress[0][0].adress)" // NIL
         
         orderDetailsLabel.textColor = .systemGray2
         orderDetailsLabel.numberOfLines = 0
@@ -255,7 +257,7 @@ class DeliveryViewController: UIViewController, UITableViewDelegate, UITableView
         let directions = MKDirections(request: directionRequest)
         directions.calculate { (response, error) in
             guard let response = response else {
-                if let error = error {
+                if error != nil {
                 }
                 return
             }
@@ -348,7 +350,7 @@ extension DeliveryViewController: MKMapViewDelegate {
         request.httpMethod = "GET"
         
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            if let error = error {
+            if error != nil {
                 return
             }
             
