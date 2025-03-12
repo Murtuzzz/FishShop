@@ -102,7 +102,7 @@ final class ProfileOrderCell: UITableViewCell {
             countLabel.leadingAnchor.constraint(equalTo: priceLabel.trailingAnchor),
             countLabel.trailingAnchor.constraint(equalTo: trailingAnchor),
             countLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor),
-            countLabel.widthAnchor.constraint(equalToConstant: 50),
+            //countLabel.widthAnchor.constraint(equalToConstant: 50),
             
             prodImage.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 16),
             prodImage.centerYAnchor.constraint(equalTo: centerYAnchor),

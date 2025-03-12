@@ -14,6 +14,7 @@ final class OrderInfoTable: UIViewController, UITableViewDelegate, UITableViewDa
     
     override func viewWillAppear(_ animated: Bool) {
         print("----------------------OrderInfoTable-------------------------------")
+        print("#OrderInfoTable#viewWillAppear#OrderHistory = \(UserSettings.ordersHistory ?? [])")
     }
     
     override func viewDidLoad() {
@@ -29,10 +30,17 @@ final class OrderInfoTable: UIViewController, UITableViewDelegate, UITableViewDa
     init(ind: Int) {
         super.init(nibName: nil, bundle: nil)
         
-        title = UserSettings.ordersHistory[reversedIndex: ind]![0][0].orderTime
+        var index = 0
+        if ind <= UserSettings.ordersHistory.count {
+            index = (UserSettings.ordersHistory.count - 1) - ind
+        }
+        
+        title = UserSettings.ordersHistory[index][0][0].orderTime
+        
+        print("#OrderInfoTable#init#OrderHistory = \(UserSettings.ordersHistory[index])")
         
         if UserSettings.ordersHistory != nil {
-            for el in UserSettings.ordersHistory[reversedIndex: ind]! {
+            for el in UserSettings.ordersHistory[index] {
                 orderData[0].append(.init(title: el[0].title, price: el[0].price, quantity: el[0].quantity, id: el[0].id, inBasket: el[0].inBasket, catId: el[0].catId, inStock: el[0].inStock, prodCount: el[0].prodCount))
             }
             print("#OrderInfoTable#init#orderData = \(orderData)")
@@ -104,19 +112,4 @@ extension OrderInfoTable {
         return 128.0
     }
     
-}
-
-extension Array {
-    subscript(reversedIndex index: Int) -> Element? {
-        get {
-            if index == 0 {
-                return self.last
-            } else if index == self.count - 1 {
-                return self.first
-            } else if index >= 0 && index < self.count {
-                return self[index]
-            }
-            return nil
-        }
-    }
 }

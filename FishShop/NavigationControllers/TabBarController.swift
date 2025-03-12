@@ -125,7 +125,7 @@ class TabBarController: UITabBarController {
     
     private let productNavController = NavBarController(rootViewController: ProductsController())
     private let searchNavController = NavBarController(rootViewController: ProfileController(login: "Dinglbob", id: ""))
-    private var profileController = NavBarController(rootViewController: LoginController())
+    private var profileController = NavBarController(rootViewController:MapRouteController())//LoginController())
     
 //    override func viewWillAppear(_ animated: Bool) {
 //        super.viewWillAppear(animated)
@@ -176,7 +176,7 @@ class TabBarController: UITabBarController {
         
         setupTabBar()
         tabBarAppearance()
-        switchTo(tab: .products)
+        switchTo(tab: .login)
         
     }
     

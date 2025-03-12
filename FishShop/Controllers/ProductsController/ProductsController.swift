@@ -169,6 +169,7 @@ class ProductsController: UIViewController, UITableViewDelegate, UITableViewData
         UserSettings.orderInfo = []
         UserSettings.dataFromStore = []
         UserSettings.unavailableProducts = []
+        UserSettings.userLocation = ["Location":"", "latitude":"", "longitude":""]
         UserSettings.isLocChanging = false
         //UserSettings.ordersHistory = []
         UserSettings.orderPaid = false
@@ -234,7 +235,10 @@ class ProductsController: UIViewController, UITableViewDelegate, UITableViewData
             basketInfo = UserSettings.basketInfo }
         checkAvailableProd(orders: basketInfo)
         let vc = BasketController()
-        present(vc, animated: true)
+        //vc.modalPresentationStyle = .pageSheet
+       // vc.modalTransitionStyle = .crossDissolve
+       // navigationController?.pushViewController(vc, animated: true)
+        present(vc,animated: true)
         
     }
     
@@ -302,7 +306,8 @@ class ProductsController: UIViewController, UITableViewDelegate, UITableViewData
     
     @objc
     func deilveryButtonAction() {
-        let vc = DeliveryViewController()
+        //let vc = DeliveryViewController()
+        let vc = MapRouteController()
         //present(vc, animated: true)
         navigationController?.pushViewController(vc, animated: true)
     }

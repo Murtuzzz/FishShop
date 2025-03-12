@@ -9,6 +9,10 @@
 /* Begin PBXBuildFile section */
 		B40EF3622BC0513E00F06662 /* BasketController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B40EF3612BC0513E00F06662 /* BasketController.swift */; };
 		B40EF3642BC0529900F06662 /* BasketCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B40EF3632BC0529900F06662 /* BasketCell.swift */; };
+		B42098E72D81C66000B171A2 /* MapRouteController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B42098E32D81C66000B171A2 /* MapRouteController.swift */; };
+		B42098E92D81C66000B171A2 /* RoutingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B42098E52D81C66000B171A2 /* RoutingViewModel.swift */; };
+		B42098EA2D81C66000B171A2 /* RoutePolylineStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = B42098E62D81C66000B171A2 /* RoutePolylineStyles.swift */; };
+		B42098EC2D81C72300B171A2 /* AlertPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B42098EB2D81C72300B171A2 /* AlertPresenter.swift */; };
 		B425FCEC2BB2AC2D00F2FA27 /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = B425FCEB2BB2AC2D00F2FA27 /* UserSettings.swift */; };
 		B4292CC22D5E188C00754265 /* UILableBG.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4292CC12D5E188C00754265 /* UILableBG.swift */; };
 		B4292CC42D621EFD00754265 /* tst.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4292CC32D621EFD00754265 /* tst.swift */; };
@@ -18,6 +22,12 @@
 		B46C900F2D75C6A200F32A02 /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46C900E2D75C6A200F32A02 /* LoginController.swift */; };
 		B46C90112D76DA2600F32A02 /* ProfileOrderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46C90102D76DA2600F32A02 /* ProfileOrderCell.swift */; };
 		B46C90132D76DA6B00F32A02 /* OrderInfoTable.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46C90122D76DA6B00F32A02 /* OrderInfoTable.swift */; };
+		B479138C2D80705A00B55C68 /* SearchViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47913842D80705A00B55C68 /* SearchViewModel.swift */; };
+		B479138E2D80705A00B55C68 /* MapObjectTapListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47913812D80705A00B55C68 /* MapObjectTapListener.swift */; };
+		B479138F2D80705A00B55C68 /* MapUIState.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47913822D80705A00B55C68 /* MapUIState.swift */; };
+		B47913912D80705A00B55C68 /* MapCameraListener.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47913802D80705A00B55C68 /* MapCameraListener.swift */; };
+		B47913922D80705A00B55C68 /* SuggestItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47913852D80705A00B55C68 /* SuggestItem.swift */; };
+		B479139A2D80705A00B55C68 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B47913832D80705A00B55C68 /* MapViewController.swift */; };
 		B4DBE76D2BCCF86D000A2C6D /* PricesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4DBE76C2BCCF86D000A2C6D /* PricesView.swift */; };
 		B4DC5CF82B977A73006D3E42 /* TabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4DC5CF72B977A72006D3E42 /* TabBarController.swift */; };
 		B4DC5CFA2B9B3674006D3E42 /* NavBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4DC5CF92B9B3674006D3E42 /* NavBarController.swift */; };
@@ -37,7 +47,6 @@
 		B4DC5D242BA80D4C006D3E42 /* InfoBlock.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4DC5D232BA80D4C006D3E42 /* InfoBlock.swift */; };
 		B4E87D3E2BE630E300A1EE71 /* Json.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4E87D3D2BE630E300A1EE71 /* Json.swift */; };
 		B4EF187A2BD655B900CB3C8C /* ProfileTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4EF18792BD655B900CB3C8C /* ProfileTableCell.swift */; };
-		B4EF187C2BD6FF4600CB3C8C /* AdressPickerController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4EF187B2BD6FF4600CB3C8C /* AdressPickerController.swift */; };
 		B4F38FA12B91E7A100B96806 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F38FA02B91E7A100B96806 /* AppDelegate.swift */; };
 		B4F38FA32B91E7A100B96806 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F38FA22B91E7A100B96806 /* SceneDelegate.swift */; };
 		B4F38FA52B91E7A100B96806 /* ProductsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F38FA42B91E7A100B96806 /* ProductsController.swift */; };
@@ -46,11 +55,19 @@
 		B4F7E4B42BD116DA00DE225E /* UserData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F7E4B32BD116DA00DE225E /* UserData.swift */; };
 		B4F7E4B62BD11FF600DE225E /* RegistrationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F7E4B52BD11FF600DE225E /* RegistrationController.swift */; };
 		B4F7E4B82BD1336100DE225E /* CustomTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4F7E4B72BD1336100DE225E /* CustomTextField.swift */; };
+		F73A230F2AB149FBDA267566 /* Pods_FishShop.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 473AD272C6A8DF59E7A9FE1C /* Pods_FishShop.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		097A55A1D647C8EE3183FAAA /* Pods-FishShop.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FishShop.debug.xcconfig"; path = "Target Support Files/Pods-FishShop/Pods-FishShop.debug.xcconfig"; sourceTree = "<group>"; };
+		1864BB336C8817F225B9BCE9 /* Pods-FishShop.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-FishShop.release.xcconfig"; path = "Target Support Files/Pods-FishShop/Pods-FishShop.release.xcconfig"; sourceTree = "<group>"; };
+		473AD272C6A8DF59E7A9FE1C /* Pods_FishShop.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FishShop.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B40EF3612BC0513E00F06662 /* BasketController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasketController.swift; sourceTree = "<group>"; };
 		B40EF3632BC0529900F06662 /* BasketCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasketCell.swift; sourceTree = "<group>"; };
+		B42098E32D81C66000B171A2 /* MapRouteController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapRouteController.swift; sourceTree = "<group>"; };
+		B42098E52D81C66000B171A2 /* RoutingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutingViewModel.swift; sourceTree = "<group>"; };
+		B42098E62D81C66000B171A2 /* RoutePolylineStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutePolylineStyles.swift; sourceTree = "<group>"; };
+		B42098EB2D81C72300B171A2 /* AlertPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertPresenter.swift; sourceTree = "<group>"; };
 		B425FCEB2BB2AC2D00F2FA27 /* UserSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettings.swift; sourceTree = "<group>"; };
 		B4292CC12D5E188C00754265 /* UILableBG.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UILableBG.swift; sourceTree = "<group>"; };
 		B4292CC32D621EFD00754265 /* tst.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = tst.swift; sourceTree = "<group>"; };
@@ -60,6 +77,13 @@
 		B46C900E2D75C6A200F32A02 /* LoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
 		B46C90102D76DA2600F32A02 /* ProfileOrderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileOrderCell.swift; sourceTree = "<group>"; };
 		B46C90122D76DA6B00F32A02 /* OrderInfoTable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OrderInfoTable.swift; sourceTree = "<group>"; };
+		B47913802D80705A00B55C68 /* MapCameraListener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapCameraListener.swift; sourceTree = "<group>"; };
+		B47913812D80705A00B55C68 /* MapObjectTapListener.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapObjectTapListener.swift; sourceTree = "<group>"; };
+		B47913822D80705A00B55C68 /* MapUIState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapUIState.swift; sourceTree = "<group>"; };
+		B47913832D80705A00B55C68 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		B47913842D80705A00B55C68 /* SearchViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchViewModel.swift; sourceTree = "<group>"; };
+		B47913852D80705A00B55C68 /* SuggestItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuggestItem.swift; sourceTree = "<group>"; };
+		B47913A12D80711C00B55C68 /* FishShop.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FishShop.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B4DBE76C2BCCF86D000A2C6D /* PricesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PricesView.swift; sourceTree = "<group>"; };
 		B4DC5CF72B977A72006D3E42 /* TabBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarController.swift; sourceTree = "<group>"; };
 		B4DC5CF92B9B3674006D3E42 /* NavBarController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NavBarController.swift; sourceTree = "<group>"; };
@@ -79,8 +103,6 @@
 		B4DC5D232BA80D4C006D3E42 /* InfoBlock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoBlock.swift; sourceTree = "<group>"; };
 		B4E87D3D2BE630E300A1EE71 /* Json.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Json.swift; sourceTree = "<group>"; };
 		B4EF18792BD655B900CB3C8C /* ProfileTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileTableCell.swift; sourceTree = "<group>"; };
-		B4EF187B2BD6FF4600CB3C8C /* AdressPickerController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdressPickerController.swift; sourceTree = "<group>"; };
-		B4F38F9D2B91E7A100B96806 /* FishShop.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FishShop.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B4F38FA02B91E7A100B96806 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B4F38FA22B91E7A100B96806 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		B4F38FA42B91E7A100B96806 /* ProductsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProductsController.swift; sourceTree = "<group>"; };
@@ -97,12 +119,30 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F73A230F2AB149FBDA267566 /* Pods_FishShop.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		8AD74508A3564B2671C59C1E /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				097A55A1D647C8EE3183FAAA /* Pods-FishShop.debug.xcconfig */,
+				1864BB336C8817F225B9BCE9 /* Pods-FishShop.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		B280E11BE573D8E1AC75037E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				473AD272C6A8DF59E7A9FE1C /* Pods_FishShop.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		B40EF3652BC1B51100F06662 /* BasketController */ = {
 			isa = PBXGroup;
 			children = (
@@ -113,6 +153,17 @@
 			path = BasketController;
 			sourceTree = "<group>";
 		};
+		B42098E22D81C65300B171A2 /* MapRouting */ = {
+			isa = PBXGroup;
+			children = (
+				B42098E32D81C66000B171A2 /* MapRouteController.swift */,
+				B42098E52D81C66000B171A2 /* RoutingViewModel.swift */,
+				B42098E62D81C66000B171A2 /* RoutePolylineStyles.swift */,
+				B42098EB2D81C72300B171A2 /* AlertPresenter.swift */,
+			);
+			path = MapRouting;
+			sourceTree = "<group>";
+		};
 		B4660C692C6F73D500CF9474 /* DeliveryController */ = {
 			isa = PBXGroup;
 			children = (
@@ -120,6 +171,28 @@
 				B4660C6A2C6F73EE00CF9474 /* DeliveryCell.swift */,
 			);
 			path = DeliveryController;
+			sourceTree = "<group>";
+		};
+		B47913232D7745B600B55C68 /* YandexMapKit */ = {
+			isa = PBXGroup;
+			children = (
+				B42098E22D81C65300B171A2 /* MapRouting */,
+				B47913862D80705A00B55C68 /* MapSearch */,
+			);
+			path = YandexMapKit;
+			sourceTree = "<group>";
+		};
+		B47913862D80705A00B55C68 /* MapSearch */ = {
+			isa = PBXGroup;
+			children = (
+				B47913802D80705A00B55C68 /* MapCameraListener.swift */,
+				B47913812D80705A00B55C68 /* MapObjectTapListener.swift */,
+				B47913822D80705A00B55C68 /* MapUIState.swift */,
+				B47913832D80705A00B55C68 /* MapViewController.swift */,
+				B47913842D80705A00B55C68 /* SearchViewModel.swift */,
+				B47913852D80705A00B55C68 /* SuggestItem.swift */,
+			);
+			path = MapSearch;
 			sourceTree = "<group>";
 		};
 		B4DC5D032B9B3F3F006D3E42 /* Resources */ = {
@@ -214,21 +287,16 @@
 			isa = PBXGroup;
 			children = (
 				B4F38F9F2B91E7A100B96806 /* FishShop */,
-				B4F38F9E2B91E7A100B96806 /* Products */,
+				8AD74508A3564B2671C59C1E /* Pods */,
+				B280E11BE573D8E1AC75037E /* Frameworks */,
+				B47913A12D80711C00B55C68 /* FishShop.app */,
 			);
-			sourceTree = "<group>";
-		};
-		B4F38F9E2B91E7A100B96806 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				B4F38F9D2B91E7A100B96806 /* FishShop.app */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 		B4F38F9F2B91E7A100B96806 /* FishShop */ = {
 			isa = PBXGroup;
 			children = (
+				B47913232D7745B600B55C68 /* YandexMapKit */,
 				B4E87D3D2BE630E300A1EE71 /* Json.swift */,
 				B4F7E4B02BD104BC00DE225E /* Controllers */,
 				B4DC5D032B9B3F3F006D3E42 /* Resources */,
@@ -237,7 +305,6 @@
 				B4F38FA92B91E7A400B96806 /* Assets.xcassets */,
 				B4F38FAB2B91E7A400B96806 /* LaunchScreen.storyboard */,
 				B4F38FAE2B91E7A400B96806 /* Info.plist */,
-				B4EF187B2BD6FF4600CB3C8C /* AdressPickerController.swift */,
 			);
 			path = FishShop;
 			sourceTree = "<group>";
@@ -269,9 +336,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = B4F38FB12B91E7A400B96806 /* Build configuration list for PBXNativeTarget "FishShop" */;
 			buildPhases = (
+				14375F4F76FEE74B44718823 /* [CP] Check Pods Manifest.lock */,
 				B4F38F992B91E7A100B96806 /* Sources */,
 				B4F38F9A2B91E7A100B96806 /* Frameworks */,
 				B4F38F9B2B91E7A100B96806 /* Resources */,
+				0446DC7BBBE0D5CEF2BCE4C2 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -279,7 +348,7 @@
 			);
 			name = FishShop;
 			productName = FishShop;
-			productReference = B4F38F9D2B91E7A100B96806 /* FishShop.app */;
+			productReference = B47913A12D80711C00B55C68 /* FishShop.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -306,7 +375,7 @@
 				Base,
 			);
 			mainGroup = B4F38F942B91E7A100B96806;
-			productRefGroup = B4F38F9E2B91E7A100B96806 /* Products */;
+			productRefGroup = B4F38F942B91E7A100B96806;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
@@ -327,6 +396,48 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		0446DC7BBBE0D5CEF2BCE4C2 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-FishShop/Pods-FishShop-resources-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-FishShop/Pods-FishShop-resources-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-FishShop/Pods-FishShop-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		14375F4F76FEE74B44718823 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-FishShop-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		B4F38F992B91E7A100B96806 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -346,12 +457,21 @@
 				B4292CC22D5E188C00754265 /* UILableBG.swift in Sources */,
 				B40EF3622BC0513E00F06662 /* BasketController.swift in Sources */,
 				B4DC5D1E2BA71466006D3E42 /* RoundedView.swift in Sources */,
+				B479138C2D80705A00B55C68 /* SearchViewModel.swift in Sources */,
+				B42098EC2D81C72300B171A2 /* AlertPresenter.swift in Sources */,
+				B479138E2D80705A00B55C68 /* MapObjectTapListener.swift in Sources */,
+				B479138F2D80705A00B55C68 /* MapUIState.swift in Sources */,
+				B47913912D80705A00B55C68 /* MapCameraListener.swift in Sources */,
+				B47913922D80705A00B55C68 /* SuggestItem.swift in Sources */,
+				B479139A2D80705A00B55C68 /* MapViewController.swift in Sources */,
 				B4DC5D022B9B3B31006D3E42 /* R.swift in Sources */,
 				B4DC5D122B9DCDDD006D3E42 /* FilterButtons.swift in Sources */,
-				B4EF187C2BD6FF4600CB3C8C /* AdressPickerController.swift in Sources */,
 				B4DBE76D2BCCF86D000A2C6D /* PricesView.swift in Sources */,
 				B4EF187A2BD655B900CB3C8C /* ProfileTableCell.swift in Sources */,
 				B4F38FA12B91E7A100B96806 /* AppDelegate.swift in Sources */,
+				B42098E72D81C66000B171A2 /* MapRouteController.swift in Sources */,
+				B42098E92D81C66000B171A2 /* RoutingViewModel.swift in Sources */,
+				B42098EA2D81C66000B171A2 /* RoutePolylineStyles.swift in Sources */,
 				B4F7E4B62BD11FF600DE225E /* RegistrationController.swift in Sources */,
 				B4DC5D142B9DCE26006D3E42 /* ProdButton.swift in Sources */,
 				B4DC5D082B9B4134006D3E42 /* ProfileController.swift in Sources */,
@@ -423,7 +543,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -486,7 +606,7 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu17;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -507,12 +627,14 @@
 		};
 		B4F38FB22B91E7A400B96806 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 097A55A1D647C8EE3183FAAA /* Pods-FishShop.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = N4AY2827DP;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = FishShop/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -537,12 +659,14 @@
 		};
 		B4F38FB32B91E7A400B96806 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 1864BB336C8817F225B9BCE9 /* Pods-FishShop.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = N4AY2827DP;
+				ENABLE_USER_SCRIPT_SANDBOXING = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = FishShop/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

@@ -50,10 +50,10 @@ final class UserSettings {
         case address
         case orderPaid
         case orderInfo
-        case adress
         case activeOrder
         case orderSum
         case ordersHistory
+        case userLocation
         case isLocChanging
         case storeData
         case dataFromStore
@@ -105,18 +105,6 @@ final class UserSettings {
         }
     }
     
-    static var adress: [[Adress]]! {
-        get {
-            guard let data = UserDefaults.standard.data(forKey: SettingsKeys.adress.rawValue) else { return nil }
-            let decoder = JSONDecoder()
-            return try? decoder.decode([[Adress]].self, from: data)
-        } set {
-            let encoder = JSONEncoder()
-            let encoded = try? encoder.encode(newValue)
-            UserDefaults.standard.set(encoded, forKey: SettingsKeys.adress.rawValue)
-        }
-    }
-    
     static var storeData: [[StoreData]]! {
         get {
             guard let data = UserDefaults.standard.data(forKey: SettingsKeys.storeData.rawValue) else { return nil }
@@ -126,6 +114,29 @@ final class UserSettings {
             let encoder = JSONEncoder()
             let encoded = try? encoder.encode(newValue)
             UserDefaults.standard.set(encoded, forKey: SettingsKeys.storeData.rawValue)
+        }
+    }
+    
+    static var userLocation: [String: String]? {
+        get {
+            guard let data = UserDefaults.standard.data(forKey: SettingsKeys.userLocation.rawValue) else { return nil }
+            do {
+                return try JSONSerialization.jsonObject(with: data, options: []) as? [String: String]
+            } catch {
+                return nil
+            }
+        }
+        set {
+            guard let newValue = newValue else {
+                UserDefaults.standard.removeObject(forKey: SettingsKeys.userLocation.rawValue)
+                return
+            }
+            do {
+                let data = try JSONSerialization.data(withJSONObject: newValue, options: [])
+                UserDefaults.standard.set(data, forKey: SettingsKeys.userLocation.rawValue)
+            } catch {
+                print("Ошибка при сохранении данных: \(error.localizedDescription)")
+            }
         }
     }
     
@@ -148,21 +159,6 @@ final class UserSettings {
             
             let defaults = UserDefaults.standard
             let key = SettingsKeys.basketProdQuant.rawValue
-            if let today = newValue {
-                defaults.set(today, forKey: key)
-            } else {
-                defaults.removeObject(forKey: key)
-            }
-        }
-    }
-    
-    static var address: String! {
-        get {
-            return UserDefaults.standard.string(forKey: SettingsKeys.address.rawValue)
-        } set {
-            
-            let defaults = UserDefaults.standard
-            let key = SettingsKeys.address.rawValue
             if let today = newValue {
                 defaults.set(today, forKey: key)
             } else {

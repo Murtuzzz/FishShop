@@ -16,7 +16,7 @@ struct Basket {
     let time: String
 }
 
-class BasketController: UIViewController, UITableViewDelegate, UITableViewDataSource,AddressPickerDelegate {
+class BasketController: UIViewController, UITableViewDelegate, UITableViewDataSource {
     
     var basketProdData: [Basket] = []
     var isProductsInStock = false
@@ -43,15 +43,14 @@ class BasketController: UIViewController, UITableViewDelegate, UITableViewDataSo
         return view
     }()
     
-    private let locationTextField: UITextField = {
-        let textField = UITextField()
-        textField.translatesAutoresizingMaskIntoConstraints = false
-        //textField.placeholder = "Введите адрес доставки"
-        textField.textColor = .white
-        textField.tintColor = .white
-        textField.attributedPlaceholder = NSAttributedString(string: "Введите адрес доставки", attributes: [NSAttributedString.Key.foregroundColor: UIColor.systemGray])
-        //textField.text = ""
-        return textField
+    private let locationLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = .white
+        label.font = R.Fonts.avenirBook(with: 16)
+        label.numberOfLines = 2
+        label.text = UserSettings.userLocation?["Location"] ?? ""
+        return label
     }()
     
     private let basketImage: UIImageView = {
@@ -62,31 +61,27 @@ class BasketController: UIViewController, UITableViewDelegate, UITableViewDataSo
         return view
     }()
     
-    private let locationButton: UIButton = {
-        let button = UIButton(type: .system)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        //        button.setTitle("г. Владикавказ, ул. \(UserSettings.adress[0][0].adress)", for: .normal)
-        button.contentMode = .scaleAspectFit
-        button.tintColor = .systemBlue
-        return button
-    }()
-    
     private let locationImage: UIImageView = {
         let view = UIImageView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        //        view.tintColor = R.Colors.barBg.withAlphaComponent(0.5)
         view.contentMode = .scaleAspectFit
         view.image = UIImage(named:"location")
         return view
     }()
     
-    private let saveLocationButton: UIButton = {
+    private let changeLocationButton: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.tintColor = .systemBlue.withAlphaComponent(0.5)
-        button.setImage(UIImage(systemName: "checkmark.circle.fill"), for: .normal)
+        let config = UIImage.SymbolConfiguration(pointSize: 30)
+        let image = UIImage(systemName: "pencil", withConfiguration: config)
+        button.setImage(image, for: .normal)
+        button.clipsToBounds = true
+        button.contentMode = .scaleAspectFill
+        //button.contentEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         return button
     }()
+
     
     private let payButton: UIButton = {
         let button = UIButton(type: .system)
@@ -136,6 +131,8 @@ class BasketController: UIViewController, UITableViewDelegate, UITableViewDataSo
             isProductsInStock = false
         }
         
+        locationLabel.text = "\(UserSettings.userLocation!["Location"] ?? "")"
+        
         print("#BasketController#viewWillAppear#")
         print("BasketInfo = \(UserSettings.basketInfo ?? [])")
         print("StoreData = \(UserSettings.dataFromStore ?? [])")
@@ -145,13 +142,10 @@ class BasketController: UIViewController, UITableViewDelegate, UITableViewDataSo
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
-        view.addGestureRecognizer(tapGesture)
         view.backgroundColor = R.Colors.background
         view.addSubview(basketView)
-        view.addSubview(saveLocationButton)
-        view.addSubview(locationTextField)
+        view.addSubview(changeLocationButton)
+        view.addSubview(locationLabel)
         view.addSubview(payButton)
         //view.addSubview(locationButton)
         view.addSubview(locationImage)
@@ -164,12 +158,6 @@ class BasketController: UIViewController, UITableViewDelegate, UITableViewDataSo
         buttonsActions()
         
         payButton.addTarget(self, action: #selector(payButtonAction), for: .touchUpInside)
-        
-        if UserSettings.adress != nil {
-            locationTextField.text = "\(UserSettings.adress[0][0].adress)"
-        }
-        
-        checkBasket()
         
     }
     
@@ -191,7 +179,7 @@ class BasketController: UIViewController, UITableViewDelegate, UITableViewDataSo
     func refreshingBasket() {
 
         if isProductsInStock == true {
-            if locationTextField.hasText == true {
+            if locationLabel.text != "" {
                 if UserSettings.activeOrder == false {
                     
            
@@ -225,10 +213,6 @@ class BasketController: UIViewController, UITableViewDelegate, UITableViewDataSo
         } else {
             //displayBasketAlert()
         }
-    }
-    
-    func checkBasket() {
-   
     }
     
     //MARK: - Back: send order Info To Server bbb
@@ -313,13 +297,7 @@ class BasketController: UIViewController, UITableViewDelegate, UITableViewDataSo
         
     }
     
-    @objc
-    func hideKeyboard() {
-        view.endEditing(true)
-    }
-    
     func tableApperance() {
-        
         self.tableView = UITableView()
         self.tableView.delegate = self
         self.tableView.backgroundColor = R.Colors.background
@@ -338,37 +316,28 @@ class BasketController: UIViewController, UITableViewDelegate, UITableViewDataSo
     }
     
     func buttonsActions() {
-        locationButton.addTarget(self, action: #selector(locationButtonAction), for: .touchUpInside)
-        saveLocationButton.addTarget(self, action: #selector(saveLocationButtonAction), for: .touchUpInside)
+        changeLocationButton.addTarget(self, action: #selector(saveLocationButtonAction), for: .touchUpInside)
     }
     
     @objc
     func saveLocationButtonAction() {
-        if UserSettings.isLocChanging == false {
-            adress = locationTextField.text!
-            view.endEditing(true)
-            if locationTextField.text != nil {
-                searchForAddress(locationTextField.text!)
-            } else {
-                displaySaveError()
-            }
-            displayAddressAlert(address: "")
-        } else {
-            displayLocSaveError()
+        let vc = MapViewController()
+        let navigationController = UINavigationController(rootViewController: vc)
+        navigationController.modalPresentationStyle = .fullScreen
+        present(navigationController, animated: true)
+        
+        vc.locationPick = {
+            self.locationLabel.text = UserSettings.userLocation!["Location"]
         }
+        
+        
+        
     }
     
     @objc
     func locationButtonAction() {
-        let addressPickerVC = AddressPickerViewController()
-        addressPickerVC.delegate = self
-        present(addressPickerVC, animated: true, completion: nil)
+       
     }
-    
-    func addressDidPick(_ address: String) {
-        locationButton.setTitle(address, for: .normal)
-    }
-    
     
     //--MARK: Alerts
     func displayAddressAlert(address: String) {
@@ -393,29 +362,6 @@ class BasketController: UIViewController, UITableViewDelegate, UITableViewDataSo
         let alertController = UIAlertController(title: "Обработка", message: "Дождитесь завершения предыдущего заказа", preferredStyle: .alert)
         alertController.addAction(UIAlertAction(title: "OK", style: .default))
         present(alertController, animated: true)
-    }
-    
-    
-    func searchForAddress(_ address: String) {
-        print("address = \(adress)")
-        let geocoder = CLGeocoder()
-        geocoder.geocodeAddressString("г. Владикавказ, ул.\(adress)") { [weak self] (placemarks, error) in
-            guard let strongSelf = self else { return }
-            if let error = error {
-                return
-            }
-            if let placemark = placemarks?.first, let location = placemark.location {
-                let region = MKCoordinateRegion(center: location.coordinate, latitudinalMeters: 100, longitudinalMeters: 100)
-                
-                //strongSelf.mapView.setRegion(region, animated: true)
-                
-                
-                UserSettings.adress = []
-                UserSettings.adress.append([])
-                UserSettings.adress[0].append(.init(adress: self!.adress, latitude: region.center.latitude, longitude: region.center.longitude))
-                
-            }
-        }
     }
     
     func basketRefresh() {
@@ -515,7 +461,7 @@ class BasketController: UIViewController, UITableViewDelegate, UITableViewDataSo
         
         //
         NSLayoutConstraint.activate([
-            tableView.topAnchor.constraint(equalTo: view.topAnchor,constant: 120),
+            tableView.topAnchor.constraint(equalTo: view.topAnchor,constant: 144),
             tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -256),
@@ -536,17 +482,18 @@ class BasketController: UIViewController, UITableViewDelegate, UITableViewDataSo
             titleLabel.heightAnchor.constraint(equalToConstant: 40),
             
             locationImage.leadingAnchor.constraint(equalTo: titleLabel.leadingAnchor),
-            locationImage.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 8),
+            locationImage.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 24),
             locationImage.heightAnchor.constraint(equalToConstant: 30),
             locationImage.widthAnchor.constraint(equalTo: locationImage.heightAnchor),
             
-            saveLocationButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
-            saveLocationButton.centerYAnchor.constraint(equalTo: locationImage.centerYAnchor),
-            saveLocationButton.heightAnchor.constraint(equalToConstant: 40),
-            saveLocationButton.widthAnchor.constraint(equalTo: saveLocationButton.heightAnchor),
+            changeLocationButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -24),
+            changeLocationButton.centerYAnchor.constraint(equalTo: locationImage.centerYAnchor),
+            changeLocationButton.heightAnchor.constraint(equalToConstant: 40),
+            changeLocationButton.widthAnchor.constraint(equalTo: changeLocationButton.heightAnchor),
             
-            locationTextField.leadingAnchor.constraint(equalTo: locationImage.trailingAnchor, constant: 8),
-            locationTextField.centerYAnchor.constraint(equalTo: locationImage.centerYAnchor),
+            locationLabel.leadingAnchor.constraint(equalTo: locationImage.trailingAnchor, constant: 8),
+            locationLabel.trailingAnchor.constraint(equalTo: changeLocationButton.leadingAnchor, constant: -8),
+            locationLabel.centerYAnchor.constraint(equalTo: locationImage.centerYAnchor),
             
             payButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -64),
             payButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
