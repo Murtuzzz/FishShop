@@ -168,7 +168,7 @@ final class ProductsTableCell: UITableViewCell {
         
         contentView.addSubview(basketButton)
         constraints()
-        backgroundColor = R.Colors.background
+        backgroundColor = .clear//R.Colors.background
     }
     
     required init?(coder: NSCoder) {

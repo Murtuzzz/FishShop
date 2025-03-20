@@ -7,6 +7,7 @@
 
 struct CardInfo {
     let image: String
+    let discription: String
     let price: Int
     let title: String
     let prodType: ProdType
@@ -55,6 +56,14 @@ class ProductsController: UIViewController, UITableViewDelegate, UITableViewData
     {"id":5,"name":"Gold fish","description":"Бекещеке","price":"396.00","in_stock":true,"quantity":23.0,"category":2}
 ]
 """
+    
+    private let backgroundImage: UIImageView = {
+        let view = UIImageView()
+        view.image = UIImage(named: "bgScreen")
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.alpha = 0
+        return view
+    }()
     
     private let basketView: UIView = {
         let view = UIView()
@@ -157,12 +166,15 @@ class ProductsController: UIViewController, UITableViewDelegate, UITableViewData
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
         NotificationCenter.default.addObserver(self, selector: #selector(updateProductData), name: NSNotification.Name("basketUpdated"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(deilveryButtonAction), name: NSNotification.Name("orderPaid"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(updateProductController), name: NSNotification.Name("OrderPaid"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(prodDeletedFromBasketNow), name: NSNotification.Name("prodDeleted"), object: nil)
         
         view.backgroundColor = R.Colors.background
+        
         UserSettings.deletedFromBasketNow = true
         UserSettings.basketInfo = []
         UserSettings.storeData = []
@@ -177,6 +189,7 @@ class ProductsController: UIViewController, UITableViewDelegate, UITableViewData
         if UserSettings.activeOrder == nil {
             UserSettings.activeOrder = false
         }
+        view.addSubview(self.backgroundImage)
         
         view.addSubview(buttons)
         view.addSubview(deliveryButton)
@@ -193,15 +206,20 @@ class ProductsController: UIViewController, UITableViewDelegate, UITableViewData
         
         buttonActions()
         
+        
         setJsonProductsOnScreen {
             //self.tableView.reloadData()
             DispatchQueue.main.async {
+                
                 self.tableApperance()
             }
         }
+        
         constraints()
+        
         //getDataFromStore()
         //getDataFromStore()
+        
     }
     //func getUrl(completion: @escaping ([[String: Any]]) -> Void) {
     private func buttonActions() {
@@ -307,7 +325,7 @@ class ProductsController: UIViewController, UITableViewDelegate, UITableViewData
     @objc
     func deilveryButtonAction() {
         //let vc = DeliveryViewController()
-        let vc = MapRouteController()
+        let vc = DeliveryViewController()
         //present(vc, animated: true)
         navigationController?.pushViewController(vc, animated: true)
     }
@@ -315,9 +333,9 @@ class ProductsController: UIViewController, UITableViewDelegate, UITableViewData
     private func tableApperance() {
         self.tableView = UITableView()
         self.tableView.delegate = self
-        self.tableView.backgroundColor = R.Colors.background
+        self.tableView.backgroundColor = .clear //R.Colors.background
         self.tableView.estimatedRowHeight = 150
-        self.tableView.allowsSelection = true
+        self.tableView.allowsSelection = false
         self.tableView.rowHeight = UITableView.automaticDimension
         self.tableView.dataSource = self
         self.tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -354,7 +372,7 @@ class ProductsController: UIViewController, UITableViewDelegate, UITableViewData
                     
                     UserSettings.storeData.append([.init(id: product.id, title: product.name, description: product.name, price: product.price , inStock: product.inStock, quantity: Int(product.productCount), categoryId: product.category)])
                     
-                    cardsData.append(.init(image: product.name, price: Int(Double(product.price)!), title: product.name, prodType: .salmon, prodId: product.id-1, catId: product.category, productCount: Int(product.productCount), inStock: product.inStock))
+                    cardsData.append(.init(image: product.name, discription: product.description ?? "", price: Int(Double(product.price)!), title: product.name, prodType: .salmon, prodId: product.id-1, catId: product.category, productCount: Int(product.productCount), inStock: product.inStock))
              
                 }
             }
@@ -364,6 +382,11 @@ class ProductsController: UIViewController, UITableViewDelegate, UITableViewData
     
     private func constraints() {
         NSLayoutConstraint.activate([
+            backgroundImage.topAnchor.constraint(equalTo: view.topAnchor),
+            backgroundImage.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+            backgroundImage.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            backgroundImage.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            
             basketView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 24),
             basketView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: -16),
             basketView.heightAnchor.constraint(equalToConstant: 56),
@@ -437,8 +460,9 @@ extension ProductsController: CellDelegate, BasketCellDelegate {
    
         let cell = tableView.dequeueReusableCell(withIdentifier: ProductsTableCell.id, for: indexPath) as! ProductsTableCell
         
+        
         let cellData = displayDataSource[indexPath.row]
-        let descriptionController = CardInfoController(title: cellData.title, image: cellData.image)
+        let descriptionController = CardInfoController(title: cellData.title, image: cellData.image, description: cellData.discription)
         
         buttons.onFilterChange = { newFilter in
             
@@ -780,15 +804,9 @@ extension ProductsController: CellDelegate, BasketCellDelegate {
         return cell
     }
     
-    func openVc(_ index: Int) {
-        let cellData = displayDataSource[index]
-        navigationController?.pushViewController(CardInfoController(title: cellData.title, image: cellData.image), animated: true)
-    }
-    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let cellData = displayDataSource[indexPath.row]
-        //let descriptionController = CardInfoController(title: cellData.title, image: cellData.image)
-        //navigationController?.pushViewController(descriptionController, animated: true)
+        //let cellData = displayDataSource[indexPath.row]
+     
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -824,7 +842,7 @@ extension ProductsController: CellDelegate, BasketCellDelegate {
                     if inStock == true {
                         UserSettings.storeData.append([.init(id: id, title: name, description: self.description, price: price, inStock: inStock, quantity: productCount, categoryId: category)])
                         
-                        self.cardsData.append(.init(image: name, price: Int(Double(price)!), title: name, prodType: .salmon, prodId: id - 1, catId: Int(category), productCount: Int(productCount), inStock: inStock))
+                        self.cardsData.append(.init(image: name, discription: description, price: Int(Double(price)!), title: name, prodType: .salmon, prodId: id - 1, catId: Int(category), productCount: Int(productCount), inStock: inStock))
                         
                         
                     }

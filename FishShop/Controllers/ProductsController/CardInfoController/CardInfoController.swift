@@ -183,7 +183,7 @@ final class CardInfoController: UIViewController {
         
     }
     
-    init(title: String, image: String) {
+    init(title: String, image: String, description: String) {
         super.init(nibName: nil, bundle: nil)
         
         self.weightLabel.text(text: "⚖️ 350 г")
@@ -193,7 +193,7 @@ final class CardInfoController: UIViewController {
         self.prodImage.image = UIImage(named: image)
         self.descriptionLabel.text =
     """
-    🎣 Попробуйте рыбу на гриле в нашем рыбном магазине и насладитесь натуральным вкусом моря с легким ароматом костра!
+    🎣 \(description)
     
     💡 Идеально подходит для:
     ✔ Ужинов в кругу семьи

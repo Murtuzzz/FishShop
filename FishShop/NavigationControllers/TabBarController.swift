@@ -125,27 +125,7 @@ class TabBarController: UITabBarController {
     
     private let productNavController = NavBarController(rootViewController: ProductsController())
     private let searchNavController = NavBarController(rootViewController: ProfileController(login: "Dinglbob", id: ""))
-    private var profileController = NavBarController(rootViewController:MapRouteController())//LoginController())
-    
-//    override func viewWillAppear(_ animated: Bool) {
-//        super.viewWillAppear(animated)
-//        
-//        guard let tabBarItems = tabBar.items else { return }
-//        // Проверяем, какая вкладка выбрана на старте
-//        if let selectedItem = tabBar.selectedItem,
-//           let selectedIndex = tabBarItems.firstIndex(of: selectedItem) {
-//            
-//            // Проходимся по всем вкладкам и применяем трансформацию
-//            for (index, tabBarItemView) in tabBar.subviews.enumerated() {
-//                guard tabBarItemView is UIControl else { continue }
-//                
-//                let isSelected = index == selectedIndex
-//                tabBarItemView.transform = isSelected
-//                    ? CGAffineTransform(translationX: 0, y: -10).scaledBy(x: 0.8, y: 0.8)
-//                    : .identity
-//            }
-//        }
-//    }
+    private var profileController = NavBarController(rootViewController:LoginController())
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -176,7 +156,7 @@ class TabBarController: UITabBarController {
         
         setupTabBar()
         tabBarAppearance()
-        switchTo(tab: .login)
+        switchTo(tab: .products)
         
     }
     
@@ -184,22 +164,6 @@ class TabBarController: UITabBarController {
         selectedIndex = tab.rawValue
         
     }
-    
-//    override func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
-//        
-//        guard let tabBarItems = tabBar.items else { return }
-//        // Проходимся по всем subviews таббара
-//        for (index, tabBarItemView) in tabBar.subviews.enumerated() {
-//            
-//            guard tabBarItemView is UIControl else { continue }
-//            
-//            let isSelected = tabBarItems[index] == item
-//            
-//            // Если элемент выбран, применяем трансформацию, иначе сбрасываем трансформацию
-//            tabBarItemView.transform = isSelected ? CGAffineTransform(scaleX: 0.8, y: 0.8) : .identity
-//            
-//        }
-//    }
     
     override func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {
         guard let tabBarItems = tabBar.items else { return }
@@ -268,9 +232,6 @@ class TabBarController: UITabBarController {
         tabBar.shadowImage = UIImage()
         tabBar.backgroundImage = UIImage()
         tabBar.unselectedItemTintColor = .systemGray
-        
-        //tabBar.selectedItem?.setTitleTextAttributes([.foregroundColor: UIColor.clear], for: .selected)
-        
         
         if let items = tabBar.items {
                 for item in items {

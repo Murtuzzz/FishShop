@@ -199,7 +199,7 @@ class BasketController: UIViewController, UITableViewDelegate, UITableViewDataSo
                     tableView.reloadData()
                     NotificationCenter.default.post(name: NSNotification.Name("OrderPaid"), object: nil)
                     UserSettings.orderPaid = true
-                    //UserSettings.activeOrder = true
+                    UserSettings.activeOrder = true
                     UserSettings.isLocChanging = true
                     NotificationCenter.default.post(name: NSNotification.Name("orderPaid"), object: nil)
                     dismiss(animated: true)
@@ -680,7 +680,6 @@ extension BasketController {
         if editingStyle == .delete {
             print("#BasketController#editingStyle =.delete#basketInfo = \(UserSettings.basketInfo ?? [])")
             let basketData = self.basketProdData[indexPath.row]
-            UserSettings.basketInfo[basketData.id][0].inBasket = true
             
             
             var bskt = UserSettings.basketInfo
@@ -705,7 +704,6 @@ extension BasketController {
             UserSettings.unavailableProducts = prodToDel
             self.unavailableProducts = prodToDel!
         
-            UserSettings.basketProdQuant -= UserSettings.basketInfo[basketData.id][0].quantity
             basketInfo.remove(at: indexPath.row)
             
             print("#BasketController#editingStyle =.delete#basketProdData[indexPath.row].price = \(basketProdData[indexPath.row].price)")
@@ -717,9 +715,11 @@ extension BasketController {
                         print("el = \(el)")
                         //print("ind = \(ind)")
                         if UserSettings.basketInfo[ind][0].title == basketData.title {
+                            UserSettings.basketProdQuant -= UserSettings.basketInfo[ind][0].quantity
                             if UserSettings.basketInfo[ind][0].quantity == 1 {
                                 self.totalBasketPrice = totalBasketPrice - UserSettings.basketInfo[ind][0].price
                                 UserSettings.basketInfo[ind][0].quantity = 0
+                                UserSettings.basketInfo[ind][0].inBasket = true
                                 self.pricesView.removeFromSuperview()
                                 priceViewApperance(totalPrice: self.totalBasketPrice)
                                 totalLabelSum.text = "\(self.totalBasketPrice)"
@@ -727,6 +727,7 @@ extension BasketController {
                             } else {
                                 totalBasketPrice = totalBasketPrice - Double(UserSettings.basketInfo[ind][0].price) * Double(UserSettings.basketInfo[ind][0].quantity)
                                 UserSettings.basketInfo[ind][0].quantity = 0
+                                UserSettings.basketInfo[ind][0].inBasket = true
                                 self.pricesView.removeFromSuperview()
                                 priceViewApperance(totalPrice: self.totalBasketPrice)
                                 totalLabelSum.text = "\(self.totalBasketPrice)"

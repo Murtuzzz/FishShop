@@ -28,6 +28,7 @@ final class BasketCell: UITableViewCell {
         label.translatesAutoresizingMaskIntoConstraints = false
         label.numberOfLines = 0
         label.textColor = .white
+        label.adjustsFontSizeToFitWidth = true
         label.text = ""
         label.font = UIFont.boldSystemFont(ofSize: 22)
         return label
@@ -178,6 +179,7 @@ final class BasketCell: UITableViewCell {
     func constraints() {
         NSLayoutConstraint.activate([
             titleLabel.leadingAnchor.constraint(equalTo: prodImage.trailingAnchor, constant: 16),
+            titleLabel.trailingAnchor.constraint(equalTo: delButton.leadingAnchor),
             titleLabel.centerYAnchor.constraint(equalTo: centerYAnchor, constant: -8),
             titleLabel.widthAnchor.constraint(equalToConstant: bounds.width - 24),
             

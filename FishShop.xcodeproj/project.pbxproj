@@ -9,14 +9,14 @@
 /* Begin PBXBuildFile section */
 		B40EF3622BC0513E00F06662 /* BasketController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B40EF3612BC0513E00F06662 /* BasketController.swift */; };
 		B40EF3642BC0529900F06662 /* BasketCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B40EF3632BC0529900F06662 /* BasketCell.swift */; };
-		B42098E72D81C66000B171A2 /* MapRouteController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B42098E32D81C66000B171A2 /* MapRouteController.swift */; };
+		B42098E72D81C66000B171A2 /* DeliveryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B42098E32D81C66000B171A2 /* DeliveryViewController.swift */; };
 		B42098E92D81C66000B171A2 /* RoutingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B42098E52D81C66000B171A2 /* RoutingViewModel.swift */; };
 		B42098EA2D81C66000B171A2 /* RoutePolylineStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = B42098E62D81C66000B171A2 /* RoutePolylineStyles.swift */; };
 		B42098EC2D81C72300B171A2 /* AlertPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B42098EB2D81C72300B171A2 /* AlertPresenter.swift */; };
+		B42098EE2D8AE8F800B171A2 /* LaunchScreenController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B42098ED2D8AE8F800B171A2 /* LaunchScreenController.swift */; };
 		B425FCEC2BB2AC2D00F2FA27 /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = B425FCEB2BB2AC2D00F2FA27 /* UserSettings.swift */; };
 		B4292CC22D5E188C00754265 /* UILableBG.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4292CC12D5E188C00754265 /* UILableBG.swift */; };
 		B4292CC42D621EFD00754265 /* tst.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4292CC32D621EFD00754265 /* tst.swift */; };
-		B4660C682C6E4DDE00CF9474 /* DeliveryController .swift in Sources */ = {isa = PBXBuildFile; fileRef = B4660C672C6E4DDE00CF9474 /* DeliveryController .swift */; };
 		B4660C6B2C6F73EE00CF9474 /* DeliveryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4660C6A2C6F73EE00CF9474 /* DeliveryCell.swift */; };
 		B4660C992C88754C00CF9474 /* SettingsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4660C982C88754C00CF9474 /* SettingsController.swift */; };
 		B46C900F2D75C6A200F32A02 /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B46C900E2D75C6A200F32A02 /* LoginController.swift */; };
@@ -64,14 +64,14 @@
 		473AD272C6A8DF59E7A9FE1C /* Pods_FishShop.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_FishShop.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B40EF3612BC0513E00F06662 /* BasketController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasketController.swift; sourceTree = "<group>"; };
 		B40EF3632BC0529900F06662 /* BasketCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BasketCell.swift; sourceTree = "<group>"; };
-		B42098E32D81C66000B171A2 /* MapRouteController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapRouteController.swift; sourceTree = "<group>"; };
+		B42098E32D81C66000B171A2 /* DeliveryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveryViewController.swift; sourceTree = "<group>"; };
 		B42098E52D81C66000B171A2 /* RoutingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutingViewModel.swift; sourceTree = "<group>"; };
 		B42098E62D81C66000B171A2 /* RoutePolylineStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutePolylineStyles.swift; sourceTree = "<group>"; };
 		B42098EB2D81C72300B171A2 /* AlertPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertPresenter.swift; sourceTree = "<group>"; };
+		B42098ED2D8AE8F800B171A2 /* LaunchScreenController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenController.swift; sourceTree = "<group>"; };
 		B425FCEB2BB2AC2D00F2FA27 /* UserSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettings.swift; sourceTree = "<group>"; };
 		B4292CC12D5E188C00754265 /* UILableBG.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UILableBG.swift; sourceTree = "<group>"; };
 		B4292CC32D621EFD00754265 /* tst.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = tst.swift; sourceTree = "<group>"; };
-		B4660C672C6E4DDE00CF9474 /* DeliveryController .swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "DeliveryController .swift"; sourceTree = "<group>"; };
 		B4660C6A2C6F73EE00CF9474 /* DeliveryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DeliveryCell.swift; sourceTree = "<group>"; };
 		B4660C982C88754C00CF9474 /* SettingsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsController.swift; sourceTree = "<group>"; };
 		B46C900E2D75C6A200F32A02 /* LoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
@@ -156,7 +156,6 @@
 		B42098E22D81C65300B171A2 /* MapRouting */ = {
 			isa = PBXGroup;
 			children = (
-				B42098E32D81C66000B171A2 /* MapRouteController.swift */,
 				B42098E52D81C66000B171A2 /* RoutingViewModel.swift */,
 				B42098E62D81C66000B171A2 /* RoutePolylineStyles.swift */,
 				B42098EB2D81C72300B171A2 /* AlertPresenter.swift */,
@@ -167,8 +166,9 @@
 		B4660C692C6F73D500CF9474 /* DeliveryController */ = {
 			isa = PBXGroup;
 			children = (
-				B4660C672C6E4DDE00CF9474 /* DeliveryController .swift */,
+				B42098E32D81C66000B171A2 /* DeliveryViewController.swift */,
 				B4660C6A2C6F73EE00CF9474 /* DeliveryCell.swift */,
+				B42098E22D81C65300B171A2 /* MapRouting */,
 			);
 			path = DeliveryController;
 			sourceTree = "<group>";
@@ -176,7 +176,6 @@
 		B47913232D7745B600B55C68 /* YandexMapKit */ = {
 			isa = PBXGroup;
 			children = (
-				B42098E22D81C65300B171A2 /* MapRouting */,
 				B47913862D80705A00B55C68 /* MapSearch */,
 			);
 			path = YandexMapKit;
@@ -304,6 +303,7 @@
 				B4DC5D042B9B4064006D3E42 /* System */,
 				B4F38FA92B91E7A400B96806 /* Assets.xcassets */,
 				B4F38FAB2B91E7A400B96806 /* LaunchScreen.storyboard */,
+				B42098ED2D8AE8F800B171A2 /* LaunchScreenController.swift */,
 				B4F38FAE2B91E7A400B96806 /* Info.plist */,
 			);
 			path = FishShop;
@@ -469,7 +469,8 @@
 				B4DBE76D2BCCF86D000A2C6D /* PricesView.swift in Sources */,
 				B4EF187A2BD655B900CB3C8C /* ProfileTableCell.swift in Sources */,
 				B4F38FA12B91E7A100B96806 /* AppDelegate.swift in Sources */,
-				B42098E72D81C66000B171A2 /* MapRouteController.swift in Sources */,
+				B42098EE2D8AE8F800B171A2 /* LaunchScreenController.swift in Sources */,
+				B42098E72D81C66000B171A2 /* DeliveryViewController.swift in Sources */,
 				B42098E92D81C66000B171A2 /* RoutingViewModel.swift in Sources */,
 				B42098EA2D81C66000B171A2 /* RoutePolylineStyles.swift in Sources */,
 				B4F7E4B62BD11FF600DE225E /* RegistrationController.swift in Sources */,
@@ -485,7 +486,6 @@
 				B4DC5CFC2B9B3AA8006D3E42 /* Stack.swift in Sources */,
 				B4DC5D242BA80D4C006D3E42 /* InfoBlock.swift in Sources */,
 				B40EF3642BC0529900F06662 /* BasketCell.swift in Sources */,
-				B4660C682C6E4DDE00CF9474 /* DeliveryController .swift in Sources */,
 				B46C90132D76DA6B00F32A02 /* OrderInfoTable.swift in Sources */,
 				B46C90112D76DA2600F32A02 /* ProfileOrderCell.swift in Sources */,
 				B4DC5D0B2B9B4810006D3E42 /* ProductsTableCell.swift in Sources */,

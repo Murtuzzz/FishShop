@@ -9,7 +9,6 @@ import UIKit
 
 enum R {
     enum Colors {
-        
         static let green = UIColor(hexString: "#00D971")
         static let sep = UIColor(hexString: "#2D344B")
         static let text = UIColor(hexString: "#EBEBF5")
@@ -19,7 +18,6 @@ enum R {
         static let bar = UIColor(hexString: "#1C1E1F")
         static let barBg = UIColor(hexString: "#252627")
         static let mapColor = UIColor(hexString: "#F8F4EB")
-        
     }
     enum Images {
        

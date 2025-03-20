@@ -22,7 +22,6 @@ class MapViewController: UIViewController {
         let exitButton = UIBarButtonItem(title: "Закрыть", style: .plain, target: self, action: #selector(exitTapped))
           
           navigationItem.leftBarButtonItem = exitButton
-
         
         mapView = YMKMapView(frame: view.frame)
         view.addSubview(mapView)
@@ -216,28 +215,39 @@ extension MapViewController: UISearchResultsUpdating, UISearchControllerDelegate
 }
 
 extension MapViewController: UITableViewDelegate {
-
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard indexPath.row < resultsTableController.items.count else { return }
 
         searchBarController.isActive = false
 
         let item = resultsTableController.items[indexPath.row]
-        let location = ("\(item.title.text), \(item.subtitle?.text ?? "")")
-        UserSettings.userLocation?["Location"] = location
-        item.onClick()
+        print("USER adress = \(item.title.text), USER city = \(item.subtitle?.text ?? "")")
+     
+        
+        let region = item.subtitle?.text.components(separatedBy: " ")
+        
+        if region?.last == "Алания" {
+            let location = ("\(item.title.text), \(item.subtitle?.text ?? "")")
+            UserSettings.userLocation?["Location"] = location
+            item.onClick()
+        } else {
+            displayAdressAlert()
+        }
+    }
+    
+    func displayAdressAlert() {
+        let alertController = UIAlertController(title: "Ошибка", message: "Введите корректный адрес в пределах респ. РСО-Алании", preferredStyle: .alert)
+        alertController.addAction(UIAlertAction(title: "OK", style: .default))
+        present(alertController, animated: true)
     }
 }
 
 fileprivate class ResultsTableController: UITableViewController {
-
     private let cellIdentifier = "cellIdentifier"
-
     var items = [SuggestItem]()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: cellIdentifier)
     }
     
@@ -260,7 +270,6 @@ fileprivate class ResultsTableController: UITableViewController {
 }
 
 fileprivate extension SuggestItem {
-
     var cellText: NSAttributedString {
         let result = NSMutableAttributedString(string: title.text)
         result.append(NSAttributedString(string: " "))
