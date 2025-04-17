@@ -14,6 +14,9 @@
 		B42098EA2D81C66000B171A2 /* RoutePolylineStyles.swift in Sources */ = {isa = PBXBuildFile; fileRef = B42098E62D81C66000B171A2 /* RoutePolylineStyles.swift */; };
 		B42098EC2D81C72300B171A2 /* AlertPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = B42098EB2D81C72300B171A2 /* AlertPresenter.swift */; };
 		B42098EE2D8AE8F800B171A2 /* LaunchScreenController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B42098ED2D8AE8F800B171A2 /* LaunchScreenController.swift */; };
+		B420997F2D8D4F6600B171A2 /* LoginController2.swift in Sources */ = {isa = PBXBuildFile; fileRef = B420997E2D8D4F6600B171A2 /* LoginController2.swift */; };
+		B42099812D8D4F7200B171A2 /* CodeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B42099802D8D4F7200B171A2 /* CodeController.swift */; };
+		B42099852D8D51D100B171A2 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = B42099842D8D51D100B171A2 /* GoogleService-Info.plist */; };
 		B425FCEC2BB2AC2D00F2FA27 /* UserSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = B425FCEB2BB2AC2D00F2FA27 /* UserSettings.swift */; };
 		B4292CC22D5E188C00754265 /* UILableBG.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4292CC12D5E188C00754265 /* UILableBG.swift */; };
 		B4292CC42D621EFD00754265 /* tst.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4292CC32D621EFD00754265 /* tst.swift */; };
@@ -69,6 +72,9 @@
 		B42098E62D81C66000B171A2 /* RoutePolylineStyles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoutePolylineStyles.swift; sourceTree = "<group>"; };
 		B42098EB2D81C72300B171A2 /* AlertPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertPresenter.swift; sourceTree = "<group>"; };
 		B42098ED2D8AE8F800B171A2 /* LaunchScreenController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenController.swift; sourceTree = "<group>"; };
+		B420997E2D8D4F6600B171A2 /* LoginController2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginController2.swift; sourceTree = "<group>"; };
+		B42099802D8D4F7200B171A2 /* CodeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeController.swift; sourceTree = "<group>"; };
+		B42099842D8D51D100B171A2 /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		B425FCEB2BB2AC2D00F2FA27 /* UserSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserSettings.swift; sourceTree = "<group>"; };
 		B4292CC12D5E188C00754265 /* UILableBG.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UILableBG.swift; sourceTree = "<group>"; };
 		B4292CC32D621EFD00754265 /* tst.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = tst.swift; sourceTree = "<group>"; };
@@ -267,6 +273,8 @@
 				B4F7E4B32BD116DA00DE225E /* UserData.swift */,
 				B4F7E4B52BD11FF600DE225E /* RegistrationController.swift */,
 				B46C900E2D75C6A200F32A02 /* LoginController.swift */,
+				B420997E2D8D4F6600B171A2 /* LoginController2.swift */,
+				B42099802D8D4F7200B171A2 /* CodeController.swift */,
 			);
 			path = LoginController;
 			sourceTree = "<group>";
@@ -305,6 +313,7 @@
 				B4F38FAB2B91E7A400B96806 /* LaunchScreen.storyboard */,
 				B42098ED2D8AE8F800B171A2 /* LaunchScreenController.swift */,
 				B4F38FAE2B91E7A400B96806 /* Info.plist */,
+				B42099842D8D51D100B171A2 /* GoogleService-Info.plist */,
 			);
 			path = FishShop;
 			sourceTree = "<group>";
@@ -341,6 +350,7 @@
 				B4F38F9A2B91E7A100B96806 /* Frameworks */,
 				B4F38F9B2B91E7A100B96806 /* Resources */,
 				0446DC7BBBE0D5CEF2BCE4C2 /* [CP] Copy Pods Resources */,
+				152804545AD9C3CE2023D4B5 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -391,6 +401,7 @@
 			files = (
 				B4F38FAD2B91E7A400B96806 /* LaunchScreen.storyboard in Resources */,
 				B4F38FAA2B91E7A400B96806 /* Assets.xcassets in Resources */,
+				B42099852D8D51D100B171A2 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -436,6 +447,23 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
+		152804545AD9C3CE2023D4B5 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-FishShop/Pods-FishShop-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-FishShop/Pods-FishShop-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-FishShop/Pods-FishShop-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -465,6 +493,7 @@
 				B47913922D80705A00B55C68 /* SuggestItem.swift in Sources */,
 				B479139A2D80705A00B55C68 /* MapViewController.swift in Sources */,
 				B4DC5D022B9B3B31006D3E42 /* R.swift in Sources */,
+				B420997F2D8D4F6600B171A2 /* LoginController2.swift in Sources */,
 				B4DC5D122B9DCDDD006D3E42 /* FilterButtons.swift in Sources */,
 				B4DBE76D2BCCF86D000A2C6D /* PricesView.swift in Sources */,
 				B4EF187A2BD655B900CB3C8C /* ProfileTableCell.swift in Sources */,
@@ -488,6 +517,7 @@
 				B40EF3642BC0529900F06662 /* BasketCell.swift in Sources */,
 				B46C90132D76DA6B00F32A02 /* OrderInfoTable.swift in Sources */,
 				B46C90112D76DA2600F32A02 /* ProfileOrderCell.swift in Sources */,
+				B42099812D8D4F7200B171A2 /* CodeController.swift in Sources */,
 				B4DC5D0B2B9B4810006D3E42 /* ProductsTableCell.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

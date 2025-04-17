@@ -7,6 +7,8 @@ target 'FishShop' do
 
   # Pods for FishShop
   pod 'YandexMapsMobile', '4.12.0-full’
+  pod 'Firebase/Core'
+  pod 'Firebase/Auth'
 
 
 end

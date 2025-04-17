@@ -2,6 +2,17 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>app-1-520371057782-ios-f90ae3ad1cedcdf021db57</string>
+			</array>
+			<key>CFBundleURLName</key>
+			<string>app-1-520371057782-ios-f90ae3ad1cedcdf021db57</string>
+		</dict>
+	</array>
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>Нужно для отображения карты и маршрутов</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
